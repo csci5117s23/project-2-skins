@@ -11,7 +11,8 @@ CSCI 5117, Spring 2022, [assignment description](https://canvas.umn.edu/courses/
 ### Students
 
 * Tenzin Tseten, tsete003@umn.edu
-* ...
+* Joshua Yang, yang7182@umn.edu
+* Ishika Nimmagadda, nimma013@umn.edu
 
 
 ## Key Features
