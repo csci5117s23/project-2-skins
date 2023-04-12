@@ -1,91 +1,38 @@
-# Module 2 Group Assignment
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-CSCI 5117, Spring 2022, [assignment description](https://canvas.umn.edu/courses/355584/pages/project-2)
+## Getting Started
 
-## App Info:
+First, run the development server:
 
-* Team Name: SKINS
-* App Name: QuickFIT
-* App Link: <https://TODO.com/>
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+```
 
-### Students
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-* Tenzin Tseten, tsete003@umn.edu
-* Joshua Yang, yang7182@umn.edu
-* Ishika Nimmagadda, nimma013@umn.edu
+You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
 
+[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
 
-## Key Features
+The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-**Describe the most challenging features you implemented
-(one sentence per bullet, maximum 4 bullets):**
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-* ...
+## Learn More
 
-Which (if any) device integration(s) does your app support?
+To learn more about Next.js, take a look at the following resources:
 
-* ...
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-Which (if any) progressive web app feature(s) does your app support?
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-* ...
+## Deploy on Vercel
 
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-
-## Mockup images
-
-### This is the home/landing page, it shows the outfit the user chose. If the user swipes to the left they can see the next day and so on. 
-![Landing page when user logs in](/images/mockups/Home.jpg?raw=true)
-
-### If the user has not chosen an outfit for the specified day yet, it will look like this and give the user the option to choose a fit. Clicking on the Month/day/year area will popup a little calender and they can also change the day that way as well.
-
-### On the calender there are tiny colored marks on certain days which imply that the user has chosen a fit for that day. Green implies user has chosen a full outfit, yellow implies the user has started to choose a fit, but has not completed it yet. 
-![Home page without a fit chosen](/images/mockups/Home2.jpg?raw=true )
-
-### The user can also access the calender from the calender icon on the bottom and it has the same features as before. Clicking on a day will bring it to the same page as above. (Home page, but with user specified day)
-
-![Calender ](/images/mockups/Calender.jpg?raw=true)
-
-### From home page user clicked on choose fit and it comes here. On this page you can choose a fit for the specified date. (First img) After the user continues they start choosing their outfit pieces. Swiping left and right to change to different category of clothes and swiping down to view more stuff from the category. (second img)
-
-### If user chooses none its implying they haven't decided yet or dont need that category of clothing. The finished outfit button is on all the pages (when swiping left and right) and is to be clicked when they have finished choosing their whole fit. (Can always add/edit fit later in "closet"(hanger icon))
-![Choosing Fit ](/images/mockups/ChoosingFit.jpg?raw=true)
-
-### The + icon on the bottom will bring the user to a page to add clothing to your "closet". 
-![Alt text](/images/mockups/AddingItem.jpg?raw=true)
-
-### After user submits their clothing it will show a success message and allow them to add more items.                                                                                  
-![Alt text ](/images/mockups/finishedAdding.jpg?raw=true)
-
-### The last icon of the hanger will let the user view, edit and delete all the clothes in their closet.
-![Alt text ](/images/mockups/closetAndEditing.jpg?raw=true)
-## Testing Notes
-
-**Is there anything special we need to know in order to effectively test your app? (optional):**
-
-* ...
-
-
-
-## Screenshots of Site (complete)
-
-**[Add a screenshot of each key page](https://stackoverflow.com/questions/10189356/how-to-add-screenshot-to-readmes-in-github-repository)
-along with a very brief caption:**
-
-![](https://media.giphy.com/media/o0vwzuFwCGAFO/giphy.gif)
-
-
-
-## External Dependencies
-
-**Document integrations with 3rd Party code or services here.
-Please do not document required libraries (e.g., Vue, Vuefire, Firebase).**
-
-* Library or service name: description of use
-* ...
-
-**If there's anything else you would like to disclose about how your project
-relied on external code, expertise, or anything else, please disclose that
-here:**
-
-...
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
