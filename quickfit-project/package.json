@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/clerk-js": "^4.38.1",
+    "@clerk/nextjs": "^4.16.2",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@fontsource/roboto": "^4.5.8",
