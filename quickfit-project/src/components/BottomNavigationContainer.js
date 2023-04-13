@@ -16,7 +16,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
-
+import Link from 'next/link';
 
 export default function BottomNavigationContainer() {
   const [value, setValue] = React.useState(0);
@@ -32,7 +32,9 @@ export default function BottomNavigationContainer() {
             setValue(newValue);
           }}
         >
-          <BottomNavigationAction label="Home" icon={<CottageRoundedIcon />} />
+          <Link href="/">
+            <BottomNavigationAction label="Home" icon={<CottageRoundedIcon />} />
+          </Link>
           <BottomNavigationAction label="Calendar" icon={<EditCalendarIcon />} />
           <BottomNavigationAction label="Add clothes" icon={<AddRoundedIcon />} />
           <BottomNavigationAction label="Wardrobe" icon={<CheckroomRoundedIcon />} />

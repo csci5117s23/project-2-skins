@@ -5,15 +5,29 @@ import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import { ClerkProvider, SignUp, SignIn, SignedIn, SignedOut } from "@clerk/clerk-react";   // Clerk authorization imports
 
-import { AppBar } from "@mui/material";
+import {
+     AppBar, 
+     Box,
+     Button,
+     Card,
+     CardActions,
+     CardActionArea,
+     CardMedia,
+     CardContent,
+     Typography
+} from "@mui/material";
+import { styled } from '@mui/material/styles';
 
 import Header from '@/components/Header'
-
 import BottomNavigationContainer from "@/components/BottomNavigationContainer";
+import DateCard from "@/components/DateCard";
+import OutfitCard from "@/components/OutfitCard"
+import WeatherCard from "@/components/WeatherCard";
 
 // Load any necessary ENV variables
 const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
+  
 export default function UILayout() {
   return (
     <>
@@ -29,16 +43,16 @@ export default function UILayout() {
 
         {/* 3. Content section */}
         <section>
-        <div>
-            This content is always visible.
-        </div>
-
-        <SignedIn>
-            <Box className="mainContainer">
-
-                <BottomNavigationContainer/>
-            </Box>
-        </SignedIn>
+            <SignedIn>
+                <Box className="mainContainer">
+                    <DateCard/>
+                    <Card className="weatherCard">
+                        Weather goes here
+                    </Card>
+                    <OutfitCard/>
+                    <BottomNavigationContainer/>
+                </Box>
+            </SignedIn>
         </section>
     </>
   )
