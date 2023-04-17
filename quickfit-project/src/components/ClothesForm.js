@@ -27,25 +27,29 @@ export default function ClothesForm() {
 
   async function addClothes() {
     const token = await getToken({ template: "codehooks" });
+
+    // if category or name is empty, dont post
     if (category === "" || name === "") {
       return;
     }
-    const response = await fetch("https://todobackend-fm9y.api.codehooks.io/dev/clothes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + token,
-      },
-      body: JSON.stringify({
-        category: category,
-        clothingName: name,
-        tags: [color],
-        createdOn: new Date(),
-      }),
-    });
+    const response = await fetch(
+      "https://todobackend-fm9y.api.codehooks.io/dev/clothes",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+          category: category,
+          clothingName: name,
+          tags: [color],
+          createdOn: new Date(),
+        }),
+      }
+    );
     console.log(response);
   }
-
 
   return (
     <>
@@ -109,7 +113,9 @@ export default function ClothesForm() {
               />
             )}
           />
-          <Button variant="outlined" onClick={addClothes}>Submit</Button>
+          <Button variant="outlined" onClick={addClothes}>
+            Submit
+          </Button>
         </Stack>
       </Card>
     </>

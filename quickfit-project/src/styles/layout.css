@@ -3,7 +3,6 @@
 /* Styling designed for main container of home page */
 /* Box that arranges: date, weather, and current date's outfit cards */
 .mainContainer {
-    background-color: rgba(0, 0, 0, 0.538);
     display: flex;
     flex-direction: column;
     height: 90vh;

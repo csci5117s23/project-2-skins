@@ -75,7 +75,7 @@ const options = {  // Schema options
 const clothesScehmaYup = object( {
   category:      string().required(),                 // Name of tag (top, bottom, sweater, shoes, etc.)
   clothingName:  string().required(),                         // Name of clothing (Black Nike hoodie, Red long sleeve from garage) 
-  tags:          array().of(strings()),
+  tags:          array().of(string()),
   createdOn:    date().default(() => new Date()),     // Date of when clothing article was created (POST date)
 })
 //////////////////////////////////////////////////////////////////////

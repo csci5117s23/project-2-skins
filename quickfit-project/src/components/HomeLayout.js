@@ -34,32 +34,32 @@ import WeatherCard from "@/components/WeatherCard";
 const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 export default function UILayout() {
-  const [clothes, setClothes] = useState([
-    {
-      category: "Top",
-      clothingName: "Black Nike T-Shirt",
-      tags: ["black"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Bottom",
-      clothingName: "shirt",
-      tags: ["black"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Shoe",
-      clothingName: "shirt",
-      tags: ["black"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Accessory",
-      clothingName: "shirt",
-      tags: ["black"],
-      createdOn: new Date(),
-    },
-  ]);
+    const [clothes, setClothes] = useState([
+        {
+          category: "Top",
+          clothingName: "Black Nike T-Shirt",
+          tags: ["black"],
+          createdOn: new Date(),
+        },
+        {
+          category: "Bottom",
+          clothingName: "Dark green cargos",
+          tags: ["Green", "loose", "cargo"],
+          createdOn: new Date(),
+        },
+        {
+          category: "Shoes",
+          clothingName: "White air forces",
+          tags: ["white"],
+          createdOn: new Date(),
+        },
+        {
+          category: "Accessory",
+          clothingName: "Silver necklace",
+          tags: ["silver","shiny"],
+          createdOn: new Date(),
+        },
+      ]);
 
   return (
     <>
@@ -71,8 +71,9 @@ export default function UILayout() {
       {/* 2. Content section */}
       <section>
         <SignedIn>
-          <Box className="mainContainer">
             <DateCard />
+            <WeatherCard/>
+          <Box className="mainContainer">
             <Card className="weatherCard">Weather goes here</Card>
             {clothes.map((cloth) => {
               return <ClothingCard clothes={cloth} />;
