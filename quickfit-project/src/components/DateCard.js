@@ -21,10 +21,11 @@ import { styled } from '@mui/material/styles';
 // Import date functions
 import { formatDate, formatDateWeekday } from "@/modules/dateFunctions";
 
-export default function DateCard() {
+export default function DateCard(props) {
+  const {date} = props;
   return (
     <Card className="dateCard">
-        {formatDate(new Date())}
+        {date? formatDate(date):formatDate(new Date())}
     </Card>
   )
 }

@@ -21,14 +21,13 @@ import { styled } from '@mui/material/styles';
 import Header from '@/components/Header'
 import BottomNavigationContainer from "@/components/BottomNavigationContainer";
 import DateCard from "@/components/DateCard";
-import OutfitCard from "@/components/OutfitCard"
 import WeatherCard from "@/components/WeatherCard";
-
+import CalenderCard from "@/components/CalenderCardd";
 // Load any necessary ENV variables
 const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
   
-export default function UILayout() {
+export default function Calender() {
   return (
     <>
         {/* 1. Header section */}
@@ -36,23 +35,14 @@ export default function UILayout() {
             <Header/>
         </section>
 
-        {/* 2. Sidebar section */}
+        {/* 2. Content section */}
         <section>
-        
+            <CalenderCard></CalenderCard>
         </section>
 
-        {/* 3. Content section */}
+        {/* 3. NavBar section */}
         <section>
-            <SignedIn>
-                <Box className="mainContainer">
-                    <DateCard/>
-                    <Card className="weatherCard">
-                        Weather goes here
-                    </Card>
-                    <OutfitCard/>
-                    <BottomNavigationContainer/>
-                </Box>
-            </SignedIn>
+            <BottomNavigationContainer></BottomNavigationContainer>
         </section>
     </>
   )

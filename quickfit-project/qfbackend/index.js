@@ -7,7 +7,7 @@
 // Code hooks & scema imports
 import {app} from 'codehooks-js'
 import {crudlify} from 'codehooks-crudlify'
-import { object, string, number, date, InferType, bool } from 'yup';
+import { object, string, number, date, InferType, bool, array } from 'yup';
 import jwtDecode from 'jwt-decode';
 
 // An example route for https://<PROJECTID>.api.codehooks.io/dev/
@@ -73,29 +73,31 @@ const options = {  // Schema options
 // API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev/clothes/[id]
 // Codehooks will auto generate '._id' property on clothing db entry on POST
 const clothesScehmaYup = object( {
-  name:         string().required(),                  // Required name of clothing
-  description:  string(),                             // Optional user-entered clothing description
+  category:      string().required(),                 // Name of tag (top, bottom, sweater, shoes, etc.)
+  clothingName:  string().required(),                         // Name of clothing (Black Nike hoodie, Red long sleeve from garage) 
+  tags:          array().of(strings()),
   createdOn:    date().default(() => new Date()),     // Date of when clothing article was created (POST date)
 })
 //////////////////////////////////////////////////////////////////////
 // Database schema - Tag (Clothing category)
 // API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev/tag/[id]
 // Codehooks will auto generate '._id' property on clothing tag db entry on POST
-const tagSchemaYup = object( {
-  clothingId: string().required(),                    // Reference to 
-  label:      string().required(),                    // Name of tag (top, bottom, sweater, shoes, etc.)
-  createdOn:  date().default(() => new Date()),       // Date of when tag was created (POST date)
-})
+// const tagSchemaYup = object( {
+//   clothingId: string().required(),                    // Reference to clothesSchemaYup(clothing article) ._id
+//   tag:      string().required(),                    // Name of tag (color, brand, style, etc.)
+//   createdOn:  date().default(() => new Date()),       // Date of when tag was created (POST date)
+// })
 //////////////////////////////////////////////////////////////////////
 // Database schema - Link (Clothing to tag relations)
 // API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev/link/[id]
 // Codehooks will auto generate '._id' property on clothing tag db entry on POST
-const linkScehmaYup = object( {
-  clothingId: string().required(),                    // Reference to 
-  label:      string().required(),                    // Name of tag (top, bottom, sweater, shoes, etc.)
-  createdOn:  date().default(() => new Date()),       // Date of when tag was created (POST date)
-})
-crudlify(app, {clothes: clothesScehmaYup, tag: tagSchemaYup, link: linkScehmaYup}, options)
+
+// const linkScehmaYup = object( {
+//   clothingId: string().required(),                    // Reference to 
+//   category:      string().required(),                    // Name of tag (top, bottom, sweater, shoes, etc.)
+//   createdOn:  date().default(() => new Date()),       // Date of when tag was created (POST date)
+// })
+// crudlify(app, {clothes: clothesScehmaYup, tag: tagSchemaYup, link: linkScehmaYup}, options)
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
@@ -250,5 +252,5 @@ app.use('/link/:id', async (req, res, next) => {
 })
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
-
+crudlify(app, { clothesScehmaYup: clothesScehmaYup });
 export default app.init();

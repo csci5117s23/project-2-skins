@@ -17,9 +17,11 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import Link from 'next/link';
+import { useRouter } from 'next/router'
 
 export default function BottomNavigationContainer() {
-  const [value, setValue] = React.useState(0);
+  const router = useRouter();
+  const value=router.pathname.slice(1)
 
   return (
     <Box sx={{ pb: 7 }}>
@@ -28,16 +30,12 @@ export default function BottomNavigationContainer() {
         <BottomNavigation
           showLabels
           value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
+          onChange={(event, newValue)=>{router.push('/'+newValue);}}
         >
-          <Link href="/">
-            <BottomNavigationAction label="Home" icon={<CottageRoundedIcon />} />
-          </Link>
-          <BottomNavigationAction label="Calendar" icon={<EditCalendarIcon />} />
-          <BottomNavigationAction label="Add clothes" icon={<AddRoundedIcon />} />
-          <BottomNavigationAction label="Wardrobe" icon={<CheckroomRoundedIcon />} />
+          <BottomNavigationAction label="Home" value="" icon={<CottageRoundedIcon />}/>
+          <BottomNavigationAction label="Calender" value="calender" icon={<EditCalendarIcon />} />
+          <BottomNavigationAction label="Add clothes" value="addclothes" icon={<AddRoundedIcon />} />
+          <BottomNavigationAction label="Wardrobe" value="wardrobe" icon={<CheckroomRoundedIcon />} />
         </BottomNavigation>
       </Paper>
     </Box>
