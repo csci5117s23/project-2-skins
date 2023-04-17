@@ -6,7 +6,7 @@ CSCI 5117, Spring 2022, [assignment description](https://canvas.umn.edu/courses/
 
 * Team Name: SKINS
 * App Name: QuickFIT
-* App Link: <https://TODO.com/>
+* App Link: https://main--curious-treacle-7cb562.netlify.app/
 
 ### Students
 
