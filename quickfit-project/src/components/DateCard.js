@@ -24,8 +24,11 @@ import { formatDate, formatDateWeekday } from "@/modules/dateFunctions";
 export default function DateCard(props) {
   const {date} = props;
   return (
-    <Card className="dateCard">
-        {date? formatDate(date):formatDate(new Date())}
-    </Card>
+    <>
+    <Typography variant="h5" sx={{color:"#000000"}}> 
+      {date? formatDate(date):formatDate(new Date())}
+    </Typography>
+      
+    </>
   )
 }

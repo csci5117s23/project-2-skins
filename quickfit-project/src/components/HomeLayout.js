@@ -16,6 +16,7 @@ import {
   Box,
   Button,
   Card,
+  Grid,
   CardActions,
   CardActionArea,
   CardMedia,
@@ -23,7 +24,7 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-
+import DateWeatherWidget from "./DateWeatherWidget";
 import Header from "@/components/Header";
 import BottomNavigationContainer from "@/components/BottomNavigationContainer";
 import DateCard from "@/components/DateCard";
@@ -63,6 +64,7 @@ export default function UILayout() {
 
   return (
     <>
+
       {/* 1. Header section */}
       <section>
         <Header />
@@ -71,14 +73,13 @@ export default function UILayout() {
       {/* 2. Content section */}
       <section>
         <SignedIn>
-            <DateCard />
-            <WeatherCard date={new Date()}/>
-          <Box className="mainContainer">
+          <DateWeatherWidget date={new Date()}/>
+          <Grid className="mainContainer" width='100vw' container>
             {clothes.map((cloth) => {
-              return <ClothingCard clothes={cloth} />;
+              return <Grid item xs={6}><ClothingCard clothes={cloth} /></Grid>;
             })}
             <BottomNavigationContainer />
-          </Box>
+          </Grid>
         </SignedIn>
       </section>
     </>

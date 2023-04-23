@@ -22,6 +22,7 @@ import {
   CardContent,
   Typography,
   Stack,
+  Grid,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -61,7 +62,6 @@ export default function Wardrobe() {
       createdOn: new Date(),
     },
   ]);
-  
 
   return (
     <>
@@ -77,15 +77,33 @@ export default function Wardrobe() {
             id="outlined-basic"
             label="Search..."
             variant="outlined"
-            sx={{ margin: "1em" }}
+            sx={{
+              margin: "1em",
+              input: { color: "#FFD36E" },
+              label: { color: '#FFD36E' },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "#FFD36E",
+                },
+              },
+            }}
           />
-          <Typography variant="h4" sx={{ color: "gray" }}>
+          <Typography
+            variant="h4"
+            sx={{ color: "#FFD36E", borderColor: "#FFD36E" }}
+          >
             Tops
           </Typography>
         </Stack>
-        {clothes.map((cloth) => {
-          return <ClothingCard clothes={cloth}/>;
-        })}
+        <Grid container width="100vw">
+          {clothes.map((cloth) => {
+            return (
+              <Grid item xs={6}>
+                <ClothingCard clothes={cloth} />
+              </Grid>
+            );
+          })}
+        </Grid>
       </section>
 
       {/* 3. NavBar section */}

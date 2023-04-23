@@ -38,7 +38,7 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static" sx={{backgroundColor:"gray"}}>
+    <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           
@@ -97,9 +97,8 @@ function ResponsiveAppBar() {
             </Menu>
           </Box>
        
-        <img src="/quick-fits.svg" height={65} width={300}/>
-     
-          {/* <Typography
+
+          <Typography
             variant="h5"
             noWrap
             component="a"
@@ -116,7 +115,7 @@ function ResponsiveAppBar() {
             }}
           >
             QUICKFIT
-          </Typography> */}
+          </Typography>
 
 
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>

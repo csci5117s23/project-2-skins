@@ -14,6 +14,7 @@ import {
   Button,
   Autocomplete,
   Chip,
+  Grid
 } from "@mui/material";
 
 export default function ClothingCard(props) {
@@ -28,7 +29,7 @@ export default function ClothingCard(props) {
   
   return (
     <Stack alignItems="center" spacing={2} mt={0.5}>
-      <Card sx={{ maxWidth: 300 }}>
+      <Card sx={{ width:"43vw"}}>
         <CardMedia
           sx={{ height: 140, backgroundColor:'gray' }}
           image="/static/images/cards/contemplative-reptile.jpg"
@@ -41,13 +42,13 @@ export default function ClothingCard(props) {
           <Typography variant="body2" color="text.secondary">
             {clothes["clothingName"]}
           </Typography>
-          <Stack direction="row" spacing={1} width={300}>
+          <Grid container>
             {clothes["tags"]?.map((tag) => {
               return (
-                <Chip label={tag} variant="outlined" onDelete={handleDelete} />
+                <Grid item xs="auto"><Chip label={tag} size="small" variant="outlined" onDelete={handleDelete}/></Grid>
               );
             })}
-          </Stack>
+          </Grid>
         </CardContent>
       </Card>
     </Stack>
