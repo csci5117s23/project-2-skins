@@ -72,9 +72,8 @@ export default function UILayout() {
       <section>
         <SignedIn>
             <DateCard />
-            <WeatherCard/>
+            <WeatherCard date={new Date()}/>
           <Box className="mainContainer">
-            <Card className="weatherCard">Weather goes here</Card>
             {clothes.map((cloth) => {
               return <ClothingCard clothes={cloth} />;
             })}

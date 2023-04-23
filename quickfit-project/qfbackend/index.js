@@ -76,7 +76,22 @@ const clothesScehmaYup = object( {
   category:      string().required(),                 // Name of tag (top, bottom, sweater, shoes, etc.)
   clothingName:  string().required(),                         // Name of clothing (Black Nike hoodie, Red long sleeve from garage) 
   tags:          array().of(string()),
-  createdOn:    date().default(() => new Date()),     // Date of when clothing article was created (POST date)
+  createdOn:     date().default(() => new Date()),     // Date of when clothing article was created (POST date)
+})
+//////////////////////////////////////////////////////////////////////
+// Database schema - outfit (Clothing category)
+// API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev/tag/[id]
+// Codehooks will auto generate '._id' property on clothing tag db entry on POST
+const outfitSchemaYup = object( {
+  // Reference to clothesSchemaYup(clothing article) ._id
+  topId:          string(),                    
+  bottomId:       string(),   
+  shoesId:        string(),   
+  sweaterId:      string(),                    
+  jacketId:       string(), 
+  accessoriesId:  string(), //should accessories be an array?
+  onePieceId:     string(), 
+  createdOn:      date().default(() => new Date()),       // Date of when tag was created (POST date)
 })
 //////////////////////////////////////////////////////////////////////
 // Database schema - Tag (Clothing category)

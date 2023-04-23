@@ -21,3 +21,12 @@ export function formatDate(inputDate)
 {
     return inputDate.toLocaleDateString('en-us', { year:"numeric", month:"long", day:"numeric"}) 
 }
+
+// -------------------------------------------------------------------
+// Function that calculates the number of days between a date and today
+// Parameters: inputDate (type: Date) --> returns int days
+// -------------------------------------------------------------------
+export function getDays(inputDate)
+{
+    return Math.ceil((inputDate.getTime() - new Date().getTime())/(1000*60*60*24));
+}
