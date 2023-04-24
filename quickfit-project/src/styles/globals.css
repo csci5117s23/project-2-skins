@@ -1,3 +1,10 @@
 #mainContainer{
   background-color: #3C3F42;
 }
+
+.MuiDateCalendar-root{
+width: 100vw;
+} 
+.css-cwhad8-MuiDateCalendar-root{
+width: 100vw;
+}

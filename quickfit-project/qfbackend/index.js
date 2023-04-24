@@ -72,26 +72,24 @@ const options = {  // Schema options
 // Database schema - Clothing article 
 // API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev/clothes/[id]
 // Codehooks will auto generate '._id' property on clothing db entry on POST
-const clothesScehmaYup = object( {
-  category:      string().required(),                 // Name of tag (top, bottom, sweater, shoes, etc.)
-  clothingName:  string().required(),                         // Name of clothing (Black Nike hoodie, Red long sleeve from garage) 
-  tags:          array().of(string()),
-  createdOn:     date().default(() => new Date()),     // Date of when clothing article was created (POST date)
+const clothesSchemaYup = object( {
+  category:      string().required(),                 // Name of category (top, bottom, sweater, shoes, etc.)
+  clothingName:  string().required(),                 // Name of clothing (Black Nike hoodie, Red long sleeve from garage) 
+  tags:          array().of(string()),                
+  createdOn:     date().default(() => new Date()),    // Date of when clothing article was created (POST date)
 })
 //////////////////////////////////////////////////////////////////////
-// Database schema - outfit (Clothing category)
+// Database schema - Outfit 
 // API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev/tag/[id]
 // Codehooks will auto generate '._id' property on clothing tag db entry on POST
 const outfitSchemaYup = object( {
   // Reference to clothesSchemaYup(clothing article) ._id
-  topId:          string(),                    
-  bottomId:       string(),   
-  shoesId:        string(),   
-  sweaterId:      string(),                    
-  jacketId:       string(), 
-  accessoriesId:  string(), //should accessories be an array?
-  onePieceId:     string(), 
-  createdOn:      date().default(() => new Date()),       // Date of when tag was created (POST date)
+  topId:          array().of(string()),               // Muliple tops allowed (zip up hoodie with t-shirt)                 
+  bottomId:       array().of(string()),               // Multiple bottoms allowed (skirt with leggings)
+  shoesId:        string(),                           // One pair of shoes only    
+  accessoriesId:  array().of(string()),               // Multiple accessories allowed (necklace and watch)
+  onePieceId:     string(),                           // Only one allowed 
+  createdOn:      date().default(() => new Date()),   // Date of when tag was created (POST date)
 })
 //////////////////////////////////////////////////////////////////////
 // Database schema - Tag (Clothing category)
@@ -267,5 +265,5 @@ app.use('/link/:id', async (req, res, next) => {
 })
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
-crudlify(app, { clothesScehmaYup: clothesScehmaYup });
+crudlify(app, { clothesSchemaYup: clothesSchemaYup, outfitSchemaYup: outfitSchemaYup});
 export default app.init();

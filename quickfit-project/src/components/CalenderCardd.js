@@ -117,9 +117,7 @@ export default function DateCalendarServerRequest() {
   return (
     <Card>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Box width="100vw">
           <DateCalendar
-            sx={{ trandform: "scale(2)" }}
             defaultValue={initialValue}
             loading={isLoading}
             onMonthChange={handleMonthChange}
@@ -133,7 +131,6 @@ export default function DateCalendarServerRequest() {
               },
             }}
           />
-        </Box>
       </LocalizationProvider>
     </Card>
   );

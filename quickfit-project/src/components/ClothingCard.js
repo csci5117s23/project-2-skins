@@ -36,11 +36,11 @@ export default function ClothingCard(props) {
           title={clothes["clothingName"]}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {clothes["category"]}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="h5">
             {clothes["clothingName"]}
+          </Typography>
+          <Typography gutterBottom  variant="body2" component="div" color="text.secondary">
+            {clothes["category"]}
           </Typography>
           <Grid container>
             {clothes["tags"]?.map((tag) => {

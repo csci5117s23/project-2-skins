@@ -53,8 +53,9 @@ export default function ClothesForm() {
 
   return (
     <>
+    <Stack spacing={1} m={2} justifyContent="center" height="70vh">
       <Card>
-        <Stack spacing={1} m={2} height="100vh">
+        <Stack spacing={1} m={2} >
           <FormControl fullWidth>
             <InputLabel>Category</InputLabel>
             <Select
@@ -113,11 +114,16 @@ export default function ClothesForm() {
               />
             )}
           />
-          <Button variant="outlined" onClick={addClothes}>
+          <Button variant="contained" component="label">
+            Upload Photo
+            <input type="file" accept="image/png, image/jpeg" hidden />
+          </Button>
+          <Button variant="contained" onClick={addClothes}>
             Submit
           </Button>
         </Stack>
       </Card>
+    </Stack>
     </>
   );
 }
