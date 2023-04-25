@@ -21,7 +21,7 @@ import {
 // Header text styling for each form input
 function InputHeader( props ) {
   return (
-    <Typography variant="h6" 
+    <Typography variant="h8" 
       sx={{
         fontWeight: 'bold'
       }}>
@@ -81,7 +81,23 @@ export default function ClothesForm() {
         
         {/* Form */}
         <FormControl fullWidth>
-          <FormLabel>Add clothes to your wardrobe</FormLabel>
+
+          <FormLabel 
+            sx={{
+              textAlign: 'center',
+              mt: 1,
+              mb: 2,
+              py: 1,
+              bgcolor: 'lightgrey',
+              borderRadius: 4
+            }}>
+            <Typography
+              variant="h7" 
+              sx={{ fontWeight: 'bold' }}
+            >
+              Add clothes to your wardrobe
+            </Typography>
+          </FormLabel>
           
           {/* List of form fields */}
           <Stack 
@@ -110,10 +126,9 @@ export default function ClothesForm() {
             {/* Name */}
             <InputHeader> Name </InputHeader>
             <TextField
+              variant="outlined"
               label="Name"
               value={name}
-              variant="outlined"
-              
               onChange={(e) => {
                 setName(e.target.value);
               }}
@@ -122,9 +137,10 @@ export default function ClothesForm() {
             {/* Color */}
             <InputHeader> Color </InputHeader>
             <TextField
-              label="Color"
               variant="outlined"
+              label="Color"
               value={color}
+              placeholder="Press Enter for more tags"
               onChange={(e) => {
                 setColor(e.target.value);
               }}
@@ -147,6 +163,8 @@ export default function ClothesForm() {
               }
               renderInput={(params) => (
                 <TextField
+                  multiline
+                  maxRows={4}
                   {...params}
                   variant="outlined"
                   label="Tags"
