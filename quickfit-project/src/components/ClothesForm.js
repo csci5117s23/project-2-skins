@@ -13,17 +13,33 @@ import {
   Button,
   Autocomplete,
   Chip,
+  FormLabel,
+  Typography,
 } from "@mui/material";
 
+
+// Header text styling for each form input
+function InputHeader( props ) {
+  return (
+    <Typography variant="h6" 
+      sx={{
+        fontWeight: 'bold'
+      }}>
+      {props.children}
+    </Typography>
+  )
+}
+
+
+// Clothes form
 export default function ClothesForm() {
   const { userId, getToken } = useAuth();
   const [category, setCategory] = useState("");
   const [color, setColor] = useState("");
   const [name, setName] = useState("");
-  //TODO:use these states to hold tag values onChange and onKeypress
+  // TODO:use these states to hold tag values onChange and onKeypress
   // const [newTag, setNewTag] = useState("");
   // const [tagList, setTagList] = useState("");
-  // const API_ENDPOINT = "https://todobackend-fm9y.api.codehooks.io/dev";
 
   async function addClothes() {
     const token = await getToken({ template: "codehooks" });
@@ -53,14 +69,31 @@ export default function ClothesForm() {
 
   return (
     <>
-    <Stack spacing={1} m={2} justifyContent="center" height="70vh">
-      <Card>
-        <Stack spacing={1} m={2} >
-          <FormControl fullWidth>
-            <InputLabel>Category</InputLabel>
-            <Select
+      {/* Clothes form container */}
+      <Box 
+        sx={{
+          bgcolor: 'white',
+          m: { xs: 0, sm: 1, md: 3, xl: 5 },
+          p: { xs: 2, sm: 3, md: 4, xl: 5 },
+          height: '100%',
+        }}
+      >
+        
+        {/* Form */}
+        <FormControl fullWidth>
+          <FormLabel>Add clothes to your wardrobe</FormLabel>
+          
+          {/* List of form fields */}
+          <Stack 
+            spacing={1}
+          >
+
+            {/* Category */}
+            <InputHeader> Category </InputHeader>
+            <TextField
+              select
+              label="Choose clothing category"
               value={category}
-              label="Category"
               onChange={(event) => {
                 setCategory(event.target.value);
               }}
@@ -72,58 +105,70 @@ export default function ClothesForm() {
               <MenuItem value={"shoes"}>Shoes</MenuItem>
               <MenuItem value={"accessories"}>Accessories</MenuItem>
               <MenuItem value={"onepiece"}>One Piece</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            fullWidth
-            label="Name"
-            variant="outlined"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-          />
-          <TextField
-            fullWidth
-            label="Color"
-            variant="outlined"
-            value={color}
-            onChange={(e) => {
-              setColor(e.target.value);
-            }}
-          />
-          <Autocomplete
-            multiple
-            options={[]}
-            freeSolo
-            renderTags={(value, getTagProps) =>
-              value.map((option, index) => (
-                <Chip
+            </TextField>
+          
+            {/* Name */}
+            <InputHeader> Name </InputHeader>
+            <TextField
+              label="Name"
+              value={name}
+              variant="outlined"
+              
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+            />
+
+            {/* Color */}
+            <InputHeader> Color </InputHeader>
+            <TextField
+              label="Color"
+              variant="outlined"
+              value={color}
+              onChange={(e) => {
+                setColor(e.target.value);
+              }}
+            />
+
+            {/* Tags */}
+            <InputHeader> Tags </InputHeader>
+            <Autocomplete
+              multiple
+              options={[]}
+              freeSolo
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => (
+                  <Chip
+                    variant="outlined"
+                    label={option}
+                    {...getTagProps({ index })}
+                  />
+                ))
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
                   variant="outlined"
-                  label={option}
-                  {...getTagProps({ index })}
+                  label="Tags"
+                  placeholder="Press Enter for more tags"
                 />
-              ))
-            }
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                variant="outlined"
-                label="Tags"
-                placeholder="Press Enter for more tags"
-              />
-            )}
-          />
-          <Button variant="contained" component="label">
-            Upload Photo
-            <input type="file" accept="image/png, image/jpeg" hidden />
-          </Button>
-          <Button variant="contained" onClick={addClothes}>
-            Submit
-          </Button>
-        </Stack>
-      </Card>
-    </Stack>
+              )}
+            />
+
+            {/* Image */}
+            <Button variant="contained" component="label">
+              Upload Photo
+              <input type="file" accept="image/png, image/jpeg" hidden />
+            </Button>
+
+            {/* Submit */}
+            <Button variant="contained" onClick={addClothes}>
+              Submit
+            </Button>
+
+          </Stack>
+        </FormControl>
+      </Box>
     </>
   );
 }
