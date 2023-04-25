@@ -42,6 +42,7 @@ function ResponsiveAppBar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           
+          {/* Desktop header */}
           <Typography
             variant="h6"
             noWrap
@@ -50,7 +51,7 @@ function ResponsiveAppBar() {
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
-              fontFamily: '',
+              // fontFamily: 'times',
               fontWeight: 700,
               letterSpacing: '.3rem',
               color: 'inherit',
@@ -97,7 +98,7 @@ function ResponsiveAppBar() {
             </Menu>
           </Box>
        
-
+          {/* Mobile header */}
           <Typography
             variant="h5"
             noWrap
@@ -107,7 +108,7 @@ function ResponsiveAppBar() {
               mr: 2,
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
-              fontFamily: 'monospace',
+              // fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
               color: 'inherit',
@@ -116,7 +117,6 @@ function ResponsiveAppBar() {
           >
             QUICKFIT
           </Typography>
-
 
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {/* {pages.map((page) => (
@@ -133,6 +133,7 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <UserButton/>
           </Box>
+
         </Toolbar>
       </Container>
     </AppBar>

@@ -1,4 +1,4 @@
-// -------------- clothesFunctions.js ----------------
+// ---------------- tagFunctions.js ----------------
 /*
  *  This file contains backend functions to make CRUD 
  *  requests for clothing tags (for the current user).
@@ -11,12 +11,12 @@
  */
 // -- Get necessary environment variables --
 const backendBase = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
-const clothesUrl = backendBase + '/clothes';
+const tagsUrl = backendBase + '/tags';
 
 // ---------------------------------------------------------
-// GET: Function get all of a user's clothes
+// GET: Function get all of a user's tags
 // ---------------------------------------------------------
-export async function getClothes() {
+export async function getTags() {
     const result = await fetch(clothesUrl, {
         'method': 'GET',
         'headers': {
@@ -27,17 +27,18 @@ export async function getClothes() {
 }
 
 // ---------------------------------------------------------
-// POST: Function to add a clothing article to user wardrobe
+// POST: Function to add a clothing tag to user tags list
 // ---------------------------------------------------------
-export async function addClothes(authToken, clothing) {
+export async function addTag(tag) {
+    // If tag name is invalid don't add it.
+    if (tag.name === "" || tag.name === null) {
+        console.log("Error. Tag name empty");
+        return;
+    }
+    
     // Get authorization token from JWT codehooks template
     const token = await getToken({ template: "codehooks" });
 
-    // If category or name is empty, don't add clothing article.
-    if (clothing.category === "" || clothing.name === "") {
-        console.log("Error. Clothing category/name empty");
-        return;
-    }
     // Send post request to add clothing to DB
     const result = await fetch(clothesUrl, {
         'method': 'POST',

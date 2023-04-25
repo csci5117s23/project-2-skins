@@ -40,7 +40,10 @@ function InputHeader( props ) {
 
 // Clothes form
 export default function ClothesForm() {
+  // Authorization
   const { userId, getToken } = useAuth();
+
+  // Add form inputs
   const [category, setCategory] = useState("");
   const [color, setColor] = useState("");
   const [name, setName] = useState("");
@@ -49,39 +52,22 @@ export default function ClothesForm() {
   const [newTag, setNewTag] = useState("");
   const [tagList, setTagList] = useState([]);
 
-  async function addClothes() {
+  // --------------------------------------------------
+  // Function to add a clothing article from front-end
+  // --------------------------------------------------
+  async function addClothesFE() {
+    // Create a clothing item from state variables to POST
     const clothingItem = {
       category: category,
       name: name,
       color: color,
-      tags: [tags],
+      tags: tagList,
     }
-
-
-    const token = await getToken({ template: "codehooks" });
-
-    // if category or name is empty, dont post
-    if (category === "" || name === "") {
-      return;
-    }
-    const response = await fetch(
-      "https://todobackend-fm9y.api.codehooks.io/dev/clothes",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify({
-          category: category,
-          clothingName: name,
-          tags: [color],
-        }),
-      }
-    );
-    console.log(response);
+    // Call POST function
+    addClothes(null, clothingItem);
   }
-
+  
+  // JSX
   return (
     <>
       {/* Clothes form container */}
@@ -96,7 +82,6 @@ export default function ClothesForm() {
         
         {/* Form */}
         <FormControl fullWidth>
-
           <FormLabel 
             sx={{
               textAlign: 'center',
@@ -106,8 +91,7 @@ export default function ClothesForm() {
               bgcolor: 'lightgrey',
               borderRadius: 4
             }}>
-            <Typography
-              variant="h7" 
+            <Typography variant="h7" 
               sx={{ fontWeight: 'bold' }}
             >
               Add clothes to your wardrobe
@@ -115,14 +99,11 @@ export default function ClothesForm() {
           </FormLabel>
           
           {/* List of form fields */}
-          <Stack 
-            spacing={1}
-          >
+          <Stack spacing={1}>
 
             {/* Category */}
             {/* <InputHeader> Category </InputHeader> */}
-            <TextField
-              select
+            <TextField select
               label="Choose clothing category"
               value={category}
               onChange={(event) => {
@@ -140,8 +121,7 @@ export default function ClothesForm() {
           
             {/* Name */}
             {/* <InputHeader> Name </InputHeader> */}
-            <TextField
-              variant="outlined"
+            <TextField variant="outlined"
               label="Name"
               value={name}
               onChange={(e) => {
@@ -150,7 +130,7 @@ export default function ClothesForm() {
             />
 
             {/* Color */}
-            {/* <InputHeader> Color </InputHeader> */}
+            <InputHeader> Color </InputHeader>
             <TextField
               variant="outlined"
               label="Color"
@@ -162,7 +142,7 @@ export default function ClothesForm() {
             />
 
             {/* Tags */}
-            {/* <InputHeader> Tags </InputHeader> */}
+            <InputHeader> Tags </InputHeader>
             <Autocomplete
               multiple
               options={[]}

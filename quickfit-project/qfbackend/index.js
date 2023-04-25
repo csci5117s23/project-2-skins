@@ -73,15 +73,17 @@ const options = {  // Schema options
 // API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev/clothes/[id]
 // Codehooks will auto generate '._id' property on clothing db entry on POST
 const clothesSchemaYup = object( {
-  category:      string().required(),                 // Name of category (top, bottom, sweater, shoes, etc.)
-  clothingName:  string().required(),                 // Name of clothing (Black Nike hoodie, Red long sleeve from garage) 
-  tags:          array().of(string()),                
+  category:      string().required(),                 // Name of category (top  , bottom, sweater, shoes, etc.)
+  name:          string().required(),                 // Name of clothing (Black Nike hoodie, Red long sleeve from garage) 
+  tags:          array().of(string()),                // List of user specified strings
+  color:         string(),                            // User-specified color
+  // image                                            // User-uplodad image of clothing
   createdOn:     date().default(() => new Date()),    // Date of when clothing article was created (POST date)
 })
 //////////////////////////////////////////////////////////////////////
 // Database schema - Outfit 
-// API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev/tag/[id]
-// Codehooks will auto generate '._id' property on clothing tag db entry on POST
+// API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev/outfit/[id]
+// Codehooks will auto generate '._id' property on outfit db entry on POST
 const outfitSchemaYup = object( {
   // Reference to clothesSchemaYup(clothing article) ._id
   topId:          array().of(string()),               // Muliple tops allowed (zip up hoodie with t-shirt)                 
@@ -90,17 +92,16 @@ const outfitSchemaYup = object( {
   accessoriesId:  array().of(string()),               // Multiple accessories allowed (necklace and watch)
   onePieceId:     string(),                           // Only one allowed 
   dateWorn:       date().required(),                  // Date of when user set to wear this outfit
-  createdOn:      date().default(() => new Date()),   // Date of when tag was created (POST date)
+  createdOn:      date().default(() => new Date()),   // Date of when outfit was created (POST date)
 })
 //////////////////////////////////////////////////////////////////////
-// Database schema - Tag (Clothing category)
+// Database schema - Tag (Clothing tags)
 // API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev/tag/[id]
-// Codehooks will auto generate '._id' property on clothing tag db entry on POST
-// const tagSchemaYup = object( {
-//   clothingId: string().required(),                    // Reference to clothesSchemaYup(clothing article) ._id
-//   tag:      string().required(),                    // Name of tag (color, brand, style, etc.)
-//   createdOn:  date().default(() => new Date()),       // Date of when tag was created (POST date)
-// })
+// Codehooks will auto generate '._id' property on tag db entry on POST
+const tagSchemaYup = object( {
+  name:        string().required(),                   // Name of tag (color, brand, style, etc.)
+  createdOn:  date().default(() => new Date()),       // Date of when tag was created (POST date)
+})
 //////////////////////////////////////////////////////////////////////
 // Database schema - Link (Clothing to tag relations)
 // API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev/link/[id]
@@ -268,5 +269,5 @@ const outfitSchemaYup = object( {
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
-crudlify(app, { clothesSchemaYup: clothesSchemaYup, outfitSchemaYup: outfitSchemaYup});
+crudlify(app, { clothesSchemaYup: clothesSchemaYup, outfitSchemaYup: outfitSchemaYup, tagSchemaYup: tagSchemaYup });
 export default app.init();
