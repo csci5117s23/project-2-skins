@@ -33,8 +33,8 @@ export default function BottomNavigationContainer() {
           onChange={(event, newValue)=>{router.push('/'+newValue);}}
         >
           <BottomNavigationAction label="Home" value="" icon={<CottageRoundedIcon />}/>
-          <BottomNavigationAction label="Calender" value="calender" icon={<EditCalendarIcon />} />
-          <BottomNavigationAction label="Add clothes" value="addclothes" icon={<AddRoundedIcon />} />
+          <BottomNavigationAction label="Calendar" value="calender" icon={<EditCalendarIcon />} />
+          <BottomNavigationAction label="Add clothes" value="add" icon={<AddRoundedIcon />} />
           <BottomNavigationAction label="Wardrobe" value="wardrobe" icon={<CheckroomRoundedIcon />} />
         </BottomNavigation>
       </Paper>

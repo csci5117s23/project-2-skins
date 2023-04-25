@@ -53,6 +53,12 @@ export default function ClothesForm() {
   const [tagList, setTagList] = useState([]);
 
   // --------------------------------------------------
+  // Function to handle adding tag to tags list state
+  // ---------------------------------------------------
+  
+
+
+  // --------------------------------------------------
   // Function to add a clothing article from front-end
   // --------------------------------------------------
   async function addClothesFE() {
@@ -63,8 +69,9 @@ export default function ClothesForm() {
       color: color,
       tags: tagList,
     }
+    console.log(clothingItem);
     // Call POST function
-    addClothes(null, clothingItem);
+    // addClothes(null, clothingItem);
   }
   
   // JSX
@@ -102,7 +109,7 @@ export default function ClothesForm() {
           <Stack spacing={1}>
 
             {/* Category */}
-            {/* <InputHeader> Category </InputHeader> */}
+            <InputHeader> Category </InputHeader>
             <TextField select
               label="Choose clothing category"
               value={category}
@@ -120,7 +127,7 @@ export default function ClothesForm() {
             </TextField>
           
             {/* Name */}
-            {/* <InputHeader> Name </InputHeader> */}
+            <InputHeader> Name </InputHeader>
             <TextField variant="outlined"
               label="Name"
               value={name}
@@ -158,14 +165,13 @@ export default function ClothesForm() {
               }
               renderInput={(params) => (
                 <TextField
-                  multiline
-                  maxRows={4}
                   {...params}
                   variant="outlined"
                   label="Tags"
                   placeholder="Press Enter for more tags"
                 />
               )}
+              onChange={}
             />
 
             {/* Image */}
@@ -175,7 +181,7 @@ export default function ClothesForm() {
             </Button>
 
             {/* Submit */}
-            <Button variant="contained" onClick={addClothes}>
+            <Button variant="contained" onClick={ addClothesFE }>
               Submit
             </Button>
 
