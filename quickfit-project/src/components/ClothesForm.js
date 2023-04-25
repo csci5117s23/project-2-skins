@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "@clerk/nextjs";
-
+// MUI Component imports
 import {
   Box,
   Stack,
@@ -16,6 +16,13 @@ import {
   FormLabel,
   Typography,
 } from "@mui/material";
+// DB Clothes Function imports
+import {
+  getClothes, 
+  addClothes, 
+  editClothes, 
+  deleteClothes 
+} from "../modules/clothesFunctions"
 
 
 // Header text styling for each form input
@@ -37,11 +44,20 @@ export default function ClothesForm() {
   const [category, setCategory] = useState("");
   const [color, setColor] = useState("");
   const [name, setName] = useState("");
-  // TODO:use these states to hold tag values onChange and onKeypress
-  // const [newTag, setNewTag] = useState("");
-  // const [tagList, setTagList] = useState("");
+  
+  // TODO: Use these states to hold tag values onChange and onKeypress
+  const [newTag, setNewTag] = useState("");
+  const [tagList, setTagList] = useState([]);
 
   async function addClothes() {
+    const clothingItem = {
+      category: category,
+      name: name,
+      color: color,
+      tags: [tags],
+    }
+
+
     const token = await getToken({ template: "codehooks" });
 
     // if category or name is empty, dont post
@@ -60,7 +76,6 @@ export default function ClothesForm() {
           category: category,
           clothingName: name,
           tags: [color],
-          createdOn: new Date(),
         }),
       }
     );
@@ -105,7 +120,7 @@ export default function ClothesForm() {
           >
 
             {/* Category */}
-            <InputHeader> Category </InputHeader>
+            {/* <InputHeader> Category </InputHeader> */}
             <TextField
               select
               label="Choose clothing category"
@@ -124,7 +139,7 @@ export default function ClothesForm() {
             </TextField>
           
             {/* Name */}
-            <InputHeader> Name </InputHeader>
+            {/* <InputHeader> Name </InputHeader> */}
             <TextField
               variant="outlined"
               label="Name"
@@ -135,7 +150,7 @@ export default function ClothesForm() {
             />
 
             {/* Color */}
-            <InputHeader> Color </InputHeader>
+            {/* <InputHeader> Color </InputHeader> */}
             <TextField
               variant="outlined"
               label="Color"
@@ -147,7 +162,7 @@ export default function ClothesForm() {
             />
 
             {/* Tags */}
-            <InputHeader> Tags </InputHeader>
+            {/* <InputHeader> Tags </InputHeader> */}
             <Autocomplete
               multiple
               options={[]}
