@@ -23,6 +23,9 @@ import {
   editClothes, 
   deleteClothes 
 } from "../modules/clothesFunctions"
+import MultipleSelectChip from "./MultiSelectChip";
+import FormDialog from "./FormDialog";
+import UploadButtons from "./UploadButtons";
 
 
 // Header text styling for each form input
@@ -109,7 +112,7 @@ export default function ClothesForm() {
           <Stack spacing={1}>
 
             {/* Category */}
-            <InputHeader> Category </InputHeader>
+            {/* <InputHeader> Category </InputHeader> */}
             <TextField select
               label="Choose clothing category"
               value={category}
@@ -127,7 +130,7 @@ export default function ClothesForm() {
             </TextField>
           
             {/* Name */}
-            <InputHeader> Name </InputHeader>
+            {/* <InputHeader> Name </InputHeader> */}
             <TextField variant="outlined"
               label="Name"
               value={name}
@@ -137,53 +140,45 @@ export default function ClothesForm() {
             />
 
             {/* Color */}
-            <InputHeader> Color </InputHeader>
+            {/* <InputHeader> Color </InputHeader> */}
             <TextField
               variant="outlined"
               label="Color"
               value={color}
-              placeholder="Press Enter for more tags"
+              placeholder="(Optional) Please enter a color"
               onChange={(e) => {
                 setColor(e.target.value);
               }}
             />
 
             {/* Tags */}
-            <InputHeader> Tags </InputHeader>
-            <Autocomplete
-              multiple
-              options={[]}
-              freeSolo
-              renderTags={(value, getTagProps) =>
-                value.map((option, index) => (
-                  <Chip
-                    variant="outlined"
-                    label={option}
-                    {...getTagProps({ index })}
-                  />
-                ))
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  label="Tags"
-                  placeholder="Press Enter for more tags"
-                />
-              )}
-              onChange={}
-            />
+            {/* <InputHeader> Tags </InputHeader> */}
+            
+            {/* Tags */}
+            <Stack direction="row"
+              spacing={2.5}
+              sx={{ alignItems: 'center' }}>
+              <MultipleSelectChip/>
+              <FormDialog/>
+            </Stack>
 
-            {/* Image */}
-            <Button variant="contained" component="label">
-              Upload Photo
-              <input type="file" accept="image/png, image/jpeg" hidden />
-            </Button>
+            {/* Images */}
+            <UploadButtons/>
 
             {/* Submit */}
-            <Button variant="contained" onClick={ addClothesFE }>
-              Submit
-            </Button>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+              }}>
+              <Button variant="contained"
+                sx={{
+                  width: '45%',
+                }} 
+                onClick={ addClothesFE }>
+                Submit
+              </Button>
+            </Box>
 
           </Stack>
         </FormControl>
