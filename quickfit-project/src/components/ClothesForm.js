@@ -31,8 +31,8 @@ import {
 import {
   getTags, 
   addTag, 
-  editClothes, 
-  deleteClothes 
+  editTag, 
+  deleteTag 
 } from "../modules/tagFunctions"
 
 // Custom component imports
@@ -176,7 +176,7 @@ export default function ClothesForm() {
               spacing={2.5}
               sx={{ alignItems: 'center' }}>
               <MultipleSelectChip/>
-              <AddTagDialog/>
+              <AddTagDialog getTags={getTags} addTag={addTag} editTag={editTag} deleteTag={deleteTag} />
             </Stack>
 
             {/* --- Images --- */}

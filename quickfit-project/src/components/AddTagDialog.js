@@ -17,39 +17,56 @@ import {
 // MUI Icons
 import AddIcon from "@mui/icons-material/Add";
 
-// DB Tag functions
-
 // Custom component imports
 import AddTagAutocomplete from "./AddTagAutocomplete";
 
 
-export default function AddTagDialog() {
+export default function AddTagDialog( {getTags, addTag, editTag, deleteTag } ) {
+  // --- Authorization ---------------------------------------------------
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
 
   // --- Form popup state hooks & functions ------------------------------
   // State hook to keep track of whether or not add tag popup should show
   const [open, setOpen] = React.useState(false);
 
-  // Function to open popup
+  // --- Function to open popup ---
   const handleClickOpen = () => {
     setOpen(true);
   };
-  // Function to close popup
+  // --- Function to close popup ---
   const handleClose = () => {
     setOpen(false);
   };
 
-  // --- User tag state hooks & functions  ---------------------------------------
+  // --- User tag state hooks & functions  -------------------------------
   const [newTags, setNewTags] = React.useState([]);
   
-  // Function to take user input and build newTags from Autocomplete component 
+  // -------------------------------------------------------------------------
+  // Function to take user input and build newTags from Autocomplete component
+  // ------------------------------------------------------------------------- 
   const setAutocompleteTags = (event, value) => {
     setNewTags(value); 
-    // console.log("Beep: " + newTags);
+    console.log("Beep: " + newTags);
   };
 
+  // --------------------------------------------------------------------
   // Function to send POST requests to add to a user's personal tags
-  const addUserTags
+  // --------------------------------------------------------------------
+  async function addAllTags() {
+    // If new tags list is empty, tell user to add more tags
+    if (newTags === null || newTags.length === 0) {
+      console.log("No tags entered.");
+      return;
+    }
+    console.log(newTags);
+    // Get authorization token from JWT codehooks template
+    const token = await getToken({ template: jwtTemplateName });
 
+    // Map over each new tag in list of new tags and make a post request to create each
+     newTags.map((tag) => {
+      addTag(tag);
+    })
+  }
 
   return (
     <div>
@@ -73,7 +90,7 @@ export default function AddTagDialog() {
 
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Add</Button>
+          <Button onClick={ () => {handleClose(); addAllTags(); }  }>Add</Button>
         </DialogActions>
       </Dialog>
     </div>

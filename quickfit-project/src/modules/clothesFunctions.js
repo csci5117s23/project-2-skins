@@ -28,6 +28,7 @@ export async function getClothes() {
             // 'Authorization': 'Bearer ' + token
         }
     })
+    // Return JSON list of user clothes
     return await result.json();
 }
 
@@ -43,7 +44,7 @@ export async function addClothes(authToken, clothing) {
         console.log("Error. Clothing category/name empty");
         return;
     }
-    // Send post request to add clothing to DB
+    // Send POST request
     const result = await fetch(clothesUrl, {
         'method': 'POST',
         'headers': {
@@ -68,6 +69,7 @@ export async function editClothes(clothing) {
     // Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
 
+    // Send PUT request
     const result = await fetch(clothesUrl + clothing._id, {
         'method': 'PUT',
         'headers': {
@@ -86,11 +88,16 @@ export async function editClothes(clothing) {
 // DELETE: Function to remove a clothing article from user wardrobe
 // -----------------------------------------------------------------
 export async function deleteClothes(authToken, clothing) {
+    // Get authorization token from JWT codehooks template
+    const token = await getToken({ template: jwtTemplateName });
+
+    // Send DELETE request
     const result = await fetch(clothesUrl + clothing._id, {
         'method': 'DELETE',
         'headers': {
             'Authorization': 'Bearer ' + authToken
         },
     })
+    // Return removed article as JSON
     return await result.json();
 }

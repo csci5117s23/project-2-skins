@@ -1,4 +1,6 @@
 // ---------------- tagFunctions.js ----------------
+import * as React from 'react';
+import { useAuth } from "@clerk/nextjs";
 /*
  *  This file contains backend functions to make CRUD 
  *  requests for clothing tags (for the current user).
@@ -11,79 +13,86 @@
  */
 // -- Get necessary environment variables --
 const backendBase = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
-const tagsUrl = backendBase + '/tags';
+const tagsUrl = backendBase + "/tags";
+const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
+const { isLoaded, userId, sessionId, getToken } = useAuth();
 
 // ---------------------------------------------------------
 // GET: Function get all of a user's tags
 // ---------------------------------------------------------
-export async function getTags() {
-    const result = await fetch(clothesUrl, {
+export async function getTags(authToken) {
+    // Send GET request
+    const result = await fetch(tagsUrl, {
         'method': 'GET',
         'headers': {
-            // 'Authorization': 'Bearer ' + authToken
+            // 'Authorization': 'Bearer ' + token
         }
     })
+    // Return JSON list of user tags
     return await result.json();
 }
 
 // ---------------------------------------------------------
-// POST: Function to add a clothing tag to user tags list
+// POST: Function to add a tag to user clothing tags list
 // ---------------------------------------------------------
 export async function addTag(tag) {
-    // If tag name is invalid don't add it.
-    if (tag.name === "" || tag.name === null) {
-        console.log("Error. Tag name empty");
+    // Get authorization token from JWT codehooks template
+    const token = await getToken({ template: jwtTemplateName });
+
+    // If tag name is null/empty, don't add clothing article.
+    if (tag.name === null || tag.name === "") {
+        console.log("Error. Tag name invalid.");
         return;
     }
-    
-    // Get authorization token from JWT codehooks template
-    const token = await getToken({ template: "codehooks" });
-
-    // Send post request to add clothing to DB
-    const result = await fetch(clothesUrl, {
+    // Send POST request
+    const result = await fetch(tagsUrl, {
         'method': 'POST',
         'headers': {
-            // 'Authorization': 'Bearer ' + authToken,
+            // 'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
         'body': JSON.stringify({
-            category: clothing.category,
-            name:     clothing.name,
-            color:    clothing.color,  
-            tags:     clothing.tags,
+            name: tag.name
         }),
     })
-    // Return newly-made clothing entry
+    // Return newly-made tag entry
     return await result.json();
 }
 
 // -------------------------------------------------------------------------
-// PUT: Function to edit an existing user clothing tag
+// PUT: Function to edit an existing user tag
 // -------------------------------------------------------------------------
 export async function editTag(tag) {
-    const authToken  
-    const result = await fetch(clothesUrl + tag._id, {
+    // Get authorization token from JWT codehooks template
+    const token = await getToken({ template: jwtTemplateName });
+
+    // Send PUT request
+    const result = await fetch(tagsUrl + tag._id, {
         'method': 'PUT',
         'headers': {
-            'Authorization': 'Bearer ' + authToken,
+            // 'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
-        'body': JSON.stringify({
-            clothing
-        })
+        'body': JSON.stringify({tag})
     });
+    // Return newly-edited tag JSON
     return await result.json();
 }
 
 // -----------------------------------------------------------------
-// DELETE: Function to remove an existing user clothing tag
+// DELETE: Function to remove a tag 
 // -----------------------------------------------------------------
-export async function deleteTag(authToken, tag) {
-    const result = await fetch(clothesUrl + tag._id, {
+export async function deleteTag(clothing) {
+    // Get authorization token from JWT codehooks template
+    const token = await getToken({ template: jwtTemplateName });
+
+    // Send DELETE request
+    const result = await fetch(clothesUrl + clothing._id, {
         'method': 'DELETE',
         'headers': {
-            'Authorization': 'Bearer ' + authToken
+            // 'Authorization': 'Bearer ' + token
         },
     })
+    // Return removed tag as JSON
     return await result.json();
 }
