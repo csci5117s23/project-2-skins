@@ -99,7 +99,7 @@ const outfitSchemaYup = object( {
 // API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev/tag/[id]
 // Codehooks will auto generate '._id' property on tag db entry on POST
 const tagSchemaYup = object( {
-  name:        string().required(),                   // Name of tag (color, brand, style, etc.)
+  name:       string().required(),                    // Name of tag (color, brand, style, etc.)
   createdOn:  date().default(() => new Date()),       // Date of when tag was created (POST date)
 })
 //////////////////////////////////////////////////////////////////////

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useAuth } from "@clerk/nextjs";
 // MUI Imports
 import {
   Autocomplete,
@@ -23,6 +24,7 @@ import AddTagAutocomplete from "./AddTagAutocomplete";
 
 export default function AddTagDialog( {getTags, addTag, editTag, deleteTag } ) {
   // --- Authorization ---------------------------------------------------
+  const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
   const { isLoaded, userId, sessionId, getToken } = useAuth();
 
   // --- Form popup state hooks & functions ------------------------------
@@ -58,14 +60,19 @@ export default function AddTagDialog( {getTags, addTag, editTag, deleteTag } ) {
       console.log("No tags entered.");
       return;
     }
-    console.log(newTags);
     // Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
 
+    addTag(token, newTags[0]);
     // Map over each new tag in list of new tags and make a post request to create each
-     newTags.map((tag) => {
-      addTag(tag);
-    })
+    // newTags.map((tag) => { 
+    //   // If tag name is null/empty, don't add tag.
+    //   if (tag.name === null || tag.name === "") {
+    //     console.log("Error. Tag name invalid.");
+    //     return;
+    //   }
+    //   addTag(token, tag); // Otherwise, add tag normally.
+    // })
   }
 
   return (
