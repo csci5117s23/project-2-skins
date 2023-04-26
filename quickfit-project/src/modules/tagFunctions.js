@@ -11,7 +11,7 @@
  */
 // -- Get necessary environment variables --
 const backendBase = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
-const tagsUrl = backendBase + "/tags";
+const tagsUrl = backendBase + "/tag";
 
 // ---------------------------------------------------------
 // GET: Function get all of a user's tags
@@ -52,7 +52,7 @@ export async function addTag(authToken, tagName) {
         // Return newly-made tag entry
         return await result.json();
     } catch (error) {
-        console.log(error);;
+        console.log(error);
     }
 }
 

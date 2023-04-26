@@ -74,6 +74,14 @@ export default function AddTagDialog( {getTags, addTag, editTag, deleteTag } ) {
     })
   }
 
+
+  // --------------------------------------------------------------------
+  // Run on every render.
+  // --------------------------------------------------------------------
+  React.useEffect(() => {
+    console.log("Middle rendered");
+  });
+
   return (
     <div>
       {/* Add tag button */}

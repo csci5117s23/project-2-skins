@@ -64,8 +64,7 @@ export default function ClothesForm() {
   const [color, setColor] = useState("");
   const [name, setName] = useState("");
   
-  // TODO: Use these states to hold tag values onChange and onKeypress
-  const [newTag, setNewTag] = useState("");
+  // Use these states to hold tag values onChange and onKeyPress
   const [tagList, setTagList] = useState([]);
 
   // --------------------------------------------------
