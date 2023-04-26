@@ -2,13 +2,19 @@ import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from '@clerk/nex
 import { useRouter } from 'next/router';
 import SignInPage from "@/components/SignInPage";
 import {createTheme, ThemeProvider} from '@mui/material'
+
+import { orange, yellow } from '@mui/material/colors';
+
 import "@/styles/globals.css";
 import "@/styles/layout.css";
 
 const theme = createTheme({
   palette:{
     primary:{
-      main: "#FFD36E"
+      main: "#FFD36E",
+    },
+    secondary: {
+      main: orange[500],
     },
     background:{
       default: "#3C3F42"

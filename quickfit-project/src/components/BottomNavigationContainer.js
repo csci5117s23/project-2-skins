@@ -1,23 +1,18 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import CottageRoundedIcon from '@mui/icons-material/CottageRounded';
+import { useRouter } from 'next/router'
+// MUI Imports
+import { 
+  Box, 
+  BottomNavigation, 
+  BottomNavigationAction, 
+  CssBaseline,
+  Paper,
+} from '@mui/material'
+// MUI Icons
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import CheckroomRoundedIcon from '@mui/icons-material/CheckroomRounded';
-import Paper from '@mui/material/Paper';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
-import Link from 'next/link';
-import { useRouter } from 'next/router'
 
 export default function BottomNavigationContainer() {
   const router = useRouter();
@@ -32,7 +27,7 @@ export default function BottomNavigationContainer() {
           value={value}
           onChange={(event, newValue)=>{router.push('/'+newValue);}}
         >
-          <BottomNavigationAction label="Home" value="" icon={<CottageRoundedIcon />}/>
+          <BottomNavigationAction label="Home" value="" icon={<HomeRoundedIcon />}/>
           <BottomNavigationAction label="Calendar" value="calender" icon={<EditCalendarIcon />} />
           <BottomNavigationAction label="Add clothes" value="addclothes" icon={<AddRoundedIcon />} />
           <BottomNavigationAction label="Wardrobe" value="wardrobe" icon={<CheckroomRoundedIcon />} />

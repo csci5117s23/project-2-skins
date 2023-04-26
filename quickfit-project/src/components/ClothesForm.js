@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "@clerk/nextjs";
+
 // MUI Component imports
 import {
   Box,
@@ -15,7 +16,9 @@ import {
   Chip,
   FormLabel,
   Typography,
+  Paper,
 } from "@mui/material";
+
 // DB Clothes Function imports
 import {
   getClothes, 
@@ -23,9 +26,11 @@ import {
   editClothes, 
   deleteClothes 
 } from "../modules/clothesFunctions"
+
+// Custom component imports
 import MultipleSelectChip from "./MultiSelectChip";
-import FormDialog from "./FormDialog";
-import UploadButtons from "./UploadButtons";
+import AddTagDialog from "./AddTagDialog";
+import UploadButtons from "./UploadImageButtons";
 
 
 // Header text styling for each form input
@@ -90,31 +95,36 @@ export default function ClothesForm() {
         }}
       >
         
-        {/* Form */}
+        {/* Clothing form */}
         <FormControl fullWidth>
-          <FormLabel 
-            sx={{
-              textAlign: 'center',
-              mt: 1,
-              mb: 2,
-              py: 1,
-              bgcolor: 'lightgrey',
-              borderRadius: 4
-            }}>
-            <Typography variant="h7" 
-              sx={{ fontWeight: 'bold' }}
+
+          {/* Form header */}
+          <FormLabel>
+            <Paper 
+              elevation={4}
+              sx={{
+                textAlign: "center",
+                mt: 1,
+                mb: 2,
+                py: 1,
+                bgcolor: "#EEEEEE",
+                borderRadius: 2,
+                border: '1px solid grey',
+              }}
             >
-              Add clothes to your wardrobe
-            </Typography>
+              <Typography variant="h7" sx={{ fontWeight: "bold" }}>
+                Add clothes to your wardrobe
+              </Typography>
+            </Paper>
           </FormLabel>
           
-          {/* List of form fields */}
+          {/* Form fields */}
           <Stack spacing={1}>
 
             {/* Category */}
-            {/* <InputHeader> Category </InputHeader> */}
+            <InputHeader> Enter clothing details </InputHeader>
             <TextField select
-              label="Choose clothing category"
+              label="Category*"
               value={category}
               onChange={(event) => {
                 setCategory(event.target.value);
@@ -132,8 +142,9 @@ export default function ClothesForm() {
             {/* Name */}
             {/* <InputHeader> Name </InputHeader> */}
             <TextField variant="outlined"
-              label="Name"
+              label="Name*"
               value={name}
+              placeholder="(Required) Enter a name"
               onChange={(e) => {
                 setName(e.target.value);
               }}
@@ -151,25 +162,26 @@ export default function ClothesForm() {
               }}
             />
 
-            {/* Tags */}
-            {/* <InputHeader> Tags </InputHeader> */}
-            
-            {/* Tags */}
+            {/* --- Tags --- */}
+            <InputHeader> Tags </InputHeader>
             <Stack direction="row"
               spacing={2.5}
               sx={{ alignItems: 'center' }}>
               <MultipleSelectChip/>
-              <FormDialog/>
+              <AddTagDialog/>
             </Stack>
 
-            {/* Images */}
+            {/* --- Images --- */}
+            <InputHeader> Image</InputHeader>
             <UploadButtons/>
 
-            {/* Submit */}
+            {/* --- Submit --- */}
             <Box
               sx={{
                 display: 'flex',
                 justifyContent: 'center',
+                // bgcolor: 'red',
+                pt: 2,
               }}>
               <Button variant="contained"
                 sx={{
