@@ -89,6 +89,7 @@ const outfitSchemaYup = object( {
   shoesId:        string(),                           // One pair of shoes only    
   accessoriesId:  array().of(string()),               // Multiple accessories allowed (necklace and watch)
   onePieceId:     string(),                           // Only one allowed 
+  dateWorn:       date().required(),
   createdOn:      date().default(() => new Date()),   // Date of when tag was created (POST date)
 })
 //////////////////////////////////////////////////////////////////////

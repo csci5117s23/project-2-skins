@@ -25,7 +25,7 @@ export default function DateCard(props) {
   const {date} = props;
   return (
     <>
-    <Typography variant="h5" sx={{color:"#000000"}}> 
+    <Typography variant="h5" sx={{color:"#696969"}}> 
       {date? formatDate(date):formatDate(new Date())}
     </Typography>
       

@@ -19,7 +19,7 @@ export function formatDateWeekday(inputDate)
 // -------------------------------------------------------------------
 export function formatDate(inputDate)
 {
-    return inputDate.toLocaleDateString('en-us', { year:"numeric", month:"long", day:"numeric"}) 
+    return inputDate.toLocaleDateString('en-us', { month:"long", day:"numeric"}) 
 }
 
 // -------------------------------------------------------------------

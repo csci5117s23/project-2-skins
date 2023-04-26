@@ -29,7 +29,9 @@ export default function ClothingCard(props) {
   
   return (
     <Stack alignItems="center" spacing={2} mt={0.5}>
-      <Card sx={{ width:"43vw"}}>
+      <Card sx={{ width:"43vw", '@media (min-width: 800px)': {
+      width: '30vw'
+    }}}>
         <CardMedia
           sx={{ height: 140, backgroundColor:'gray' }}
           image="/static/images/cards/contemplative-reptile.jpg"

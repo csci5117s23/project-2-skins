@@ -15,8 +15,11 @@ const theme = createTheme({
     },
     text:{
       primary: "#3C3F42"
-    }
-  }
+    },
+  },
+  typography: {
+    "fontFamily": `"Poppins"`,
+  },
 })
 
 export default function App({ Component, pageProps }) {

@@ -67,19 +67,19 @@ export default function WeatherCard(props) {
         <Box
           component="img"
           sx={{
-            height: 75,
-            width: 75,
+            height: 60,
+            width: 60,
           }}
           alt="Weather icon"
           src={iconurl}
         />
-        <Typography variant="h4" sx={{ color: "white" }}>
-          <Box sx={{ fontWeight: "bold", fontFamily: "Monospace" }}>
+        <Typography variant="h4" sx={{ color: "#696969" }}>
+          <Box sx={{ fontWeight: "bold"}}>
             {data && Math.round(temp["min"])}° -{" "}
             {data && Math.round(temp["max"])}°
           </Box>
         </Typography>
-        <Box
+        {/* <Box
           component="img"
           sx={{
             height: 75,
@@ -87,7 +87,7 @@ export default function WeatherCard(props) {
           }}
           alt="Weather icon"
           src={iconurl}
-        />
+        /> */}
       </Stack>
     </>
   );
