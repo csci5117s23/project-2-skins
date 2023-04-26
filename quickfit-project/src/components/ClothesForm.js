@@ -27,6 +27,14 @@ import {
   deleteClothes 
 } from "../modules/clothesFunctions"
 
+// DB Tag Function imports
+import {
+  getTags, 
+  addTag, 
+  editClothes, 
+  deleteClothes 
+} from "../modules/tagFunctions"
+
 // Custom component imports
 import MultipleSelectChip from "./MultiSelectChip";
 import AddTagDialog from "./AddTagDialog";

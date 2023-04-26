@@ -16,7 +16,12 @@ import {
 } from "@mui/material";
 // MUI Icons
 import AddIcon from "@mui/icons-material/Add";
+
+// DB Tag functions
+
+// Custom component imports
 import AddTagAutocomplete from "./AddTagAutocomplete";
+
 
 export default function AddTagDialog() {
 
@@ -33,6 +38,19 @@ export default function AddTagDialog() {
     setOpen(false);
   };
 
+  // --- User tag state hooks & functions  ---------------------------------------
+  const [newTags, setNewTags] = React.useState([]);
+  
+  // Function to take user input and build newTags from Autocomplete component 
+  const setAutocompleteTags = (event, value) => {
+    setNewTags(value); 
+    // console.log("Beep: " + newTags);
+  };
+
+  // Function to send POST requests to add to a user's personal tags
+  const addUserTags
+
+
   return (
     <div>
       {/* Add tag button */}
@@ -45,11 +63,12 @@ export default function AddTagDialog() {
       {/* Add tag popup */}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add tags</DialogTitle>
+        
         <DialogContent>
           <DialogContentText>
             Tags created here will be added to your list of personal tags.
           </DialogContentText>
-          <AddTagAutocomplete />
+          <AddTagAutocomplete setAutocompleteTags={setAutocompleteTags} />
         </DialogContent>
 
         <DialogActions>

@@ -58,10 +58,11 @@ export async function addTag(tag) {
 }
 
 // -------------------------------------------------------------------------
-// PUT: Function to edit an existing clothing article from user wardrobe
+// PUT: Function to edit an existing user clothing tag
 // -------------------------------------------------------------------------
-export async function editClothes(authToken, clothing) {
-    const result = await fetch(clothesUrl + clothing._id, {
+export async function editTag(tag) {
+    const authToken  
+    const result = await fetch(clothesUrl + tag._id, {
         'method': 'PUT',
         'headers': {
             'Authorization': 'Bearer ' + authToken,
@@ -75,10 +76,10 @@ export async function editClothes(authToken, clothing) {
 }
 
 // -----------------------------------------------------------------
-// DELETE: Function to remove a clothing article from user wardrobe
+// DELETE: Function to remove an existing user clothing tag
 // -----------------------------------------------------------------
-export async function deleteClothes(authToken, clothing) {
-    const result = await fetch(clothesUrl + clothing._id, {
+export async function deleteTag(authToken, tag) {
+    const result = await fetch(clothesUrl + tag._id, {
         'method': 'DELETE',
         'headers': {
             'Authorization': 'Bearer ' + authToken

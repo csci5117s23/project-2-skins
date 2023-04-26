@@ -11,16 +11,21 @@
  */
 // -- Get necessary environment variables --
 const backendBase = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
-const clothesUrl = backendBase + '/clothes';
+const clothesUrl = backendBase + "/clothes";
+const jwtTemplateName = "codehooks-quickfit";
 
 // ---------------------------------------------------------
 // GET: Function get all of a user's clothes
 // ---------------------------------------------------------
 export async function getClothes() {
+    // Get authorization token from JWT codehooks template
+    const token = await getToken({ template: jwtTemplateName });
+    
+    // Send GET request
     const result = await fetch(clothesUrl, {
         'method': 'GET',
         'headers': {
-            // 'Authorization': 'Bearer ' + authToken
+            // 'Authorization': 'Bearer ' + token
         }
     })
     return await result.json();
@@ -31,7 +36,7 @@ export async function getClothes() {
 // ---------------------------------------------------------
 export async function addClothes(authToken, clothing) {
     // Get authorization token from JWT codehooks template
-    const token = await getToken({ template: "codehooks" });
+    const token = await getToken({ template: jwtTemplateName });
 
     // If category or name is empty, don't add clothing article.
     if (clothing.category === "" || clothing.name === "") {
@@ -42,7 +47,7 @@ export async function addClothes(authToken, clothing) {
     const result = await fetch(clothesUrl, {
         'method': 'POST',
         'headers': {
-            // 'Authorization': 'Bearer ' + authToken,
+            // 'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
         'body': JSON.stringify({
@@ -59,17 +64,21 @@ export async function addClothes(authToken, clothing) {
 // -------------------------------------------------------------------------
 // PUT: Function to edit an existing clothing article from user wardrobe
 // -------------------------------------------------------------------------
-export async function editClothes(authToken, clothing) {
+export async function editClothes(clothing) {
+    // Get authorization token from JWT codehooks template
+    const token = await getToken({ template: jwtTemplateName });
+
     const result = await fetch(clothesUrl + clothing._id, {
         'method': 'PUT',
         'headers': {
-            'Authorization': 'Bearer ' + authToken,
+            // 'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
         'body': JSON.stringify({
             clothing
         })
     });
+    // Return newly-made clothing entry
     return await result.json();
 }
 
