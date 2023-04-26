@@ -63,16 +63,15 @@ export default function AddTagDialog( {getTags, addTag, editTag, deleteTag } ) {
     // Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
 
-    addTag(token, newTags[0]);
     // Map over each new tag in list of new tags and make a post request to create each
-    // newTags.map((tag) => { 
-    //   // If tag name is null/empty, don't add tag.
-    //   if (tag.name === null || tag.name === "") {
-    //     console.log("Error. Tag name invalid.");
-    //     return;
-    //   }
-    //   addTag(token, tag); // Otherwise, add tag normally.
-    // })
+    newTags.map((tag) => { 
+      // If tag name is null/empty, don't add tag.
+      if (tag.name === null || tag.name === "") {
+        console.log("Error. Tag name invalid.");
+        return;
+      }
+      addTag(token, tag); // Otherwise, add tag normally.
+    })
   }
 
   return (

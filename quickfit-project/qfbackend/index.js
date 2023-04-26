@@ -269,5 +269,5 @@ const tagSchemaYup = object( {
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
-crudlify(app, { clothesSchemaYup: clothesSchemaYup, outfitSchemaYup: outfitSchemaYup, tagSchemaYup: tagSchemaYup });
+crudlify(app, { clothes: clothesSchemaYup, outfit: outfitSchemaYup, tag: tagSchemaYup });
 export default app.init();

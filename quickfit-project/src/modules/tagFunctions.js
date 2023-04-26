@@ -18,14 +18,18 @@ const tagsUrl = backendBase + "/tags";
 // ---------------------------------------------------------
 export async function getTags(authToken) {
     // Send GET request
-    const result = await fetch(tagsUrl, {
-        'method': 'GET',
-        'headers': {
-            // 'Authorization': 'Bearer ' + authToken
-        }
-    })
-    // Return JSON list of user tags
-    return await result.json();
+    try {
+        const result = await fetch(tagsUrl, {
+            'method': 'GET',
+            'headers': {
+                // 'Authorization': 'Bearer ' + authToken
+            }
+        })
+        // Return JSON list of user tags
+        return await result.json();
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 // ---------------------------------------------------------
@@ -33,18 +37,23 @@ export async function getTags(authToken) {
 // ---------------------------------------------------------
 export async function addTag(authToken, tagName) {
     // Send POST request
-    const result = await fetch(tagsUrl, {
-        'method': 'POST',
-        'headers': {
-            'Authorization': 'Bearer ' + authToken,
-            'Content-Type': 'application/json'
-        },
-        'body': JSON.stringify({
-            name: tagName,
-        }),
-    })
-    // Return newly-made tag entry
-    return await result.json();
+    try {
+        console.log(tagsUrl);
+        const result = await fetch(tagsUrl, {
+            'method': 'POST',
+            'headers': {
+                'Authorization': 'Bearer ' + authToken,
+                'Content-Type': 'application/json'
+            },
+            'body': JSON.stringify({
+                name: tagName,
+            }),
+        })
+        // Return newly-made tag entry
+        return await result.json();
+    } catch (error) {
+        console.log(error);;
+    }
 }
 
 // -------------------------------------------------------------------------
@@ -52,16 +61,20 @@ export async function addTag(authToken, tagName) {
 // -------------------------------------------------------------------------
 export async function editTag(authToken, tag) {
     // Send PUT request
-    const result = await fetch(tagsUrl + tag._id, {
-        'method': 'PUT',
-        'headers': {
-            // 'Authorization': 'Bearer ' + authToken,
-            'Content-Type': 'application/json'
-        },
-        'body': JSON.stringify({tag})
-    });
-    // Return newly-edited tag JSON
-    return await result.json();
+    try {
+        const result = await fetch(tagsUrl + tag._id, {
+            'method': 'PUT',
+            'headers': {
+                // 'Authorization': 'Bearer ' + authToken,
+                'Content-Type': 'application/json'
+            },
+            'body': JSON.stringify({tag})
+        });
+        // Return newly-edited tag JSON
+        return await result.json();
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 // -----------------------------------------------------------------
@@ -69,12 +82,16 @@ export async function editTag(authToken, tag) {
 // -----------------------------------------------------------------
 export async function deleteTag(authToken, tag) {
     // Send DELETE request
-    const result = await fetch(tagsUrl + tag._id, {
-        'method': 'DELETE',
-        'headers': {
-            // 'Authorization': 'Bearer ' + authToken
-        },
-    })
-    // Return removed tag as JSON
-    return await result.json();
+    try {
+        const result = await fetch(tagsUrl + tag._id, {
+            'method': 'DELETE',
+            'headers': {
+                // 'Authorization': 'Bearer ' + authToken
+            },
+        })
+        // Return removed tag as JSON
+        return await result.json();
+    } catch (error) {
+        console.log(error);
+    }
 }
