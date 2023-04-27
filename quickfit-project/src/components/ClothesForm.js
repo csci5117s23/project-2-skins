@@ -65,7 +65,7 @@ export default function ClothesForm() {
   const [color, setColor] = useState("");         // Clothing entry color
   const [name, setName] = useState("");           // Clothing entry name
   const [userTags, setUserTags] = useState([]);   // Clothing tags previously made by user (store here)
-  const [tagList, setTagList] = useState([]);     // Clothing tags to apply to this entry
+  const [inputTags, setInputTags] = useState([]); // Clothing tags to apply to this entry
   const [newTags, setNewTags] = useState([]);     // Clothing tags to add to user's list of personal tags
 
   // ----------------------------------------
@@ -75,7 +75,7 @@ export default function ClothesForm() {
     setCategory("");
     setColor("");
     setName("");
-    setTagList([]);
+    setInputTags([]);
     setNewTags([]);
   }
 
@@ -89,7 +89,7 @@ export default function ClothesForm() {
       category: category,
       name: name,
       color: color,
-      tags: tagList,
+      tags: inputTags,
     }
     console.log(clothingItem);
     
@@ -109,29 +109,41 @@ export default function ClothesForm() {
   // --------------------------------------------------------------------
   async function addNewTags() {
     // If new tags list is empty, tell user to add more tags
-    if (tagList === null || tagList.length === 0) {
+    if (inputTags === null || inputTags.length === 0) {
       console.log("No tags entered.");
       return;
     }
-    // Get all tag names
+    // Get all user-inputted tag names if there are any objects
+    const inputTagNames = inputTags.filter( (tag) => {
+      // Get rid of any object tags (just want the name)
+      if (tag.name) {
+        console.log("TAGNAME: " + tag.name); 
+        return tag.name; }
+      else {
+        console.log("TAG: " + tag);
+        return tag };
+    });
     
+    console.log("--------------------");
+    console.log(JSON.stringify(inputTagNames));
+
     // Get existing user tag names
     const existingTagNames = userTags.map( (tag) => { return tag.name; })
     
     // Map over each current tag and find which ones aren't in the set of pre-existing tags
-    const result = tagList.filter((tag) => {
+    const result = inputTagNames.filter((tag) => {
       if (existingTagNames.includes(tag) === false) {
         return tag;
       }
     })
 
-    console.log(JSON.stringify(result));
+    // console.log(JSON.stringify(result));
 
     // Ensure list of tags are unique from one another (convert to Set and back to array)
     let uniqueResult = new Set(result);
     uniqueResult = Array.from(uniqueResult);
 
-    console.log("Unique result: " + JSON.stringify(uniqueResult));
+    // console.log("Unique result: " + JSON.stringify(uniqueResult));
 
     // Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
@@ -143,7 +155,7 @@ export default function ClothesForm() {
         console.log("Error. Tag name invalid.");
         return;
       }
-      addTag(token, tag); // Otherwise, add tag normally.
+      // addTag(token, tag); // Otherwise, add tag normally.
     })
   }
 
@@ -247,7 +259,7 @@ export default function ClothesForm() {
 
             {/* --- Tags --- */}
             <InputHeader> Tags </InputHeader>
-            <AddTagComboBox userTags={userTags} setTagList={setTagList} getTags={getTags} addTag={addTag} editTag={editTag} deleteTag={deleteTag}/>
+            <AddTagComboBox userTags={userTags} setInputTags={setInputTags} getTags={getTags} addTag={addTag} editTag={editTag} deleteTag={deleteTag}/>
             {/* <Test/> */}
             {/* --- Images --- */}
             <InputHeader> Image</InputHeader>

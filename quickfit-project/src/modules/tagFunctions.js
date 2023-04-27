@@ -38,7 +38,7 @@ export async function getTags(authToken) {
 // POST: Function to add a tag to user clothing tags list
 // ---------------------------------------------------------
 export async function addTag(authToken, tagName) {
-    console.log("Tag name: " + JSON.stringify(tagName));
+    // console.log("Tag name: " + JSON.stringify(tagName));
     // Send POST request
     try {
         console.log(tagsUrl);

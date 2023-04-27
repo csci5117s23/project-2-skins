@@ -27,7 +27,7 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export default function AddTagComboBox( {userTags, setTagList, getTags, addTag, editTag, deleteTag} ) {
+export default function AddTagComboBox( {userTags, setInputTags, getTags, addTag, editTag, deleteTag} ) {
   return (
     <Autocomplete
       multiple
@@ -49,7 +49,7 @@ export default function AddTagComboBox( {userTags, setTagList, getTags, addTag, 
       renderInput={(params) => (
         <TextField {...params} label="Checkboxes" placeholder="Checkboxes" />
       )}
-      onChange={ (event, value) => { setTagList(value); console.log("Value: " + value); } }
+      onChange={ (event, value) => { setInputTags(value); console.log("Value: " + value); } }
     />
   );
 }
