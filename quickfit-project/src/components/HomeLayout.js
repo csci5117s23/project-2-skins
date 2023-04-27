@@ -12,7 +12,8 @@ import ClothingCard from "@/components/ClothingCard";
 const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 export default function UILayout() {
-  const [clothes, setClothes] = useState([
+  const [date, setDate] = useState(new Date());
+  const [outfit, setOutfit] = useState([
     {
       category: "Top",
       clothingName: "Black Nike T-Shirt",
@@ -49,12 +50,12 @@ export default function UILayout() {
       {/* 2. Content section */}
       <section>
         <SignedIn>
-          <DateWeatherWidget date={new Date()} />
+          <DateWeatherWidget date={date} setDate={setDate}/>
           <Grid className="mainContainer" width="100vw" container>
-            {clothes.map((cloth) => {
+            {outfit.map((clothes) => {
               return (
                 <Grid item xs={6}>
-                  <ClothingCard clothes={cloth} />
+                  <ClothingCard clothes={clothes} />
                 </Grid>
               );
             })}

@@ -14,17 +14,19 @@ import {
   Typography,
   Stack,
   Divider,
-  Modal
+  Modal,
 } from "@mui/material";
+import CalendarMonthTwoToneIcon from '@mui/icons-material/CalendarMonthTwoTone';
 import CalenderCard from './CalenderCard';
 
 export default function DateWeatherWidget(props) {
-  const { date } = props;
+  const { date, setDate } = props;
   const [open, setOpen] = useState(false);
-  
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  var d = new Date();
+  var yesterday = d.setDate(d.getDate() - 1);
+  
   return (
     <>
         <Card onClick={handleOpen} sx={{ backgroundColor: "#FFFFFF", margin: "1.5vh" }}>
@@ -36,9 +38,11 @@ export default function DateWeatherWidget(props) {
             direction="row"
             sx={{ cursor: 'pointer' }}
           >
-            <WeatherCard date={date ? date : new Date()} />
-            <Divider orientation="vertical" variant="middle" flexItem />
+            {date > yesterday? <><WeatherCard date={date ? date : new Date()} />
+            <Divider orientation="vertical" variant="middle" flexItem /></>:<></>}
+            
             <DateCard date={date ? date : new Date()} />
+            <CalendarMonthTwoToneIcon/>
           </Stack>
         </Card>
       <Modal
@@ -46,7 +50,7 @@ export default function DateWeatherWidget(props) {
         onClose={handleClose}
       >
         <Box >
-          <CalenderCard></CalenderCard>
+          <CalenderCard date={date} setDate={setDate} handleClose={handleClose}/>
         </Box>
       </Modal>
     </>
