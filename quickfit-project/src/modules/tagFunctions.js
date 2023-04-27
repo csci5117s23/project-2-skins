@@ -12,6 +12,7 @@
 // -- Get necessary environment variables --
 const backendBase = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 const tagsUrl = backendBase + "/tag";
+const apiKey = process.env.CH_API_KEY_RW;
 
 // ---------------------------------------------------------
 // GET: Function get all of a user's tags
@@ -22,7 +23,8 @@ export async function getTags(authToken) {
         const result = await fetch(tagsUrl, {
             'method': 'GET',
             'headers': {
-                // 'Authorization': 'Bearer ' + authToken
+                'Authorization': 'Bearer ' + authToken,
+                'x-api-key': apiKey,
             }
         })
         // Return JSON list of user tags

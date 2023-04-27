@@ -18,7 +18,8 @@ import {
 // MUI Icons
 import AddIcon from "@mui/icons-material/Add";
 
-export default function AddTagAutoComboBox( { setNewTags, getTags, addTag, editTag, deleteTag } ) {
+export default function AddTagAutoComboBox( { userTags, setTagList, getTags, addTag, editTag, deleteTag } ) {
+
   return (
     <div>
       {/* List of user tag inputs */}
@@ -27,7 +28,7 @@ export default function AddTagAutoComboBox( { setNewTags, getTags, addTag, editT
         autoHighlight
         freeSolo
         options={["cat"]}
-        onChange={ (event, value) => {setNewTags(value); console.log(value);} }
+        onChange={ (event, value) => {setTagList(value); console.log(value);} }
         renderTags={(value, getTagProps) =>
           value.map((option, index) => (
             <Chip variant="outlined" label={option} {...getTagProps({ index })} />

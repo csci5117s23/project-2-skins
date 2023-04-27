@@ -61,20 +61,21 @@ export default function ClothesForm() {
   // --- Authorization ---------------------------------------------------
   const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
   const { isLoaded, userId, sessionId, getToken } = useAuth();
+  const [loading, setLoading] = useState(true);
 
   // --- Main form state hooks & functions -------------------------------
   const [category, setCategory] = useState("");   // Clothing entry category
   const [color, setColor] = useState("");         // Clothing entry color
   const [name, setName] = useState("");           // Clothing entry name
-  const [tagList, setTagList] = useState([]);     // Clothing tags previously made by user
-  const [newTags, setNewTags] = useState([]);     // 
-
+  const [userTags, setUserTags] = useState([]);   // Clothing tags previously made by user (store here)
+  const [tagList, setTagList] = useState([]);     // Clothing tags to apply to this entry
+  const [newTags, setNewTags] = useState([]);     // Clothing tags to add to user's list of personal tags
 
   // --- Clothes functions ---
   // --------------------------------------------------
   // Function to add a clothing article from front-end
   // --------------------------------------------------
-  async function addClothesFE() {
+  async function submitClothesForm() {
     // Create a clothing item from state variables to POST
     const clothingItem = {
       category: category,
@@ -91,7 +92,7 @@ export default function ClothesForm() {
   // --------------------------------------------------------------------
   // Function to send POST requests to add to a user's personal tags
   // --------------------------------------------------------------------
-  async function addAllTags() {
+  async function addNewTags() {
     // If new tags list is empty, tell user to add more tags
     if (newTags === null || newTags.length === 0) {
       console.log("No tags entered.");
@@ -99,6 +100,8 @@ export default function ClothesForm() {
     }
     // Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
+
+    // Map over each current tag and find which ones aren't in the set of pre-existing tags
 
     // Map over each new tag in list of new tags and make a post request to create each
     newTags.map((tag) => { 
@@ -117,10 +120,17 @@ export default function ClothesForm() {
   // Run on every render.
   // --------------------------------------------------------------------
   React.useEffect(() => {
-    // Set current user tag list to
-    setTagList();
-    console.log("Middle rendered");
-  });
+    console.log("Page rendered.");
+    async function process() {                                        // Process getting authorization key and user db tags
+      if (userId) {                                                   // Ensure user is logged in
+        const token = await getToken({ template: jwtTemplateName});   // Get auth token
+        setUserTags(await getTags(token));                            // Get user tasks from codehooks database
+        setLoading(false);                                            // Once we get these things, we are no longer loading 
+      }
+    }
+    process();
+    console.log(userTags);
+  }, [isLoaded]);
   
   // JSX
   return (
@@ -204,7 +214,7 @@ export default function ClothesForm() {
 
             {/* --- Tags --- */}
             <InputHeader> Tags </InputHeader>
-            <AddTagAutoComboBox setNewTags={setNewTags} getTags={getTags} addTag={addTag} editTag={editTag} deleteTag={deleteTag}/>
+            <AddTagAutoComboBox userTags={userTags} setTagList={setTagList} getTags={getTags} addTag={addTag} editTag={editTag} deleteTag={deleteTag}/>
           
             {/* --- Images --- */}
             <InputHeader> Image</InputHeader>
@@ -219,10 +229,8 @@ export default function ClothesForm() {
                 pt: 2,
               }}>
               <Button variant="contained"
-                sx={{
-                  width: '45%',
-                }} 
-                onClick={ addClothesFE }>
+                sx={{ width: '45%' }} 
+                onClick={ () => { addNewTags(); submitClothesForm(); } }>
                 Submit
               </Button>
             </Box>
