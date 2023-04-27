@@ -27,7 +27,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-export default function SearchBar() {
+export default function SearchBar(props) {
+  const { setSearch } = props;
   return (
     <Stack alignItems="center">
       <TextField

@@ -16,7 +16,6 @@ import {
   Divider,
   Modal,
 } from "@mui/material";
-import CalendarMonthTwoToneIcon from "@mui/icons-material/CalendarMonthTwoTone";
 import CalenderCard from "./CalenderCard";
 
 export default function DateWeatherWidget(props) {
@@ -55,9 +54,7 @@ export default function DateWeatherWidget(props) {
           ) : (
             <></>
           )}
-
           <DateCard date={date ? date : new Date()} />
-          <CalendarMonthTwoToneIcon />
         </Stack>
       </Card>
       <Modal

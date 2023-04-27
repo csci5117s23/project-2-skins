@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import styles from '@/styles/Home.module.css'
 import { SignedIn } from "@clerk/clerk-react"; // Clerk authorization imports
 
@@ -40,6 +40,16 @@ export default function UILayout() {
     },
   ]);
 
+  useEffect(() => {
+    //TODO: Get request that gets the outfit that matches the date
+    //do a fetch to get our outfit given a date
+    //   fetch(
+    //   "our end point/something?date=" + date
+    //   )
+    //   .then((res) => res.json())
+    //   .then((data) => setOutfit(data));
+  }, [date]);
+
   return (
     <>
       {/* 1. Header section */}
@@ -50,7 +60,7 @@ export default function UILayout() {
       {/* 2. Content section */}
       <section>
         <SignedIn>
-          <DateWeatherWidget date={date} setDate={setDate}/>
+          <DateWeatherWidget date={date} setDate={setDate} />
           <Grid className="mainContainer" width="100vw" container>
             {outfit.map((clothes) => {
               return (

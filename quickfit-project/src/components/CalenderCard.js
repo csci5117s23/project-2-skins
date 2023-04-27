@@ -48,6 +48,7 @@ export default function CalenderCard(props) {
 
   const fetchHighlightedDays = (date) => {
     //TODO: get request for days that have outfits
+    // setHighlightedDays()
   };
 
   React.useEffect(() => {
@@ -59,11 +60,11 @@ export default function CalenderCard(props) {
     fetchHighlightedDays(date);
   };
 
-const handleDateChange = (date) => {
+  const handleDateChange = (date) => {
     setDate(new Date(date));
     handleClose();
   };
-  
+
   return (
     <Card>
       <LocalizationProvider dateAdapter={AdapterDayjs}>

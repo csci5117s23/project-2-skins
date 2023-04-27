@@ -8,12 +8,12 @@ export default function WeatherCard(props) {
   const [temp, setTemp] = useState(null);
   const [forecast, setForecast] = useState(null);
   const API_KEY = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
-  
+
   useEffect(() => {
     //weather api only works up to 30 days into the future
     if (getDays(date) < 0 || getDays(date) > 30) {
       return;
-    }else{
+    } else {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(getWeather);
       } else {
@@ -47,7 +47,11 @@ export default function WeatherCard(props) {
 
   //if you have no weather data, dont render weather card
   if (!data) {
-    return  <Box sx={{ width: '20vw' }}><Skeleton /></Box>;
+    return (
+      <Box sx={{ width: "30vw" }}>
+        <Skeleton />
+      </Box>
+    );
   }
 
   return (
@@ -56,17 +60,16 @@ export default function WeatherCard(props) {
         <Box
           component="img"
           sx={{
-            height: 60,
-            width: 60,
+            height: 50,
+            width: 50,
           }}
           alt="Weather icon"
           src={iconurl}
         />
-        <Typography variant="h5" sx={{ color: "#696969"}}>
-          <Box sx={{ fontWeight: "bold"}}>
-            {data && Math.round(temp["min"])}° -{" "}
-            {data && Math.round(temp["max"])}°
-          </Box>
+        <Typography variant="h5" sx={{ color: "#696969" }}>
+          {/* <Box sx={{ fontWeight: "bold"}}> */}
+          {data && Math.round(temp["min"])}° - {data && Math.round(temp["max"])}
+          °{/* </Box> */}
         </Typography>
       </Stack>
     </>
