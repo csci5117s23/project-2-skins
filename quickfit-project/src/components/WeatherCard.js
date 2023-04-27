@@ -52,7 +52,7 @@ export default function WeatherCard(props) {
 
   return (
     <>
-      <Stack direction="row" justifyContent="center" alignItems="center">
+      <Stack direction="row" alignItems="center">
         <Box
           component="img"
           sx={{
@@ -62,21 +62,12 @@ export default function WeatherCard(props) {
           alt="Weather icon"
           src={iconurl}
         />
-        <Typography variant="h4" sx={{ color: "#696969" }}>
+        <Typography variant="h5" sx={{ color: "#696969"}}>
           <Box sx={{ fontWeight: "bold"}}>
             {data && Math.round(temp["min"])}° -{" "}
             {data && Math.round(temp["max"])}°
           </Box>
         </Typography>
-        {/* <Box
-          component="img"
-          sx={{
-            height: 75,
-            width: 75,
-          }}
-          alt="Weather icon"
-          src={iconurl}
-        /> */}
       </Stack>
     </>
   );

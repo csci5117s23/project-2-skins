@@ -16,8 +16,8 @@ import {
   Divider,
   Modal,
 } from "@mui/material";
-import CalendarMonthTwoToneIcon from '@mui/icons-material/CalendarMonthTwoTone';
-import CalenderCard from './CalenderCard';
+import CalendarMonthTwoToneIcon from "@mui/icons-material/CalendarMonthTwoTone";
+import CalenderCard from "./CalenderCard";
 
 export default function DateWeatherWidget(props) {
   const { date, setDate } = props;
@@ -26,31 +26,51 @@ export default function DateWeatherWidget(props) {
   const handleClose = () => setOpen(false);
   var d = new Date();
   var yesterday = d.setDate(d.getDate() - 1);
-  
+
   return (
     <>
-        <Card onClick={handleOpen} sx={{ backgroundColor: "#FFFFFF", margin: "1.5vh" }}>
-          <Stack
-            alignItems="center"
-            justifyContent="center"
-            spacing={2}
-            minHeight="8vh"
-            direction="row"
-            sx={{ cursor: 'pointer' }}
-          >
-            {date > yesterday? <><WeatherCard date={date ? date : new Date()} />
-            <Divider orientation="vertical" variant="middle" flexItem /></>:<></>}
-            
-            <DateCard date={date ? date : new Date()} />
-            <CalendarMonthTwoToneIcon/>
-          </Stack>
-        </Card>
+      <Card
+        onClick={handleOpen}
+        sx={{
+          backgroundColor: "#FFFFFF",
+          margin: "1.5vh",
+          "&:hover": {
+            backgroundColor: "#f2f2f2",
+          },
+        }}
+      >
+        <Stack
+          alignItems="center"
+          justifyContent="center"
+          spacing={1}
+          minHeight="8vh"
+          direction="row"
+          sx={{ cursor: "pointer" }}
+        >
+          {date > yesterday ? (
+            <>
+              <WeatherCard date={date ? date : new Date()} />
+              <Divider orientation="vertical" variant="middle" flexItem />
+            </>
+          ) : (
+            <></>
+          )}
+
+          <DateCard date={date ? date : new Date()} />
+          <CalendarMonthTwoToneIcon />
+        </Stack>
+      </Card>
       <Modal
         open={open}
         onClose={handleClose}
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
-        <Box >
-          <CalenderCard date={date} setDate={setDate} handleClose={handleClose}/>
+        <Box>
+          <CalenderCard
+            date={date}
+            setDate={setDate}
+            handleClose={handleClose}
+          />
         </Box>
       </Modal>
     </>
