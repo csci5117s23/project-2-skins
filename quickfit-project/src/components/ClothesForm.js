@@ -36,12 +36,9 @@ import {
 } from "../modules/tagFunctions"
 
 // Custom component imports
-import MultipleSelectChip from "./MultiSelectChip";
-import AddTagDialog from "./AddTagDialog";
 import UploadButtons from "./UploadImageButtons";
-import AddTagAutocomplete from "./AddTagAutocomplete";
-import AddTagAutoComboBox from "./AddTagComboBox";
-
+import AddTagComboBox from "./AddTagComboBox";
+import Test from "./Test";
 
 // Header text styling for each form input
 function InputHeader( props ) {
@@ -95,8 +92,12 @@ export default function ClothesForm() {
       tags: tagList,
     }
     console.log(clothingItem);
+    
+    // Get authorization token from JWT codehooks template
+    const token = await getToken({ template: jwtTemplateName });
+
     // Call POST function
-    // addClothes(null, clothingItem);
+    // addClothes(token, clothingItem);
 
     // On submit also, refresh the form
     resetForm();
@@ -235,8 +236,8 @@ export default function ClothesForm() {
 
             {/* --- Tags --- */}
             <InputHeader> Tags </InputHeader>
-            <AddTagAutoComboBox userTags={userTags} setTagList={setTagList} getTags={getTags} addTag={addTag} editTag={editTag} deleteTag={deleteTag}/>
-          
+            <AddTagComboBox userTags={userTags} setTagList={setTagList} getTags={getTags} addTag={addTag} editTag={editTag} deleteTag={deleteTag}/>
+            <Test/>
             {/* --- Images --- */}
             <InputHeader> Image</InputHeader>
             <UploadButtons/>

@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   Chip,
+  Checkbox,
   Container,
   Dialog,
   DialogActions,
@@ -20,55 +21,34 @@ import {
 // MUI Icons
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from '@mui/icons-material/Clear';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 
-export default function AddTagAutoComboBox( { userTags, setTagList, getTags, addTag, editTag, deleteTag } ) {
-  // Get list of user tags' names
-  const tagNames = userTags.map( (tag) => { return ( tag.name ) });
-  const tagIds = userTags.map( (tag) => { return ( tag._id ) });
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
+export default function AddTagComboBox( {userTags, setTagList, getTags, addTag, editTag, deleteTag} ) {
   return (
-    <div>
-      {/* List of user tag inputs */}
-      <Autocomplete
-        multiple
-        autoHighlight
-        freeSolo
-        options={ userTags }
-        // value={tagIds}
-        onChange={ (event, value) => {setTagList(value); console.log(value);} }
-        renderTags={(value, getTagProps) =>
-          value.map((option, index) => (
-            <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-          ))
-        }
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            variant="outlined"
-            label="Select or enter a new tag."
+    <Autocomplete
+      multiple
+      freeSolo
+      id="checkboxes-tags"
+      options={userTags}
+      disableCloseOnSelect
+      getOptionLabel={(option) => option.name || option}  // || statement for user freesolo inputs
+      renderOption={(props, option, { selected }) => (
+        <li {...props}>
+          <Checkbox
+            icon={icon}
+            checkedIcon={checkedIcon}
+            checked={selected}
           />
-        )}
-        renderOption={(props, option, state) => (
-          // Container for each element/option in pre-existing tags dropdown
-          <Container key={option._id} {...props}>
-              {option.name} 
-            {/* Delete tag button */}
-            <Tooltip title="Remove from personal tags">
-              <IconButton onClick={ () => { deleteTag(option._id); } }>
-                <ClearIcon/>
-              </IconButton>
-            </Tooltip>     
-          </Container>
-        )}
-        getOptionLabel={ (tag) => tag.name }
-        // getOptionSelected={(option, value) => option.name === value.name }
-        // renderOption={(props, option, state) => {
-        //   console.log(props);
-        //   return (
-        //     <li {...props}>{`${option.key}`}</li>
-        //   );
-        // }}
-      />
-    </div>
+          {option.name}
+        </li>
+      )}
+      renderInput={(params) => (
+        <TextField {...params} label="Checkboxes" placeholder="Checkboxes" />
+      )}
+    />
   );
 }
