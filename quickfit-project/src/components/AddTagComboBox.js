@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   Chip,
+  Container,
   Dialog,
   DialogActions,
   DialogContent,
@@ -20,24 +21,11 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from '@mui/icons-material/Clear';
 
-// Container for each element/option in pre-existing tags dropdown
-function TagDropdownOption( props ) {
-  return (
-    <Box>
-      {props.children}
-      
-      {/* Delete tag button */}
-      <Tooltip title="Add a tag">
-        <IconButton><ClearIcon/></IconButton>
-      </Tooltip>
-    </Box>
-  )
-}
-
 export default function AddTagAutoComboBox( { userTags, setTagList, getTags, addTag, editTag, deleteTag } ) {
   // Get list of user tags' names
-  const tags = userTags.map( (tag) => { return ( tag.name ) });
-  
+  const tagNames = userTags.map( (tag) => { return ( tag.name ) });
+  const tagIds = userTags.map( (tag) => { return ( tag._id ) });
+
   return (
     <div>
       {/* List of user tag inputs */}
@@ -45,7 +33,8 @@ export default function AddTagAutoComboBox( { userTags, setTagList, getTags, add
         multiple
         autoHighlight
         freeSolo
-        options={tags}
+        options={tagNames}
+        // value={tagIds}
         onChange={ (event, value) => {setTagList(value); console.log(value);} }
         renderTags={(value, getTagProps) =>
           value.map((option, index) => (
@@ -59,9 +48,27 @@ export default function AddTagAutoComboBox( { userTags, setTagList, getTags, add
             label="Select or enter a new tag."
           />
         )}
-        renderOption={(props, option) => (
-          <TagDropdownOption {...props}>{option} </TagDropdownOption>
-        )}
+        // renderOption={(props, option, state) => (
+        //   // Container for each element/option in pre-existing tags dropdown
+        //   <Container key={option._id} {...props}>
+        //       {option.name} 
+        //     {/* Delete tag button */}
+        //     <Tooltip title="Remove from personal tags">
+        //       <IconButton onClick={ () => { deleteTag(option._id); } }>
+        //         <ClearIcon/>
+        //       </IconButton>
+        //     </Tooltip>
+          
+        //   </Container>
+        // )}
+        // getOptionLabel={ (tag) => tag.name }
+        // getOptionSelected={(option, value) => option.name === value.name }
+        // renderOption={(props, option, state) => {
+        //   console.log(props);
+        //   return (
+        //     <li {...props}>{`${option.key}`}</li>
+        //   );
+        // }}
       />
     </div>
   );
