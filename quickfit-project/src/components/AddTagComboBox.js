@@ -50,7 +50,7 @@ export default function AddTagAutoComboBox( { userTags, setTagList, getTags, add
         )}
         renderOption={(props, option, state) => (
           // Container for each element/option in pre-existing tags dropdown
-          <Container key={option} {...props}>
+          <Container key={option._id} {...props}>
               {option.name} 
             {/* Delete tag button */}
             <Tooltip title="Remove from personal tags">
