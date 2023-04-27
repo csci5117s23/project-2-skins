@@ -38,6 +38,14 @@ export async function getTags(authToken) {
 // POST: Function to add a tag to user clothing tags list
 // ---------------------------------------------------------
 export async function addTag(authToken, tagName) {
+    // Ensure tag name doesn't already exist
+    try {
+        const tags = await getTags(authToken);
+        
+    } catch (error) {
+        console.log(error);
+    }
+
     // Send POST request
     try {
         console.log(tagsUrl);

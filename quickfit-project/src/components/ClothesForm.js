@@ -71,11 +71,22 @@ export default function ClothesForm() {
   const [tagList, setTagList] = useState([]);     // Clothing tags to apply to this entry
   const [newTags, setNewTags] = useState([]);     // Clothing tags to add to user's list of personal tags
 
+  // ----------------------------------------
+  // Function to reset clothes form inputs
+  // ----------------------------------------
+  function resetForm() {
+    setCategory("");
+    setColor("");
+    setName("");
+    setTagList([]);
+    setNewTags([]);
+  }
+
   // --- Clothes functions ---
   // --------------------------------------------------
   // Function to add a clothing article from front-end
   // --------------------------------------------------
-  async function submitClothesForm() {
+  async function onHandleSubmit() {
     // Create a clothing item from state variables to POST
     const clothingItem = {
       category: category,
@@ -86,6 +97,9 @@ export default function ClothesForm() {
     console.log(clothingItem);
     // Call POST function
     // addClothes(null, clothingItem);
+
+    // On submit also, refresh the form
+    resetForm();
   }
 
   // --- Tag functions ---
@@ -94,17 +108,24 @@ export default function ClothesForm() {
   // --------------------------------------------------------------------
   async function addNewTags() {
     // If new tags list is empty, tell user to add more tags
-    if (newTags === null || newTags.length === 0) {
+    if (tagList === null || tagList.length === 0) {
       console.log("No tags entered.");
       return;
     }
+    // Get existing user tag names
+    const existingTagNames = userTags.map( (tag) => { return tag.name; })
+    
+    // Map over each current tag and find which ones aren't in the set of pre-existing tags
+    const result = tagList.filter((tag) => {
+      if (existingTagNames.includes(tag) === false) {
+        return tag;
+      }
+    })
     // Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
 
-    // Map over each current tag and find which ones aren't in the set of pre-existing tags
-
     // Map over each new tag in list of new tags and make a post request to create each
-    newTags.map((tag) => { 
+    result.map((tag) => { 
       // If tag name is null/empty, don't add tag.
       if (tag.name === null || tag.name === "") {
         console.log("Error. Tag name invalid.");
@@ -230,7 +251,7 @@ export default function ClothesForm() {
               }}>
               <Button variant="contained"
                 sx={{ width: '45%' }} 
-                onClick={ () => { addNewTags(); submitClothesForm(); } }>
+                onClick={ () => { addNewTags(); onHandleSubmit(); } }>
                 Submit
               </Button>
             </Box>
