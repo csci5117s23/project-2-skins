@@ -39,6 +39,8 @@ import {
 import MultipleSelectChip from "./MultiSelectChip";
 import AddTagDialog from "./AddTagDialog";
 import UploadButtons from "./UploadImageButtons";
+import AddTagAutocomplete from "./AddTagAutocomplete";
+import AddTagAutoComboBox from "./AddTagComboBox";
 
 
 // Header text styling for each form input
@@ -56,23 +58,19 @@ function InputHeader( props ) {
 
 // Clothes form
 export default function ClothesForm() {
-  // Authorization
-  const { userId, getToken } = useAuth();
+  // --- Authorization ---------------------------------------------------
+  const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
 
-  // Add form inputs
-  const [category, setCategory] = useState("");
-  const [color, setColor] = useState("");
-  const [name, setName] = useState("");
-  
-  // Use these states to hold tag values onChange and onKeyPress
-  const [tagList, setTagList] = useState([]);
-
-  // --------------------------------------------------
-  // Function to handle adding tag to tags list state
-  // ---------------------------------------------------
-  
+  // --- Main form state hooks & functions -------------------------------
+  const [category, setCategory] = useState("");   // Clothing entry category
+  const [color, setColor] = useState("");         // Clothing entry color
+  const [name, setName] = useState("");           // Clothing entry name
+  const [tagList, setTagList] = useState([]);     // Clothing tags previously made by user
+  const [newTags, setNewTags] = useState([]);     // 
 
 
+  // --- Clothes functions ---
   // --------------------------------------------------
   // Function to add a clothing article from front-end
   // --------------------------------------------------
@@ -88,6 +86,41 @@ export default function ClothesForm() {
     // Call POST function
     // addClothes(null, clothingItem);
   }
+
+  // --- Tag functions ---
+  // --------------------------------------------------------------------
+  // Function to send POST requests to add to a user's personal tags
+  // --------------------------------------------------------------------
+  async function addAllTags() {
+    // If new tags list is empty, tell user to add more tags
+    if (newTags === null || newTags.length === 0) {
+      console.log("No tags entered.");
+      return;
+    }
+    // Get authorization token from JWT codehooks template
+    const token = await getToken({ template: jwtTemplateName });
+
+    // Map over each new tag in list of new tags and make a post request to create each
+    newTags.map((tag) => { 
+      // If tag name is null/empty, don't add tag.
+      if (tag.name === null || tag.name === "") {
+        console.log("Error. Tag name invalid.");
+        return;
+      }
+      addTag(token, tag); // Otherwise, add tag normally.
+    })
+  }
+
+
+
+  // --------------------------------------------------------------------
+  // Run on every render.
+  // --------------------------------------------------------------------
+  React.useEffect(() => {
+    // Set current user tag list to
+    setTagList();
+    console.log("Middle rendered");
+  });
   
   // JSX
   return (
@@ -171,13 +204,8 @@ export default function ClothesForm() {
 
             {/* --- Tags --- */}
             <InputHeader> Tags </InputHeader>
-            <Stack direction="row"
-              spacing={2.5}
-              sx={{ alignItems: 'center' }}>
-              <MultipleSelectChip/>
-              <AddTagDialog getTags={getTags} addTag={addTag} editTag={editTag} deleteTag={deleteTag} />
-            </Stack>
-
+            <AddTagAutoComboBox setNewTags={setNewTags} getTags={getTags} addTag={addTag} editTag={editTag} deleteTag={deleteTag}/>
+          
             {/* --- Images --- */}
             <InputHeader> Image</InputHeader>
             <UploadButtons/>

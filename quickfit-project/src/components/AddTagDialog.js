@@ -75,19 +75,12 @@ export default function AddTagDialog( {getTags, addTag, editTag, deleteTag } ) {
   }
 
 
-  // --------------------------------------------------------------------
-  // Run on every render.
-  // --------------------------------------------------------------------
-  React.useEffect(() => {
-    console.log("Middle rendered");
-  });
-
   return (
     <div>
       {/* Add tag button */}
       <Tooltip title="Add a tag">
-        <Button variant="contained" onClick={handleClickOpen}>
-          <AddIcon />
+        <Button variant="contained" startIcon={<AddIcon />} onClick={handleClickOpen}>
+          Add tags
         </Button>
       </Tooltip>
 
