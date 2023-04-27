@@ -11,7 +11,7 @@ export default function WeatherCard(props) {
 
   useEffect(() => {
     //weather api only works up to 30 days into the future
-    if (getDays(date) < 0 || getDays(date) > 30) {
+    if (getDays(date) < 0 || getDays(date) > 29) {
       return;
     } else {
       if (navigator.geolocation) {
@@ -42,7 +42,7 @@ export default function WeatherCard(props) {
   };
 
   var iconurl = data
-    ? "http://openweathermap.org/img/w/" + forecast["icon"] + ".png"
+    ? "https://openweathermap.org/img/wn/" + forecast["icon"] + "@2x.png"
     : "";
 
   //if you have no weather data, dont render weather card
@@ -60,8 +60,8 @@ export default function WeatherCard(props) {
         <Box
           component="img"
           sx={{
-            height: 50,
-            width: 50,
+            height: 70,
+            width: 70,
           }}
           alt="Weather icon"
           src={iconurl}

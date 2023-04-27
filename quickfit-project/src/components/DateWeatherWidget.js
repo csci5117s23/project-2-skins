@@ -25,7 +25,7 @@ export default function DateWeatherWidget(props) {
   const handleClose = () => setOpen(false);
   var d = new Date();
   var yesterday = d.setDate(d.getDate() - 1);
-
+  var nextMonth = d.setDate(d.getDate() + 30);
   return (
     <>
       <Card
@@ -46,7 +46,7 @@ export default function DateWeatherWidget(props) {
           direction="row"
           sx={{ cursor: "pointer" }}
         >
-          {date > yesterday ? (
+          {date > yesterday && date < nextMonth ? (
             <>
               <WeatherCard date={date ? date : new Date()} />
               <Divider orientation="vertical" variant="middle" flexItem />
