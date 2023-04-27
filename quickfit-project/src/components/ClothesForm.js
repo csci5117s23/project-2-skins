@@ -113,6 +113,8 @@ export default function ClothesForm() {
       console.log("No tags entered.");
       return;
     }
+    // Get all tag names
+    
     // Get existing user tag names
     const existingTagNames = userTags.map( (tag) => { return tag.name; })
     
@@ -122,11 +124,20 @@ export default function ClothesForm() {
         return tag;
       }
     })
+
+    console.log(JSON.stringify(result));
+
+    // Ensure list of tags are unique from one another (convert to Set and back to array)
+    let uniqueResult = new Set(result);
+    uniqueResult = Array.from(uniqueResult);
+
+    console.log("Unique result: " + JSON.stringify(uniqueResult));
+
     // Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
 
     // Map over each new tag in list of new tags and make a post request to create each
-    result.map((tag) => { 
+    uniqueResult.map((tag) => { 
       // If tag name is null/empty, don't add tag.
       if (tag.name === null || tag.name === "") {
         console.log("Error. Tag name invalid.");
@@ -237,7 +248,7 @@ export default function ClothesForm() {
             {/* --- Tags --- */}
             <InputHeader> Tags </InputHeader>
             <AddTagComboBox userTags={userTags} setTagList={setTagList} getTags={getTags} addTag={addTag} editTag={editTag} deleteTag={deleteTag}/>
-            <Test/>
+            {/* <Test/> */}
             {/* --- Images --- */}
             <InputHeader> Image</InputHeader>
             <UploadButtons/>

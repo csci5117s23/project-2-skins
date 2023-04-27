@@ -35,7 +35,7 @@ export default function AddTagComboBox( {userTags, setTagList, getTags, addTag, 
       id="checkboxes-tags"
       options={userTags}
       disableCloseOnSelect
-      getOptionLabel={(option) => option.name || option}  // || statement for user freesolo inputs
+      getOptionLabel={(option) => option.name || option}  // || statement for user freeSolo inputs
       renderOption={(props, option, { selected }) => (
         <li {...props}>
           <Checkbox
@@ -49,6 +49,7 @@ export default function AddTagComboBox( {userTags, setTagList, getTags, addTag, 
       renderInput={(params) => (
         <TextField {...params} label="Checkboxes" placeholder="Checkboxes" />
       )}
+      onChange={ (event, value) => { setTagList(value); console.log("Value: " + value); } }
     />
   );
 }
