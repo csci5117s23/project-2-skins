@@ -33,7 +33,7 @@ export default function AddTagAutoComboBox( { userTags, setTagList, getTags, add
         multiple
         autoHighlight
         freeSolo
-        options={tagNames}
+        options={ userTags }
         // value={tagIds}
         onChange={ (event, value) => {setTagList(value); console.log(value);} }
         renderTags={(value, getTagProps) =>
@@ -48,20 +48,19 @@ export default function AddTagAutoComboBox( { userTags, setTagList, getTags, add
             label="Select or enter a new tag."
           />
         )}
-        // renderOption={(props, option, state) => (
-        //   // Container for each element/option in pre-existing tags dropdown
-        //   <Container key={option._id} {...props}>
-        //       {option.name} 
-        //     {/* Delete tag button */}
-        //     <Tooltip title="Remove from personal tags">
-        //       <IconButton onClick={ () => { deleteTag(option._id); } }>
-        //         <ClearIcon/>
-        //       </IconButton>
-        //     </Tooltip>
-          
-        //   </Container>
-        // )}
-        // getOptionLabel={ (tag) => tag.name }
+        renderOption={(props, option, state) => (
+          // Container for each element/option in pre-existing tags dropdown
+          <Container key={option} {...props}>
+              {option.name} 
+            {/* Delete tag button */}
+            <Tooltip title="Remove from personal tags">
+              <IconButton onClick={ () => { deleteTag(option._id); } }>
+                <ClearIcon/>
+              </IconButton>
+            </Tooltip>     
+          </Container>
+        )}
+        getOptionLabel={ (tag) => tag.name }
         // getOptionSelected={(option, value) => option.name === value.name }
         // renderOption={(props, option, state) => {
         //   console.log(props);
