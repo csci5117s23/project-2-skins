@@ -8,7 +8,7 @@ import "@/styles/layout.css";
 const theme = createTheme({
   palette:{
     primary:{
-      main: "#FFD36E"
+      main: "#ffd83d"
     },
     background:{
       default: "#3C3F42"

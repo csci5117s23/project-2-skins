@@ -33,14 +33,12 @@ export default function WardrobePanel(props) {
 
   console.log(clothes);
   return (
-    <Grid container width="100vw">
+    <Stack spacing={1.5} width="100vw" alignItems="center" justifyContent="center">
       {clothes.map((cloth) => {
         return (
-          <Grid item xs={6}>
             <ClothingCard clothes={cloth} />
-          </Grid>
         );
       })}
-    </Grid>
+    </Stack>
   );
 }

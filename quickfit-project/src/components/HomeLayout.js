@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 // import styles from '@/styles/Home.module.css'
 import { SignedIn } from "@clerk/clerk-react"; // Clerk authorization imports
 
-import { Grid } from "@mui/material";
+import { Grid, Button, Stack } from "@mui/material";
 import DateWeatherWidget from "@/components/DateWeatherWidget";
 import Header from "@/components/Header";
 import BottomNavigationContainer from "@/components/BottomNavigationContainer";
 import ClothingCard from "@/components/ClothingCard";
+import NoFitChosenLayout from "./NoFitChosenLayout";
 
 // Load any necessary ENV variables
 const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
@@ -61,16 +62,17 @@ export default function UILayout() {
       <section>
         <SignedIn>
           <DateWeatherWidget date={date} setDate={setDate} />
-          <Grid className="mainContainer" width="100vw" container>
-            {outfit.map((clothes) => {
+          <Stack className="mainContainer" width="100vw" spacing={2} alignItems="center" justifyContent="center">
+          
+          <Button variant="contained" onClick={()=>{setOutfit(null)}}>clear outfit</Button>
+
+            {outfit ? outfit.map((clothes) => {
               return (
-                <Grid item xs={6}>
-                  <ClothingCard clothes={clothes} />
-                </Grid>
+                <ClothingCard clothes={clothes} />
               );
-            })}
+            }): <NoFitChosenLayout/>}
             <BottomNavigationContainer />
-          </Grid>
+          </Stack>
         </SignedIn>
       </section>
     </>

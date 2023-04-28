@@ -31,6 +31,8 @@ export default function DateWeatherWidget(props) {
       <Card
         onClick={handleOpen}
         sx={{
+          backgroundImage: "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
+          backgroundSize: "30vw",
           backgroundColor: "#FFFFFF",
           margin: "1.5vh",
           "&:hover": {
@@ -48,13 +50,19 @@ export default function DateWeatherWidget(props) {
         >
           {date > yesterday && date < nextMonth ? (
             <>
-              <WeatherCard date={date ? date : new Date()} />
+              <Stack width={"50vw"} direction="row" alignItems="center"
+          justifyContent="center">
+                <WeatherCard date={date ? date : new Date()} />
+              </Stack>
               <Divider orientation="vertical" variant="middle" flexItem />
             </>
           ) : (
             <></>
           )}
-          <DateCard date={date ? date : new Date()} />
+          <Stack width={"50vw"} direction="row" alignItems="center"
+          justifyContent="center">
+            <DateCard date={date ? date : new Date()} />
+          </Stack>
         </Stack>
       </Card>
       <Modal

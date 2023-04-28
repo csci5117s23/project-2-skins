@@ -42,7 +42,7 @@ function ResponsiveAppBar() {
                 fontFamily: "",
                 fontWeight: 700,
                 letterSpacing: ".3rem",
-                color: "inherit",
+                color: "#3C3F42",
                 textDecoration: "none",
                 cursor: "pointer",
               }}
@@ -55,7 +55,7 @@ function ResponsiveAppBar() {
             alignItems="center"
             justifyContent="center"
             sx={{
-              ml: "20vw",
+              ml: "15vw",
               width: "100vw",
               display: { xs: "flex", md: "none" },
             }}
@@ -75,7 +75,7 @@ function ResponsiveAppBar() {
                 fontFamily: "monospace",
                 fontWeight: 700,
                 letterSpacing: ".3rem",
-                color: "inherit",
+                color: "#3C3F42",
                 textDecoration: "none",
               }}
             >

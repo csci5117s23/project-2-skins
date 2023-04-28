@@ -39,7 +39,9 @@ export default function DateCard(props) {
         direction="row"
       >
         <Typography variant="h5" sx={{ color: "#696969" }}>
+        <Box sx={{ fontWeight: "bold"}}>
           {date ? formatDate(date) : formatDate(new Date())}
+          </Box>
         </Typography>
         <CalendarMonthTwoToneIcon />
       </Stack>

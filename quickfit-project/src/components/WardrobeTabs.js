@@ -28,6 +28,11 @@ export default function WardrobeTabs() {
   const [value, setValue] = useState(0);
   const [search, setSearch] = useState("");
 
+  
+  // useEffect(() => {
+  //   console.log(search);
+  // }, [search]);
+
   return (
     <>
       <Stack

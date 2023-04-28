@@ -35,6 +35,9 @@ export default function SearchBar(props) {
         id="outlined-basic"
         label="Search..."
         variant="outlined"
+        onChange={(e) => {
+          setSearch(e.target.value);
+        }}
         sx={{
           margin: "1em",
           input: { color: "#FFD36E" },
