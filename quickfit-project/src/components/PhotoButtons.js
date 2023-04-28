@@ -22,7 +22,7 @@ import DriveFolderUploadRoundedIcon from "@mui/icons-material/DriveFolderUploadR
 // Camera-imports
 import WebcamDialog from "./WebcamDialog";
 
-export default function PhotoButtons() {
+export default function PhotoButtons( { image, setImage }) {
   return (
     <>
       <CssBaseline />
@@ -41,7 +41,7 @@ export default function PhotoButtons() {
         </Tooltip>
 
         {/* Take photo (from camera) */}
-        <WebcamDialog />
+        <WebcamDialog image={image} setImage={setImage} />
       </Stack>
     </>
   );

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useAuth } from "@clerk/nextjs";
-
 // MUI Component imports
 import {
   Box,
@@ -18,6 +17,7 @@ import {
   Typography,
   Paper,
   CssBaseline,
+  Container,
 } from "@mui/material";
 
 // DB Clothes Function imports
@@ -32,9 +32,8 @@ import {
 import { getTags, addTag, editTag, deleteTag } from "../modules/tagFunctions";
 
 // Custom component imports
-import UploadButtons from "./UploadImageButtons";
+import PhotoButtons from "./PhotoButtons";
 import AddTagComboBox from "./AddTagComboBox";
-import Test from "./Test";
 
 // Header text styling for each form input
 function InputHeader(props) {
@@ -63,6 +62,7 @@ export default function ClothesForm() {
   const [name, setName] = useState(""); // Clothing entry name
   const [userTags, setUserTags] = useState([]); // Clothing tags previously made by user (store here)
   const [inputTags, setInputTags] = useState([]); // Clothing tags to apply to this entry
+  const [image, setImage] = useState(null);
 
   // ----------------------------------------
   // Function to reset clothes form inputs
@@ -252,7 +252,9 @@ export default function ClothesForm() {
 
             {/* --- Images --- */}
             <InputHeader> Image</InputHeader>
-            <UploadButtons />
+            <PhotoButtons image={image} setImage={setImage} />
+            {image && ( <img src={image} alt="captured-photo"/> )}
+     
 
             {/* --- Submit --- */}
             <Box

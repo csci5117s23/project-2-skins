@@ -19,10 +19,9 @@ import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
-export default function DualCamera() {
+export default function DualCamera( { handleCloseDialog, image, setImage, } ) {
     // --- Camera-related hooks & functions --------------------------------------
     // For setting up camera capture, settings, and which camera to choose
-    const [img, setImg] = useState(null);
     const webcamRef = useRef(null);
     const [camera, setCamera] = useState(false);
     let videoConstraints;
@@ -40,7 +39,7 @@ export default function DualCamera() {
     // Capture image function
     const capture = useCallback(() => {
         const imageSrc = webcamRef.current.getScreenshot();
-        setImg(imageSrc);
+        setImage(imageSrc);
     }, [webcamRef]);
 
     // Set custom dimensions for front-facing & back-facing cameras
@@ -64,7 +63,7 @@ export default function DualCamera() {
             <Box className="Webcam">
                 {/* Show webcam when user is trying to take photo */}
                 <Box id="webcam-container">
-                    {!img && 
+                    {!image && 
                         <Webcam 
                             mirrored={false}
                             videoConstraints={videoConstraints}
@@ -75,7 +74,7 @@ export default function DualCamera() {
                 </Box>
                 {/* Show user-captured photo when they click "Capture photo" button */}
                 <Box id="photo-capture-container">
-                    {img && ( <img src={img} alt="captured-photo"/> )}
+                    {image && ( <img src={image} alt="captured-photo"/> )}
                 </Box>
             </Box>
 
@@ -116,7 +115,7 @@ export default function DualCamera() {
                 {/* Grid item 2 */}
                 <Grid item>
                     {/* Capture photo button w/ associated snackbar onclick to notify users */}
-                    {!img &&
+                    {!image &&
                         <Button 
                             variant="contained" 
                             onClick={ () => { capture() }}
@@ -126,11 +125,11 @@ export default function DualCamera() {
                         </Button>
                     }
                     {/* If a photo has already been taken, show this button to start up the webcam again */}
-                    {img &&
+                    {image &&
                         <Button 
                             variant="contained" 
                             onClick={ () => {
-                                setImg(null);
+                                setImage(null);
                             }}
                             endIcon={<PhotoCameraIcon/>}
                         >
@@ -141,7 +140,7 @@ export default function DualCamera() {
                 {/* Grid item 3 */}
                 <Grid item>
                     {/* Switch camera button */}
-                        {(img == null) ? ( // User still hasn't taken a photo
+                        {(image == null) ? ( // User still hasn't taken a photo
                             <Tooltip title="No photo taken">
                                 <IconButton color="error">
                                     <CheckCircleOutlineIcon/>
@@ -149,7 +148,12 @@ export default function DualCamera() {
                             </Tooltip>
                         ) : ( // Otherwise, a photo has been taken
                             <Tooltip title="Confirm photo">
-                            <IconButton color="success">
+                            <IconButton color="success" 
+                                onClick={ () => {
+                                    setImage(image);
+                                    handleCloseDialog();
+                                }}
+                            >
                                 <CheckCircleIcon/>
                             </IconButton>
                             </Tooltip>
