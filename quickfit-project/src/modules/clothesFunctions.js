@@ -36,8 +36,6 @@ export async function getClothes() {
 // POST: Function to add a clothing article to user wardrobe
 // ---------------------------------------------------------
 export async function addClothes(authToken, clothing) {
-    // Get authorization token from JWT codehooks template
-    const token = await getToken({ template: jwtTemplateName });
 
     // If category or name is empty, don't add clothing article.
     if (clothing.category === "" || clothing.name === "") {
@@ -48,7 +46,7 @@ export async function addClothes(authToken, clothing) {
     const result = await fetch(clothesUrl, {
         'method': 'POST',
         'headers': {
-            // 'Authorization': 'Bearer ' + token,
+            'Authorization': 'Bearer ' + authToken,
             'Content-Type': 'application/json'
         },
         'body': JSON.stringify({
