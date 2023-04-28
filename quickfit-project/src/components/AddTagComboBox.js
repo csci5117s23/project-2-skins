@@ -47,7 +47,7 @@ export default function AddTagComboBox( {userTags, setInputTags, getTags, addTag
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="Checkboxes" placeholder="Checkboxes" />
+        <TextField {...params} label="Select Tags" placeholder="Select or add tags." />
       )}
       onChange={ (event, value) => { setInputTags(value); console.log("Value: " + value); } }
     />
