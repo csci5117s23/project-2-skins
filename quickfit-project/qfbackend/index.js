@@ -73,15 +73,17 @@ const options = {  // Schema options
 // API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev/clothes/[id]
 // Codehooks will auto generate '._id' property on clothing db entry on POST
 const clothesSchemaYup = object( {
-  category:      string().required(),                 // Name of category (top, bottom, sweater, shoes, etc.)
-  clothingName:  string().required(),                 // Name of clothing (Black Nike hoodie, Red long sleeve from garage) 
-  tags:          array().of(string()),                
+  category:      string().required(),                 // Name of category (top  , bottom, sweater, shoes, etc.)
+  name:          string().required(),                 // Name of clothing (Black Nike hoodie, Red long sleeve from garage) 
+  tags:          array().of(string()),                // List of user specified strings
+  color:         string(),                            // User-specified color
+  // image                                            // User-uplodad image of clothing
   createdOn:     date().default(() => new Date()),    // Date of when clothing article was created (POST date)
 })
 //////////////////////////////////////////////////////////////////////
 // Database schema - Outfit 
-// API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev/tag/[id]
-// Codehooks will auto generate '._id' property on clothing tag db entry on POST
+// API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev/outfit/[id]
+// Codehooks will auto generate '._id' property on outfit db entry on POST
 const outfitSchemaYup = object( {
   // Reference to clothesSchemaYup(clothing article) ._id
   topId:          array().of(string()),               // Muliple tops allowed (zip up hoodie with t-shirt)                 
@@ -89,18 +91,17 @@ const outfitSchemaYup = object( {
   shoesId:        string(),                           // One pair of shoes only    
   accessoriesId:  array().of(string()),               // Multiple accessories allowed (necklace and watch)
   onePieceId:     string(),                           // Only one allowed 
-  dateWorn:       date().required(),
-  createdOn:      date().default(() => new Date()),   // Date of when tag was created (POST date)
+  dateWorn:       date().required(),                  // Date of when user set to wear this outfit
+  createdOn:      date().default(() => new Date()),   // Date of when outfit was created (POST date)
 })
 //////////////////////////////////////////////////////////////////////
-// Database schema - Tag (Clothing category)
+// Database schema - Tag (Clothing tags)
 // API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev/tag/[id]
-// Codehooks will auto generate '._id' property on clothing tag db entry on POST
-// const tagSchemaYup = object( {
-//   clothingId: string().required(),                    // Reference to clothesSchemaYup(clothing article) ._id
-//   tag:      string().required(),                    // Name of tag (color, brand, style, etc.)
-//   createdOn:  date().default(() => new Date()),       // Date of when tag was created (POST date)
-// })
+// Codehooks will auto generate '._id' property on tag db entry on POST
+const tagSchemaYup = object( {
+  name:       string().required(),                    // Name of tag (color, brand, style, etc.)
+  createdOn:  date().default(() => new Date()),       // Date of when tag was created (POST date)
+})
 //////////////////////////////////////////////////////////////////////
 // Database schema - Link (Clothing to tag relations)
 // API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev/link/[id]
@@ -117,154 +118,156 @@ const outfitSchemaYup = object( {
 
 
 
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-// Authorization
-// Grabs the authorization token and parses it, stashing it on the request.
-const userAuth = async (req, res, next) => {
-  try {
-    const { authorization } = req.headers;
-    if (authorization) {
-      const token = authorization.replace('Bearer ','');
-      // NOTE this doesn't validate, but we don't need it to. codehooks is doing that for us.
-      const token_parsed = jwtDecode(token);
-      req.user_token = token_parsed;
-    }
-    next();
-  } catch (error) {
-    next(error);
-  } 
-}
-app.use(userAuth)
+// //////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////
+// // Authorization
+// // Grabs the authorization token and parses it, stashing it on the request.
+// const userAuth = async (req, res, next) => {
+//   try {
+//     const { authorization } = req.headers;
+//     if (authorization) {
+//       const token = authorization.replace('Bearer ','');
+//       // NOTE this doesn't validate, but we don't need it to. codehooks is doing that for us.
+//       const token_parsed = jwtDecode(token);
+//       req.user_token = token_parsed;
+//     }
+//     next();
+//   } catch (error) {
+//     next(error);
+//   } 
+// }
+// app.use(userAuth)
 
 
 
-//////////////////////////////////////////////////////////////////////
-// 'clothes' route authentication
-// Extra logic for GET / and POST / requests.
-app.use('/clothes', (req, res, next) => {
-  if (req.method === "POST") {
-      // always save authenticating user Id token.
-      // note -- were not enforcing uniqueness which isn't great.
-      // we don't currently have a great way to do this -- one option would be to 
-      // have a user collection track which collections have been filled
-      // It's a limitation for sure, but I'll just make that a front-end problem...
-      req.body.userId = req.user_token.sub
-  } else if (req.method === "GET") {
-      // on "index" -- always check for authentication.
-      req.query.userId = req.user_token.sub
-  }
-  next();
-})
-// Extra logic for GET /id and PUT /id DELETE /id PATCH /id requests.
-// side effect here will break patch patch by query, but that's OK for my purposes.
-app.use('/clothes/:id', async (req, res, next) => {
-  const id = req.params.ID;
-  const userId = req.user_token.sub
-  // let's check access rights for the document being read/updated/replaced/deleted
-  const conn = await Datastore.open();
-  try {
-      console.log(id);
-      const doc = await conn.getOne('task', id)
-      if (doc.userId != userId) {
-          // authenticate duser doesn't own this document.
-          res.status(403).end(); // end is like "quit this request"
-          return
-      }
-  } catch (e) {
-      console.log(e);
-      // the document doesn't exist.
-      res.status(404).end(e);
-      return;
-  }
-  // if we don't crash out -- call next and let crudlify deal with the details...
-  next();
-})
+// //////////////////////////////////////////////////////////////////////
+// // 'clothes' route authentication
+// // Extra logic for GET / and POST / requests.
+// app.use('/clothes', (req, res, next) => {
+//   if (req.method === "POST") {
+//       // always save authenticating user Id token.
+//       // note -- were not enforcing uniqueness which isn't great.
+//       // we don't currently have a great way to do this -- one option would be to 
+//       // have a user collection track which collections have been filled
+//       // It's a limitation for sure, but I'll just make that a front-end problem...
+//       req.body.userId = req.user_token.sub
+//   } else if (req.method === "GET") {
+//       // on "index" -- always check for authentication.
+//       req.query.userId = req.user_token.sub
+//   }
+//   next();
+// })
+// // Extra logic for GET /id and PUT /id DELETE /id PATCH /id requests.
+// // side effect here will break patch patch by query, but that's OK for my purposes.
+// app.use('/clothes/:id', async (req, res, next) => {
+//   const id = req.params.ID;
+//   const userId = req.user_token.sub
+//   // let's check access rights for the document being read/updated/replaced/deleted
+//   const conn = await Datastore.open();
+//   try {
+//       console.log(id);
+//       const doc = await conn.getOne('task', id)
+//       if (doc.userId != userId) {
+//           // authenticate duser doesn't own this document.
+//           res.status(403).end(); // end is like "quit this request"
+//           return
+//       }
+//   } catch (e) {
+//       console.log(e);
+//       // the document doesn't exist.
+//       res.status(404).end(e);
+//       return;
+//   }
+//   // if we don't crash out -- call next and let crudlify deal with the details...
+//   next();
+// })
+
+// //////////////////////////////////////////////////////////////////////
+// // 'tag' route authentication
+// // Extra logic for GET / and POST / requests.
+// app.use('/tag', (req, res, next) => {
+//   if (req.method === "POST") {
+//       // always save authenticating user Id token.
+//       // note -- were not enforcing uniqueness which isn't great.
+//       // we don't currently have a great way to do this -- one option would be to 
+//       // have a user collection track which collections have been filled
+//       // It's a limitation for sure, but I'll just make that a front-end problem...
+//       req.body.userId = req.user_token.sub
+//   } else if (req.method === "GET") {
+//       // on "index" -- always check for authentication.
+//       req.query.userId = req.user_token.sub
+//   }
+//   next();
+// })
+// // Extra logic for GET /id and PUT /id DELETE /id PATCH /id requests.
+// // side effect here will break patch patch by query, but that's OK for my purposes.
+// app.use('/tag/:id', async (req, res, next) => {
+//   const id = req.params.ID;
+//   const userId = req.user_token.sub
+//   // let's check access rights for the document being read/updated/replaced/deleted
+//   const conn = await Datastore.open();
+//   try {
+//       console.log(id);
+//       const doc = await conn.getOne('category', id)
+//       if (doc.userId != userId) {
+//           // authenticate duser doesn't own this document.
+//           res.status(403).end(); // end is like "quit this request"
+//           return
+//       }
+//   } catch (e) {
+//       console.log(e);
+//       // the document doesn't exist.
+//       res.status(404).end(e);
+//       return;
+//   }
+//   // if we don't crash out -- call next and let crudlify deal with the details...
+//   next();
+// })
+
+// //////////////////////////////////////////////////////////////////////
+// // 'link' route authentication
+// // Extra logic for GET / and POST / requests.
+// app.use('/link', (req, res, next) => {
+//   if (req.method === "POST") {
+//       // always save authenticating user Id token.
+//       // note -- were not enforcing uniqueness which isn't great.
+//       // we don't currently have a great way to do this -- one option would be to 
+//       // have a user collection track which collections have been filled
+//       // It's a limitation for sure, but I'll just make that a front-end problem...
+//       req.body.userId = req.user_token.sub
+//   } else if (req.method === "GET") {
+//       // on "index" -- always check for authentication.
+//       req.query.userId = req.user_token.sub
+//   }
+//   next();
+// })
+// // Extra logic for GET /id and PUT /id DELETE /id PATCH /id requests.
+// // side effect here will break patch patch by query, but that's OK for my purposes.
+// app.use('/link/:id', async (req, res, next) => {
+//   const id = req.params.ID;
+//   const userId = req.user_token.sub
+//   // let's check access rights for the document being read/updated/replaced/deleted
+//   const conn = await Datastore.open();
+//   try {
+//       console.log(id);
+//       const doc = await conn.getOne('category', id)
+//       if (doc.userId != userId) {
+//           // authenticate duser doesn't own this document.
+//           res.status(403).end(); // end is like "quit this request"
+//           return
+//       }
+//   } catch (e) {
+//       console.log(e);
+//       // the document doesn't exist.
+//       res.status(404).end(e);
+//       return;
+//   }
+//   // if we don't crash out -- call next and let crudlify deal with the details...
+//   next();
+// })
+
 
 //////////////////////////////////////////////////////////////////////
-// 'tag' route authentication
-// Extra logic for GET / and POST / requests.
-app.use('/tag', (req, res, next) => {
-  if (req.method === "POST") {
-      // always save authenticating user Id token.
-      // note -- were not enforcing uniqueness which isn't great.
-      // we don't currently have a great way to do this -- one option would be to 
-      // have a user collection track which collections have been filled
-      // It's a limitation for sure, but I'll just make that a front-end problem...
-      req.body.userId = req.user_token.sub
-  } else if (req.method === "GET") {
-      // on "index" -- always check for authentication.
-      req.query.userId = req.user_token.sub
-  }
-  next();
-})
-// Extra logic for GET /id and PUT /id DELETE /id PATCH /id requests.
-// side effect here will break patch patch by query, but that's OK for my purposes.
-app.use('/tag/:id', async (req, res, next) => {
-  const id = req.params.ID;
-  const userId = req.user_token.sub
-  // let's check access rights for the document being read/updated/replaced/deleted
-  const conn = await Datastore.open();
-  try {
-      console.log(id);
-      const doc = await conn.getOne('category', id)
-      if (doc.userId != userId) {
-          // authenticate duser doesn't own this document.
-          res.status(403).end(); // end is like "quit this request"
-          return
-      }
-  } catch (e) {
-      console.log(e);
-      // the document doesn't exist.
-      res.status(404).end(e);
-      return;
-  }
-  // if we don't crash out -- call next and let crudlify deal with the details...
-  next();
-})
-
 //////////////////////////////////////////////////////////////////////
-// 'link' route authentication
-// Extra logic for GET / and POST / requests.
-app.use('/link', (req, res, next) => {
-  if (req.method === "POST") {
-      // always save authenticating user Id token.
-      // note -- were not enforcing uniqueness which isn't great.
-      // we don't currently have a great way to do this -- one option would be to 
-      // have a user collection track which collections have been filled
-      // It's a limitation for sure, but I'll just make that a front-end problem...
-      req.body.userId = req.user_token.sub
-  } else if (req.method === "GET") {
-      // on "index" -- always check for authentication.
-      req.query.userId = req.user_token.sub
-  }
-  next();
-})
-// Extra logic for GET /id and PUT /id DELETE /id PATCH /id requests.
-// side effect here will break patch patch by query, but that's OK for my purposes.
-app.use('/link/:id', async (req, res, next) => {
-  const id = req.params.ID;
-  const userId = req.user_token.sub
-  // let's check access rights for the document being read/updated/replaced/deleted
-  const conn = await Datastore.open();
-  try {
-      console.log(id);
-      const doc = await conn.getOne('category', id)
-      if (doc.userId != userId) {
-          // authenticate duser doesn't own this document.
-          res.status(403).end(); // end is like "quit this request"
-          return
-      }
-  } catch (e) {
-      console.log(e);
-      // the document doesn't exist.
-      res.status(404).end(e);
-      return;
-  }
-  // if we don't crash out -- call next and let crudlify deal with the details...
-  next();
-})
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-crudlify(app, { clothesSchemaYup: clothesSchemaYup, outfitSchemaYup: outfitSchemaYup});
+crudlify(app, { clothes: clothesSchemaYup, outfit: outfitSchemaYup, tag: tagSchemaYup });
 export default app.init();

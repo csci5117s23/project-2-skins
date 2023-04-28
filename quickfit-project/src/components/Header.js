@@ -86,6 +86,7 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <UserButton />
           </Box>
+
         </Toolbar>
       </Container>
     </AppBar>
