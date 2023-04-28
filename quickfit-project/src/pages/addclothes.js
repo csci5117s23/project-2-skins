@@ -36,7 +36,7 @@ export default function AddClothes() {
       {/* Main container */}
       <Box
         sx={{
-          bgcolor: 'royalblue',
+          bgcolor: 'white',
           height: '100vh', 
         }}
       >

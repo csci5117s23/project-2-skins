@@ -1,19 +1,25 @@
+// DualCamera.js 
+// Some camera code inspired from BookTok projects' tech share  on React camera
 import React, { useCallback, useState, useRef } from "react";
 import Webcam from "react-webcam";
 // Mui component imports
 import { 
     Box, 
     Button, 
+    Grid, 
     IconButton, 
+    Paper, 
+    Slide, 
     Snackbar, 
     Tooltip
 } from "@mui/material";
 // MUI Icon Imports
-import CameraswitchIcon from '@mui/icons-material/Cameraswitch';
-import ImageSnackbar from "./ImageSnackbar";
+import CameraswitchIcon from "@mui/icons-material/Cameraswitch";
 import CloseIcon from "@mui/icons-material/Close";
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import CancelIcon from '@mui/icons-material/Cancel';
 
-export default function DualCamera() {
+export default function DualCamera( { handleCloseDialog} ) {
     // --- Camera-related hooks & functions --------------------------------------
     // For setting up camera capture, settings, and which camera to choose
     const [img, setImg] = useState(null);
@@ -31,13 +37,6 @@ export default function DualCamera() {
         setCamera(true)
     }, [setCamera]);
 
-
-    function switchCamera(useRearCamera) {
-        userCallback( () =>{
-            setCamera(useRearCamera);
-        }, [setCamera])
-    }
-
     // Capture image function
     const capture = useCallback(() => {
         const imageSrc = webcamRef.current.getScreenshot();
@@ -45,46 +44,22 @@ export default function DualCamera() {
     }, [webcamRef]);
 
     // Set custom dimensions for front-facing & back-facing cameras
-    if (camera == true) {           // rear camera
+    if (camera === false) {          // front camera
         videoConstraints = {
             width: screen.width,
-            height: screen.height - 250,
-            facingMode: "environment",
-          };    
-    } else {                        // front camera
-        videoConstraints = {
-            width: screen.width,
-            height: screen.height - 250,
+            height: screen.height,
             facingMode: "user",
-          };
+        };
+    } else {                        // rear camera
+        videoConstraints = {
+            width: screen.width,
+            height: screen.height,
+            facingMode: "environment",
+        }; 
     }
 
-
-    // --- Snackbar-related hooks & functions ------------------------------------
-    const [snackbarProps,  setSnackbarProps] = React.useState({
-        open: false,
-        vertical: "top",
-        horizontal: "center",
-      });
-      const { vertical, horizontal, open } = snackbarProps;
-    
-      // Handle photo capture button clicked
-      const handleClick = (newSnackbarProps) => () => {
-        setSnackbarProps({ open: true, ...newSnackbarProps });
-      };
-    
-      // Handle  closing snackbar
-      const handleClose = () => {
-        setSnackbarProps({ ...snackbarProps, open: false });
-      };
-      
-      // For making snackbar transition up on popup
-      function TransitionUp(props) {
-        return <Slide {...props} direction="up" />;
-      }
-
     return (
-        <Box>
+        <Box sx={{ m: 0, p: 0 }}>
             {/* Webcam box */}
             <Box className="Webcam">
                 {/* Show webcam when user is trying to take photo */}
@@ -98,60 +73,83 @@ export default function DualCamera() {
                         />
                     }
                 </Box>
-                {/* Show user-captured photo when they click 'Capture photo' button */}
+                {/* Show user-captured photo when they click "Capture photo" button */}
                 <Box id="photo-capture-container">
                     {img && ( <img src={img} alt="captured-photo"/> )}
                 </Box>
             </Box>
 
             {/* Buttons for switching camera, taking photo, etc. */}
-            <Box>
-                <Tooltip title="Switch camera">
-                    {camera ? ( // If true, show front camera
-                        <IconButton onClick={frontCamera}>
-                            <CameraswitchIcon/>
-                        </IconButton>
-                    ) : ( // Othewise show back camera
-                        <IconButton onClick={rearCamera}>
-                            <CameraswitchIcon/>
-                        </IconButton>
-                    )}
-                </Tooltip>
-                
-                {/* Capture photo button w/ associated snackbar onclick to notify users */}
-                <Button 
-                    variant="contained" 
-                    onClick={ () => {
-                        capture(); 
-                        handleClick({
-                            vertical: "bottom",
-                            horizontal: "center",
-                        })
-                    }}>
-                    Capture photo
-                </Button> 
-                <Snackbar
-                    anchorOrigin={{ vertical, horizontal }}
-                    open={open}
-                    onClose={handleClose}
-                    message="Photo captured"
-                    key={vertical + horizontal}
-                    TransitionComponent={TransitionUp}
-                    action={
-                    <React.Fragment>
-                        <IconButton
-                        aria-label="close"
-                        color="inherit"
-                        sx={{ p: 0.5 }}
-                        onClick={handleClose}
+            <Grid
+                container
+                direction="row"
+                // alignItems="center"
+                justifyContent={"center"}
+                spacing={6}
+                sx={{
+                    position: 'fixed', 
+                    bottom: '0',
+                    pb: 3
+                }}
+            > 
+                {/* Grid item 1 */}
+                <Grid item>
+                    {/* Close open dialog button */}
+                    <Tooltip title="Go back">
+                        <IconButton 
+                            color="primary"
+                            onClick={ () => { handleCloseDialog(); } } 
                         >
-                        <CloseIcon />
+                            <CancelIcon/>
                         </IconButton>
-                    </React.Fragment>
+                    </Tooltip>
+                </Grid>
+                {/* Grid item 2 */}
+                <Grid item>
+                    {/* Capture photo button w/ associated snackbar onclick to notify users */}
+                    {!img &&
+                        <Button 
+                            variant="contained" 
+                            onClick={ () => { capture() }}
+                            endIcon={<PhotoCameraIcon/>}
+                        >
+                            Take photo
+                        </Button>
                     }
-                />
-
-            </Box>
+                    {/* If a photo has already been taken, show this button to start up the webcam again */}
+                    {img &&
+                        <Button 
+                            variant="contained" 
+                            onClick={ () => {
+                                setImg(null);
+                            }}
+                            endIcon={<PhotoCameraIcon/>}
+                        >
+                            Take a new photo
+                        </Button>
+                    }
+                </Grid>
+                {/* Grid item 3 */}
+                <Grid item>
+                    <Tooltip title="Switch camera">
+                        {camera ? ( // If true, show front camera
+                            <IconButton 
+                                color="primary"
+                                onClick={frontCamera} 
+                            >
+                                <CameraswitchIcon/>
+                            </IconButton>
+                        ) : ( // Othewise show back camera
+                            <IconButton 
+                                color="primary"
+                                onClick={rearCamera} 
+                            >
+                                <CameraswitchIcon/>
+                            </IconButton>
+                        )}
+                    </Tooltip>
+                </Grid>
+            </Grid> 
         </Box>
     );
 }

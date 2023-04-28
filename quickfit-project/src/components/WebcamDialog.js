@@ -18,11 +18,6 @@ import {
 // MUI Icons imports
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import DualCamera from './DualCamera';
-import CloseIcon from '@mui/icons-material/Close';
-
-// React webcam import
-import Webcam from "react-webcam";
-import ImageSnackbar from './ImageSnackbar';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -31,11 +26,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function WebcamDialog() {
   const [open, setOpen] = React.useState(false);
 
+  // Function to open up webcam dialog/popup
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  // Function to close webcam dialog/popup
+  const handleCloseDialog = () => {
     setOpen(false);
   };
 
@@ -43,47 +40,38 @@ export default function WebcamDialog() {
     <div>
       {/* Take photo icon button */}
       <Tooltip title="Take a photo">
-        <IconButton 
-            color="primary" 
+        <Button 
+            variant="outlined"
+            color="secondary"
             aria-label="upload webcam photo" 
             component="label" 
             onClick={handleClickOpen}
+            endIcon={<PhotoCamera />}
         >
-          <PhotoCamera />
-        </IconButton>
+            Use camera
+        </Button>
       </Tooltip>
 
     {  /* Popup that shows when user clicks camera button */}
       <Dialog
         fullScreen
         open={open}
-        onClose={handleClose}
+        onClose={handleCloseDialog}
         TransitionComponent={Transition}
+        sx={{ mb: -1}}
       >
         {/* Top header of form popup */}
-        <AppBar sx={{ position: 'relative' }}>
+        <AppBar sx={{ position: 'absolute', textAlign: 'center', height: '4.5vh' }}>
             <Toolbar>
                 {/* Popup header text */}
-                <Typography sx={{ ml: 0.5, flex: 1 }} variant="h6" component="div">
-                Take a photo
+                <Typography sx={{ flex: 1, mb: 2 }} variant="h6" component="div">
+                    Take a photo
                 </Typography>
-
-                {/* Close button */}
-                <IconButton
-                    edge="start"
-                    color="inherit"
-                    onClick={handleClose}
-                    aria-label="close"
-                >
-                    <CloseIcon />
-                </IconButton>
             </Toolbar>
         </AppBar>
 
         {/* Camera container */}
-        <Box sx={{display: 'flex', justifyContent: 'center'}}>
-            <DualCamera />
-        </Box>
+        <DualCamera handleCloseDialog={handleCloseDialog} />
       </Dialog>
     </div>
   );

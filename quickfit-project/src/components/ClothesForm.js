@@ -97,7 +97,7 @@ export default function ClothesForm() {
     // Call POST function
     const result = await addClothes(token, clothingItem);
 
-    
+
     // On submit also, refresh the form
     resetForm();
   }
@@ -169,7 +169,7 @@ export default function ClothesForm() {
       {/* Clothes form container */}
       <Box 
         sx={{
-          bgcolor: 'white',
+          // bgcolor: 'white',
           m: { xs: 0, sm: 1, md: 3, xl: 5 },
           p: { xs: 2, sm: 3, md: 4, xl: 5 },
           height: '100%',
@@ -182,10 +182,9 @@ export default function ClothesForm() {
           {/* Form header */}
           <FormLabel>
             <Paper 
-              elevation={4}
+              elevation={2}
               sx={{
                 textAlign: "center",
-                mt: 1,
                 mb: 2,
                 py: 1,
                 bgcolor: "#EEEEEE",

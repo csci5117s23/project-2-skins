@@ -16,6 +16,7 @@ import {
   Typography 
 } from '@mui/material';
 // MUI Icons
+import DriveFolderUploadRoundedIcon from '@mui/icons-material/DriveFolderUploadRounded';
 
 // Camera-imports
 import WebcamDialog from './WebcamDialog';
@@ -27,7 +28,12 @@ export default function PhotoButtons() {
       
       {/* Upload photo */}
       <Tooltip title="Upload a photo">
-        <Button variant="contained" component="label">
+        <Button 
+          variant="outlined" 
+          component="label" 
+          color="secondary"
+          endIcon={<DriveFolderUploadRoundedIcon/>}
+        >
           Upload
           <input hidden accept="image/*" multiple type="file" />
         </Button>
