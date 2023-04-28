@@ -22,6 +22,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 // React webcam import
 import Webcam from "react-webcam";
+import ImageSnackbar from './ImageSnackbar';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -40,7 +41,7 @@ export default function WebcamDialog() {
 
   return (
     <div>
-      {/* Take photo (from camera) */}
+      {/* Take photo icon button */}
       <Tooltip title="Take a photo">
         <IconButton 
             color="primary" 
@@ -52,27 +53,34 @@ export default function WebcamDialog() {
         </IconButton>
       </Tooltip>
 
+    {  /* Popup that shows when user clicks camera button */}
       <Dialog
         fullScreen
         open={open}
         onClose={handleClose}
         TransitionComponent={Transition}
       >
+        {/* Top header of form popup */}
         <AppBar sx={{ position: 'relative' }}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Take a photo
-            </Typography>
-          </Toolbar>
+            <Toolbar>
+                {/* Popup header text */}
+                <Typography sx={{ ml: 0.5, flex: 1 }} variant="h6" component="div">
+                Take a photo
+                </Typography>
+
+                {/* Close button */}
+                <IconButton
+                    edge="start"
+                    color="inherit"
+                    onClick={handleClose}
+                    aria-label="close"
+                >
+                    <CloseIcon />
+                </IconButton>
+            </Toolbar>
         </AppBar>
+
+        {/* Camera container */}
         <Box sx={{display: 'flex', justifyContent: 'center'}}>
             <DualCamera />
         </Box>
