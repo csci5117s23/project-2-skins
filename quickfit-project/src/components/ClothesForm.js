@@ -95,8 +95,9 @@ export default function ClothesForm() {
     const token = await getToken({ template: jwtTemplateName });
 
     // Call POST function
-    addClothes(token, clothingItem);
+    const result = await addClothes(token, clothingItem);
 
+    
     // On submit also, refresh the form
     resetForm();
   }

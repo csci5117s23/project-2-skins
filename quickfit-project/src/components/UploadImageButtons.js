@@ -16,7 +16,9 @@ import {
   Typography 
 } from '@mui/material';
 // MUI Icons
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
+
+// Camera-imports
+import WebcamDialog from './WebcamDialog';
 
 
 export default function PhotoButtons() {
@@ -24,18 +26,15 @@ export default function PhotoButtons() {
     <Stack direction="row" alignItems="center" spacing={2}>
       
       {/* Upload photo */}
-      <Button variant="contained" component="label">
-        Upload
-        <input hidden accept="image/*" multiple type="file" />
-      </Button>
+      <Tooltip title="Upload a photo">
+        <Button variant="contained" component="label">
+          Upload
+          <input hidden accept="image/*" multiple type="file" />
+        </Button>
+      </Tooltip>
       
       {/* Take photo (from camera) */}
-      <Tooltip title="Take a photo">
-        <IconButton color="primary" aria-label="upload picture" component="label">
-          <input hidden accept="image/*" type="file" />
-          <PhotoCamera />
-        </IconButton>
-      </Tooltip>
+      <WebcamDialog/>
 
     </Stack>
   );

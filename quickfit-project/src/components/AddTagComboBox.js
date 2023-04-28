@@ -44,6 +44,8 @@ export default function AddTagComboBox( {userTags, setInputTags, getTags, addTag
             checked={selected}
           />
           {option.name}
+
+          {/* Delete button */}
         </li>
       )}
       renderInput={(params) => (

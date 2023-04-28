@@ -68,7 +68,7 @@ export async function editTag(authToken, tag) {
         const result = await fetch(tagsUrl + tag._id, {
             'method': 'PUT',
             'headers': {
-                // 'Authorization': 'Bearer ' + authToken,
+                'Authorization': 'Bearer ' + authToken,
                 'Content-Type': 'application/json'
             },
             'body': JSON.stringify({tag})
@@ -89,7 +89,7 @@ export async function deleteTag(authToken, tag) {
         const result = await fetch(tagsUrl + tag._id, {
             'method': 'DELETE',
             'headers': {
-                // 'Authorization': 'Bearer ' + authToken
+                'Authorization': 'Bearer ' + authToken
             },
         })
         // Return removed tag as JSON
