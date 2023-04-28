@@ -15,11 +15,11 @@ import {
 } from "@mui/material";
 // MUI Icon Imports
 import CameraswitchIcon from "@mui/icons-material/Cameraswitch";
-import CloseIcon from "@mui/icons-material/Close";
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
-export default function DualCamera( { handleCloseDialog} ) {
+export default function DualCamera() {
     // --- Camera-related hooks & functions --------------------------------------
     // For setting up camera capture, settings, and which camera to choose
     const [img, setImg] = useState(null);
@@ -94,14 +94,23 @@ export default function DualCamera( { handleCloseDialog} ) {
             > 
                 {/* Grid item 1 */}
                 <Grid item>
-                    {/* Close open dialog button */}
-                    <Tooltip title="Go back">
-                        <IconButton 
-                            color="primary"
-                            onClick={ () => { handleCloseDialog(); } } 
-                        >
-                            <CancelIcon/>
-                        </IconButton>
+                    {/* Switch camera button */}
+                    <Tooltip title="Switch camera">
+                        {camera ? ( // If true, show front camera
+                            <IconButton 
+                                color="primary"
+                                onClick={frontCamera} 
+                            >
+                                <CameraswitchIcon/>
+                            </IconButton>
+                        ) : ( // Othewise show back camera
+                            <IconButton 
+                                color="primary"
+                                onClick={rearCamera} 
+                            >
+                                <CameraswitchIcon/>
+                            </IconButton>
+                        )}
                     </Tooltip>
                 </Grid>
                 {/* Grid item 2 */}
@@ -125,29 +134,26 @@ export default function DualCamera( { handleCloseDialog} ) {
                             }}
                             endIcon={<PhotoCameraIcon/>}
                         >
-                            Take a new photo
+                            Retake photo
                         </Button>
                     }
                 </Grid>
                 {/* Grid item 3 */}
                 <Grid item>
-                    <Tooltip title="Switch camera">
-                        {camera ? ( // If true, show front camera
-                            <IconButton 
-                                color="primary"
-                                onClick={frontCamera} 
-                            >
-                                <CameraswitchIcon/>
+                    {/* Switch camera button */}
+                        {(img == null) ? ( // User still hasn't taken a photo
+                            <Tooltip title="No photo taken">
+                                <IconButton color="error">
+                                    <CheckCircleOutlineIcon/>
+                                </IconButton>
+                            </Tooltip>
+                        ) : ( // Otherwise, a photo has been taken
+                            <Tooltip title="Confirm photo">
+                            <IconButton color="success">
+                                <CheckCircleIcon/>
                             </IconButton>
-                        ) : ( // Othewise show back camera
-                            <IconButton 
-                                color="primary"
-                                onClick={rearCamera} 
-                            >
-                                <CameraswitchIcon/>
-                            </IconButton>
+                            </Tooltip>
                         )}
-                    </Tooltip>
                 </Grid>
             </Grid> 
         </Box>

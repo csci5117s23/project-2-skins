@@ -1,9 +1,10 @@
-import * as React from 'react';
+import * as React from "react";
 // MUI Imports
-import { 
+import {
   Autocomplete,
   Button,
   Chip,
+  CssBaseline,
   Dialog,
   DialogActions,
   DialogContent,
@@ -12,36 +13,36 @@ import {
   IconButton,
   Stack,
   TextField,
-  Tooltip, 
-  Typography 
-} from '@mui/material';
+  Tooltip,
+  Typography,
+} from "@mui/material";
 // MUI Icons
-import DriveFolderUploadRoundedIcon from '@mui/icons-material/DriveFolderUploadRounded';
+import DriveFolderUploadRoundedIcon from "@mui/icons-material/DriveFolderUploadRounded";
 
 // Camera-imports
-import WebcamDialog from './WebcamDialog';
-
+import WebcamDialog from "./WebcamDialog";
 
 export default function PhotoButtons() {
   return (
-    <Stack direction="row" alignItems="center" spacing={2}>
-      
-      {/* Upload photo */}
-      <Tooltip title="Upload a photo">
-        <Button 
-          variant="outlined" 
-          component="label" 
-          color="secondary"
-          endIcon={<DriveFolderUploadRoundedIcon/>}
-        >
-          Upload
-          <input hidden accept="image/*" multiple type="file" />
-        </Button>
-      </Tooltip>
-      
-      {/* Take photo (from camera) */}
-      <WebcamDialog/>
+    <>
+      <CssBaseline />
+      <Stack direction="row" alignItems="center" spacing={2}>
+        {/* Upload photo */}
+        <Tooltip title="Upload a photo">
+          <Button
+            variant="outlined"
+            component="label"
+            color="secondary"
+            endIcon={<DriveFolderUploadRoundedIcon />}
+          >
+            Upload
+            <input hidden accept="image/*" multiple type="file" />
+          </Button>
+        </Tooltip>
 
-    </Stack>
+        {/* Take photo (from camera) */}
+        <WebcamDialog />
+      </Stack>
+    </>
   );
 }

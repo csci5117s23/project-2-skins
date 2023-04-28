@@ -17,23 +17,19 @@ import {
   FormLabel,
   Typography,
   Paper,
+  CssBaseline,
 } from "@mui/material";
 
 // DB Clothes Function imports
 import {
-  getClothes, 
-  addClothes, 
-  editClothes, 
-  deleteClothes 
-} from "../modules/clothesFunctions"
+  getClothes,
+  addClothes,
+  editClothes,
+  deleteClothes,
+} from "../modules/clothesFunctions";
 
 // DB Tag Function imports
-import {
-  getTags, 
-  addTag, 
-  editTag, 
-  deleteTag 
-} from "../modules/tagFunctions"
+import { getTags, addTag, editTag, deleteTag } from "../modules/tagFunctions";
 
 // Custom component imports
 import UploadButtons from "./UploadImageButtons";
@@ -41,17 +37,18 @@ import AddTagComboBox from "./AddTagComboBox";
 import Test from "./Test";
 
 // Header text styling for each form input
-function InputHeader( props ) {
+function InputHeader(props) {
   return (
-    <Typography variant="h8" 
+    <Typography
+      variant="h8"
       sx={{
-        fontWeight: 'bold'
-      }}>
+        fontWeight: "bold",
+      }}
+    >
       {props.children}
     </Typography>
-  )
+  );
 }
-
 
 // Clothes form
 export default function ClothesForm() {
@@ -61,10 +58,10 @@ export default function ClothesForm() {
   const [loading, setLoading] = useState(true);
 
   // --- Main form state hooks & functions -------------------------------
-  const [category, setCategory] = useState("");   // Clothing entry category
-  const [color, setColor] = useState("");         // Clothing entry color
-  const [name, setName] = useState("");           // Clothing entry name
-  const [userTags, setUserTags] = useState([]);   // Clothing tags previously made by user (store here)
+  const [category, setCategory] = useState(""); // Clothing entry category
+  const [color, setColor] = useState(""); // Clothing entry color
+  const [name, setName] = useState(""); // Clothing entry name
+  const [userTags, setUserTags] = useState([]); // Clothing tags previously made by user (store here)
   const [inputTags, setInputTags] = useState([]); // Clothing tags to apply to this entry
 
   // ----------------------------------------
@@ -88,15 +85,14 @@ export default function ClothesForm() {
       name: name,
       color: color,
       tags: inputTags,
-    }
+    };
     console.log(clothingItem);
-    
+
     // Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
 
     // Call POST function
     const result = await addClothes(token, clothingItem);
-
 
     // On submit also, refresh the form
     resetForm();
@@ -113,83 +109,83 @@ export default function ClothesForm() {
       return;
     }
     // 2) Get all user-inputted tag names if there are any objects
-    const inputTagNames = inputTags.map( (tag) => {
+    const inputTagNames = inputTags.map((tag) => {
       if (tag.name) {
         return tag.name;
-      } else if (typeof(tag) === 'string' || tag instanceof String) {
+      } else if (typeof tag === "string" || tag instanceof String) {
         return tag;
       }
-    })
+    });
     // 3) Get existing user tag names
-    const existingTagNames = userTags.map( (tag) => { return tag.name; })
-    
+    const existingTagNames = userTags.map((tag) => {
+      return tag.name;
+    });
     // 4) Map over each current tag and find which ones aren't in the set of pre-existing tags
     let newTags = inputTagNames.filter((tag) => {
-      if (existingTagNames.includes(tag) === false) { return tag; }
-    })
+      if (existingTagNames.includes(tag) === false) {
+        return tag;
+      }
+    });
     // 5) Ensure list of tags are unique from one another (convert to Set and back to array)
     newTags = Array.from(new Set(newTags));
-    // console.log("Unique result: " + JSON.stringify(newTags));
-
+    
     // 6) Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
 
     // 7) Map over each new tag in list of new tags and make a post request to create each
-    newTags.map((tag) => { 
+    newTags.map((tag) => {
       // If tag name is null/empty, don't add tag.
       if (tag.name === null || tag.name === "") {
         console.log("Error. Tag name invalid.");
         return;
       }
       addTag(token, tag); // Otherwise, add tag normally.
-    })
+    });
   }
-
-
 
   // --------------------------------------------------------------------
   // Run on every render.
   // --------------------------------------------------------------------
   React.useEffect(() => {
     console.log("Page rendered.");
-    async function process() {                                        // Process getting authorization key and user db tags
-      if (userId) {                                                   // Ensure user is logged in
-        const token = await getToken({ template: jwtTemplateName});   // Get auth token
-        setUserTags(await getTags(token));                            // Get user tasks from codehooks database
-        setLoading(false);                                            // Once we get these things, we are no longer loading 
+    async function process() {
+      // Process getting authorization key and user db tags
+      if (userId) {
+        // Ensure user is logged in
+        const token = await getToken({ template: jwtTemplateName }); // Get auth token
+        setUserTags(await getTags(token)); // Get user tasks from codehooks database
+        setLoading(false); // Once we get these things, we are no longer loading
       }
     }
     process();
     console.log(userTags);
   }, [isLoaded]);
-  
+
   // JSX
   return (
     <>
+      <CssBaseline />
       {/* Clothes form container */}
-      <Box 
+      <Box
         sx={{
-          // bgcolor: 'white',
           m: { xs: 0, sm: 1, md: 3, xl: 5 },
           p: { xs: 2, sm: 3, md: 4, xl: 5 },
-          height: '100%',
+          height: "87vh",
+          bgcolor: "white",
         }}
       >
-        
         {/* Clothing form */}
         <FormControl fullWidth>
-
           {/* Form header */}
           <FormLabel>
-            <Paper 
+            <Paper
               elevation={2}
               sx={{
                 textAlign: "center",
                 mb: 2,
                 py: 1,
-                bgcolor: "#EEEEEE",
                 borderRadius: 2,
-                border: '1px solid grey',
+                border: "1px solid grey",
               }}
             >
               <Typography variant="h7" sx={{ fontWeight: "bold" }}>
@@ -197,13 +193,13 @@ export default function ClothesForm() {
               </Typography>
             </Paper>
           </FormLabel>
-          
+
           {/* Form fields */}
           <Stack spacing={1}>
-
             {/* Category */}
             <InputHeader> Enter clothing details </InputHeader>
-            <TextField select
+            <TextField
+              select
               label="Category*"
               value={category}
               onChange={(event) => {
@@ -218,10 +214,11 @@ export default function ClothesForm() {
               <MenuItem value={"accessories"}>Accessories</MenuItem>
               <MenuItem value={"onepiece"}>One Piece</MenuItem>
             </TextField>
-          
+
             {/* Name */}
             {/* <InputHeader> Name </InputHeader> */}
-            <TextField variant="outlined"
+            <TextField
+              variant="outlined"
               label="Name*"
               value={name}
               placeholder="(Required) Enter a name"
@@ -244,27 +241,38 @@ export default function ClothesForm() {
 
             {/* --- Tags --- */}
             <InputHeader> Tags </InputHeader>
-            <AddTagComboBox userTags={userTags} setInputTags={setInputTags} getTags={getTags} addTag={addTag} editTag={editTag} deleteTag={deleteTag}/>
-            {/* <Test/> */}
+            <AddTagComboBox
+              userTags={userTags}
+              setInputTags={setInputTags}
+              getTags={getTags}
+              addTag={addTag}
+              editTag={editTag}
+              deleteTag={deleteTag}
+            />
+
             {/* --- Images --- */}
             <InputHeader> Image</InputHeader>
-            <UploadButtons/>
+            <UploadButtons />
 
             {/* --- Submit --- */}
             <Box
               sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                // bgcolor: 'red',
+                display: "flex",
+                justifyContent: "center",
                 pt: 2,
-              }}>
-              <Button variant="contained"
-                sx={{ width: '45%' }} 
-                onClick={ () => { addNewTags(); onHandleSubmit(); } }>
+              }}
+            >
+              <Button
+                variant="contained"
+                sx={{ width: "45%" }}
+                onClick={() => {
+                  addNewTags();
+                  onHandleSubmit();
+                }}
+              >
                 Submit
               </Button>
             </Box>
-
           </Stack>
         </FormControl>
       </Box>

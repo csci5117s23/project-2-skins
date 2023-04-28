@@ -32,36 +32,25 @@ export default function AddClothes() {
   return (
     <>
       <CssBaseline/>
+      {/* 1. Header section */}
+      <section>
+        <Header/>
+      </section>
 
-      {/* Main container */}
-      <Box
-        sx={{
-          bgcolor: 'white',
-          height: '100vh', 
-        }}
-      >
-        
-        {/* 1. Header section */}
-        <section>
-          <Header/>
-        </section>
+      {/* 2. Sidebar section */}
+      <section>
+      
+      </section>
 
-        {/* 2. Sidebar section */}
-        <section>
-        
-        </section>
+      {/* 3. Content section */}
+      <section>
+        <ClothesForm/>
+      </section>
 
-        {/* 3. Content section */}
-        <section>
-          <ClothesForm/>
-        </section>
-
-        {/* 4. NavBar section */}
-        <section>
-          <BottomNavigationContainer/>
-        </section>
-
-      </Box>
+      {/* 4. NavBar section */}
+      <section>
+        <BottomNavigationContainer/>
+      </section>
     </>
   )
 }

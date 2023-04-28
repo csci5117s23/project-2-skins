@@ -1,23 +1,27 @@
-import * as React from 'react';
+import * as React from "react";
 // MUI Component Imports
-import { 
-    AppBar,
-    Button,
-    Dialog,
-    Divider,
-    List,
-    ListItem,
-    ListItemText,
-    IconButton,
-    Slide,
-    Toolbar,
-    Tooltip,
-    Typography,
-    Box,
-} from '@mui/material';
+import {
+  AppBar,
+  Button,
+  Dialog,
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+  Slide,
+  Toolbar,
+  Tooltip,
+  Typography,
+  Box,
+  CssBaseline,
+} from "@mui/material";
 // MUI Icons imports
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import DualCamera from './DualCamera';
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import CancelIcon from '@mui/icons-material/Cancel';
+// Custom component imports
+import DualCamera from "./DualCamera";
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -37,42 +41,52 @@ export default function WebcamDialog() {
   };
 
   return (
-    <div>
+    <>
+      <CssBaseline />
       {/* Take photo icon button */}
       <Tooltip title="Take a photo">
-        <Button 
-            variant="outlined"
-            color="secondary"
-            aria-label="upload webcam photo" 
-            component="label" 
-            onClick={handleClickOpen}
-            endIcon={<PhotoCamera />}
+        <Button
+          variant="outlined"
+          color="secondary"
+          aria-label="upload webcam photo"
+          component="label"
+          onClick={handleClickOpen}
+          endIcon={<PhotoCamera />}
         >
-            Use camera
+          Use camera
         </Button>
       </Tooltip>
 
-    {  /* Popup that shows when user clicks camera button */}
+      {/* Popup that shows when user clicks camera button */}
       <Dialog
         fullScreen
         open={open}
         onClose={handleCloseDialog}
         TransitionComponent={Transition}
-        sx={{ mb: -1}}
+        sx={{ mb: -1 }}
       >
         {/* Top header of form popup */}
-        <AppBar sx={{ position: 'absolute', textAlign: 'center', height: '4.5vh' }}>
-            <Toolbar>
-                {/* Popup header text */}
-                <Typography sx={{ flex: 1, mb: 2 }} variant="h6" component="div">
-                    Take a photo
-                </Typography>
-            </Toolbar>
+        <AppBar
+          sx={{ position: "absolute", }}
+        >
+          <Toolbar>
+            {/* Popup header text */}
+            <Typography sx={{ ml: 1, flex: 1 }} variant="h6" component="div">
+              Take a photo
+            </Typography>
+            
+            {/* Close open dialog button */}
+            <Tooltip title="Go back">
+              <IconButton onClick={ () => { handleCloseDialog(); } }>
+                  <CancelIcon/>
+              </IconButton>
+            </Tooltip>
+          </Toolbar>
         </AppBar>
 
         {/* Camera container */}
         <DualCamera handleCloseDialog={handleCloseDialog} />
       </Dialog>
-    </div>
+    </>
   );
 }

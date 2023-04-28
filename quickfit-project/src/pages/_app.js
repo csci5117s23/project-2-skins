@@ -23,6 +23,7 @@ const theme = createTheme({
   typography: {
     "fontFamily": `"Poppins"`,
   },
+  
 })
 
 export default function App({ Component, pageProps }) {
