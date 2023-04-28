@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import * as styles from "./image-upload-form.module.scss";
 
 export default function ImageUploadForm({ onSubmit, reset }) {
     const [fileUpload, setFileUpload] = useState("Choose an image...");
@@ -14,7 +13,7 @@ export default function ImageUploadForm({ onSubmit, reset }) {
 
     return (
         <div>
-            <form onSubmit={onSubmit} className={`${styles.form}`}>
+            <form onSubmit={onSubmit}>
                 <div className="file is-boxed">
                     <label className="file-label">
                         <input

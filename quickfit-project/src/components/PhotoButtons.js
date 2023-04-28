@@ -21,6 +21,7 @@ import DriveFolderUploadRoundedIcon from "@mui/icons-material/DriveFolderUploadR
 
 // Camera-imports
 import WebcamDialog from "./WebcamDialog";
+import ImageUploadForm from "./ImageUploadForm";
 
 export default function PhotoButtons( { image, setImage }) {
   return (
@@ -43,6 +44,7 @@ export default function PhotoButtons( { image, setImage }) {
         {/* Take photo (from camera) */}
         <WebcamDialog image={image} setImage={setImage} />
       </Stack>
+      <ImageUploadForm/>
     </>
   );
 }
