@@ -71,13 +71,10 @@ export default function WebcamDialog() {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Take a photo
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              save
-            </Button>
           </Toolbar>
         </AppBar>
-        <Box>
-            <Webcam />
+        <Box sx={{display: 'flex', justifyContent: 'center'}}>
+            <DualCamera />
         </Box>
       </Dialog>
     </div>
