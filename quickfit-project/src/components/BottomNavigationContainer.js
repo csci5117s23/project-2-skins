@@ -35,7 +35,7 @@ export default function BottomNavigationContainer() {
           <BottomNavigationAction
             label="Home"
             value=""
-            icon={<CottageRoundedIcon />}
+            icon={<HomeRoundedIcon />}
           />
           <BottomNavigationAction
             label="Add clothes"
