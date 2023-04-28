@@ -53,77 +53,77 @@ export default function ClothesForm() {
 
   return (
     <>
-    <Stack spacing={1} m={2} justifyContent="center" height="70vh">
-      <Card>
-        <Stack spacing={1} m={2} >
-          <FormControl fullWidth>
-            <InputLabel>Category</InputLabel>
-            <Select
-              value={category}
-              label="Category"
-              onChange={(event) => {
-                setCategory(event.target.value);
+      <Stack spacing={1} m={2} justifyContent="center" height="70vh">
+        <Card>
+          <Stack spacing={1} m={2}>
+            <FormControl fullWidth>
+              <InputLabel>Category</InputLabel>
+              <Select
+                value={category}
+                label="Category"
+                onChange={(event) => {
+                  setCategory(event.target.value);
+                }}
+              >
+                <MenuItem value={"top"}>Top</MenuItem>
+                <MenuItem value={"sweater"}>Sweater</MenuItem>
+                <MenuItem value={"bottom"}>Bottoms</MenuItem>
+                <MenuItem value={"jacket"}>Jacket</MenuItem>
+                <MenuItem value={"shoes"}>Shoes</MenuItem>
+                <MenuItem value={"accessories"}>Accessories</MenuItem>
+                <MenuItem value={"onepiece"}>One Piece</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              fullWidth
+              label="Name"
+              variant="outlined"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
               }}
-            >
-              <MenuItem value={"top"}>Top</MenuItem>
-              <MenuItem value={"sweater"}>Sweater</MenuItem>
-              <MenuItem value={"bottom"}>Bottoms</MenuItem>
-              <MenuItem value={"jacket"}>Jacket</MenuItem>
-              <MenuItem value={"shoes"}>Shoes</MenuItem>
-              <MenuItem value={"accessories"}>Accessories</MenuItem>
-              <MenuItem value={"onepiece"}>One Piece</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            fullWidth
-            label="Name"
-            variant="outlined"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-          />
-          <TextField
-            fullWidth
-            label="Color"
-            variant="outlined"
-            value={color}
-            onChange={(e) => {
-              setColor(e.target.value);
-            }}
-          />
-          <Autocomplete
-            multiple
-            options={[]}
-            freeSolo
-            renderTags={(value, getTagProps) =>
-              value.map((option, index) => (
-                <Chip
+            />
+            <TextField
+              fullWidth
+              label="Color"
+              variant="outlined"
+              value={color}
+              onChange={(e) => {
+                setColor(e.target.value);
+              }}
+            />
+            <Autocomplete
+              multiple
+              options={[]}
+              freeSolo
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => (
+                  <Chip
+                    variant="outlined"
+                    label={option}
+                    {...getTagProps({ index })}
+                  />
+                ))
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
                   variant="outlined"
-                  label={option}
-                  {...getTagProps({ index })}
+                  label="Tags"
+                  placeholder="Press Enter for more tags"
                 />
-              ))
-            }
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                variant="outlined"
-                label="Tags"
-                placeholder="Press Enter for more tags"
-              />
-            )}
-          />
-          <Button variant="contained" component="label">
-            Upload Photo
-            <input type="file" accept="image/png, image/jpeg" hidden />
-          </Button>
-          <Button variant="contained" onClick={addClothes}>
-            Submit
-          </Button>
-        </Stack>
-      </Card>
-    </Stack>
+              )}
+            />
+            <Button variant="contained" component="label">
+              Upload Photo
+              <input type="file" accept="image/png, image/jpeg" hidden />
+            </Button>
+            <Button variant="contained" onClick={addClothes}>
+              Submit
+            </Button>
+          </Stack>
+        </Card>
+      </Stack>
     </>
   );
 }

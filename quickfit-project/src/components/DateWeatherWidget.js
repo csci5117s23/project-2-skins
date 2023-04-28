@@ -3,28 +3,73 @@ import DateCard from "./DateCard";
 import WeatherCard from "./WeatherCard";
 import { formatDate, formatDateWeekday } from "@/modules/dateFunctions";
 import {
-    AppBar, 
-    Box,
-    Button,
-    Card,
-    CardActions,
-    CardActionArea,
-    CardMedia,
-    CardContent,
-    Typography,
-    Stack
+  AppBar,
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardActionArea,
+  CardMedia,
+  CardContent,
+  Typography,
+  Stack,
+  Divider,
+  Modal,
 } from "@mui/material";
+import CalenderCard from "./CalenderCard";
 
-export default function DateWeatherWidget(props){
-  const {date} = props;
-
-    return (
-        <Card sx={{backgroundColor: "#FFD36E", margin: "1.5vh"}}>
-            <Stack alignItems="center" justifyContent="center" spacing={2} minHeight="">
-                <DateCard date={date?date:new Date()}/>
-                <WeatherCard date={date?date:new Date()}/>  
-            </Stack>     
-        </Card>     
-    )
+export default function DateWeatherWidget(props) {
+  const { date, setDate } = props;
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  var d = new Date();
+  var yesterday = d.setDate(d.getDate() - 1);
+  var nextMonth = d.setDate(d.getDate() + 30);
+  return (
+    <>
+      <Card
+        onClick={handleOpen}
+        sx={{
+          backgroundColor: "#FFFFFF",
+          margin: "1.5vh",
+          "&:hover": {
+            backgroundColor: "#f2f2f2",
+          },
+        }}
+      >
+        <Stack
+          alignItems="center"
+          justifyContent="center"
+          spacing={1}
+          minHeight="8vh"
+          direction="row"
+          sx={{ cursor: "pointer" }}
+        >
+          {date > yesterday && date < nextMonth ? (
+            <>
+              <WeatherCard date={date ? date : new Date()} />
+              <Divider orientation="vertical" variant="middle" flexItem />
+            </>
+          ) : (
+            <></>
+          )}
+          <DateCard date={date ? date : new Date()} />
+        </Stack>
+      </Card>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+      >
+        <Box>
+          <CalenderCard
+            date={date}
+            setDate={setDate}
+            handleClose={handleClose}
+          />
+        </Box>
+      </Modal>
+    </>
+  );
 }
- 

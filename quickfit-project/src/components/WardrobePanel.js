@@ -24,26 +24,23 @@ import {
   Stack,
   Grid,
   TextField,
-  styled
+  styled,
 } from "@mui/material";
 import ClothingCard from "@/components/ClothingCard";
 
-
-export default function WardrobePanel(props){
+export default function WardrobePanel(props) {
   const { clothes } = props;
 
   console.log(clothes);
-    return(
-
-        <Grid container width="100vw">
-        {clothes.map((cloth) => {
-          return (
-            <Grid item xs={6}>
-              <ClothingCard clothes={cloth} />
-            </Grid>
-          );
-        })}
-      </Grid>
-
-    );
+  return (
+    <Grid container width="100vw">
+      {clothes.map((cloth) => {
+        return (
+          <Grid item xs={6}>
+            <ClothingCard clothes={cloth} />
+          </Grid>
+        );
+      })}
+    </Grid>
+  );
 }
