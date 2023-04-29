@@ -15,7 +15,7 @@ const clothesUrl = backendBase + "/clothes";
 const apiKey = process.env.CH_API_KEY_RW;
 
 // ---------------------------------------------------------
-// GET: Function get all of a user's outfits
+// GET: Function get all of a user's clothes
 // ---------------------------------------------------------
 export async function getClothes() {
     // Send GET request

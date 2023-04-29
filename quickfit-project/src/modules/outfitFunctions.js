@@ -33,7 +33,7 @@ export async function getOutfits(authToken) {
 // ---------------------------------------------------------
 // POST: Function to add a user outfit
 // ---------------------------------------------------------
-export async function addClothes(authToken, outfit) {
+export async function addOutfit(authToken, outfit) {
     // Send POST request
     const result = await fetch(outfitUrl, {
         'method': 'POST',

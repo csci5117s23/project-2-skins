@@ -117,73 +117,73 @@ const imageSchemaYup = object({
   content: string().required(),
 });
 
-// // Backblaze functions for images
-// async function getAuthDetails() {
-//   console.log("Getting Backblaze auth details");
-// 	console.log("From bucket: " + B2_BUCKET_ID);
+// Backblaze functions for images
+async function getAuthDetails() {
+  console.log("Getting Backblaze auth details");
+	console.log("From bucket: " + B2_BUCKET_ID);
 
-//   // Encode backblaze account ID and key in base64
-//   let encoded = Buffer.from(B2_KEY_ID + ":" + B2_APPLICATION_KEY).toString("base64");
+  // Encode backblaze account ID and key in base64
+  let encoded = Buffer.from(B2_KEY_ID + ":" + B2_APPLICATION_KEY).toString("base64");
 
-//   // Fetch backblaze authorization details
-//   const response = await fetch(
-//       "https://api.backblazeb2.com/b2api/v2/b2_authorize_account",
-//       {
-//           method: "GET",
-//           headers: {
-//               Authorization: "Basic " + encoded,
-//           },
-//       }
-//   );
-//   const data = await response.json();
-//   console.log("Returning details");
-//   console.log("Url: " + data.apiUrl);
-//   console.log("Auth: " + data.authorizationToken);
+  // Fetch backblaze authorization details
+  const response = await fetch(
+      "https://api.backblazeb2.com/b2api/v2/b2_authorize_account",
+      {
+          method: "GET",
+          headers: {
+              Authorization: "Basic " + encoded,
+          },
+      }
+  );
+  const data = await response.json();
+  console.log("Returning details");
+  console.log("Url: " + data.apiUrl);
+  console.log("Auth: " + data.authorizationToken);
 
-//   // Give user apiUrl, authToken, and the download url to
-//   return {
-//       apiUrl: data.apiUrl,
-//       authToken: data.authorizationToken,
-//       downloadUrl: data.downloadUrl,
-//   };
-// }
+  // Give user apiUrl, authToken, and the download url to
+  return {
+      apiUrl: data.apiUrl,
+      authToken: data.authorizationToken,
+      downloadUrl: data.downloadUrl,
+  };
+}
 
-// app.get("/get_upload_url", async (req, res) => {
-//   // 1. Get the auth details
-//   let authDetails = await getAuthDetails();
+app.get("/get_upload_url", async (req, res) => {
+  // 1. Get the auth details
+  let authDetails = await getAuthDetails();
 
-//   // 2. Make the fetch request to get the upload URL
-//   const response = await fetch(
-//       `${authDetails.apiUrl}/b2api/v2/b2_get_upload_url?bucketId=${B2_BUCKET_ID}`,
-//       {
-//           method: "GET",
-//           headers: {
-//               Authorization: authDetails.authToken,
-//           },
-//       }
-//   );
-//   const data = await response.json();
-//   // Optional, error checking
-//   if (!data.uploadUrl || !data.authorizationToken) {
-//       res.status(500).send("Failed to get upload URL");
-//       return;
-//   }
-//   res.json({
-//       uploadUrl: data.uploadUrl,
-//       uploadAuth: data.authorizationToken,
-//   });
-// });
+  // 2. Make the fetch request to get the upload URL
+  const response = await fetch(
+      `${authDetails.apiUrl}/b2api/v2/b2_get_upload_url?bucketId=${B2_BUCKET_ID}`,
+      {
+          method: "GET",
+          headers: {
+              Authorization: authDetails.authToken,
+          },
+      }
+  );
+  const data = await response.json();
+  // Optional, error checking
+  if (!data.uploadUrl || !data.authorizationToken) {
+      res.status(500).send("Failed to get upload URL");
+      return;
+  }
+  res.json({
+      uploadUrl: data.uploadUrl,
+      uploadAuth: data.authorizationToken,
+  });
+});
 
-// app.post("/store_file_id", async (req, res) => {
-//   const conn = await Datastore.open();
-//   const doc = await conn.insertOne("image", req.body);
-//   res.status(201).json(doc);
-// });
+app.post("/store_file_id", async (req, res) => {
+  const conn = await Datastore.open();
+  const doc = await conn.insertOne("image", req.body);
+  res.status(201).json(doc);
+});
 
-// app.get("/get_all_images", async (req, res) => {
-//   const conn = await Datastore.open();
-//   conn.getMany("image").json(res);
-// });
+app.get("/get_all_images", async (req, res) => {
+  const conn = await Datastore.open();
+  conn.getMany("image").json(res);
+});
 
 
 // //////////////////////////////////////////////////////////////////////

@@ -27,10 +27,21 @@ import {
   addClothes,
   editClothes,
   deleteClothes,
-} from "../modules/clothesFunctions";
+} from "@/modules/clothesFunctions";
 
 // DB Tag Function imports
-import { getTags, addTag, editTag, deleteTag } from "../modules/tagFunctions";
+import { 
+  getTags, 
+  addTag,
+  editTag, 
+  deleteTag 
+} from "@/modules/tagFunctions";
+
+// DB Image Function imports
+import {
+  useCloudUpload,
+  useCloudDownloadLatest,
+} from "@/modules/imageFunctions"
 
 // Custom component imports
 import PhotoButtons from "./PhotoButtons";
@@ -142,6 +153,19 @@ export default function ClothesForm() {
       }
       addTag(token, tag); // Otherwise, add tag normally.
     });
+  }
+
+  // --- Image functions ---
+  // --------------------------------------------------------------------
+  // To upload an image from form:
+  // --------------------------------------------------------------------
+  // Code referenced from Upper Five tech share: https://github.com/jasonwoitalla/csci5117-upper-five-tech-share/blob/main/src/pages/cloud-storage.js
+  async function uploadImage(e) {
+    e.preventDefault();
+
+    const image = document.getElementById("imageField").files[0];
+    let uploadRes = await useCloudUpload(image);
+    setUploaded(!uploaded);
   }
 
   // --------------------------------------------------------------------

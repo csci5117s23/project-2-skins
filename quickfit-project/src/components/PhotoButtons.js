@@ -23,7 +23,10 @@ import DriveFolderUploadRoundedIcon from "@mui/icons-material/DriveFolderUploadR
 // Camera-imports
 import WebcamDialog from "./WebcamDialog";
 
+
 export default function PhotoButtons( { image, setImage }) {
+  // Some image upload code from: Upper Five Tech share
+  // https://github.com/jasonwoitalla/csci5117-upper-five-tech-share/blob/main/src/components/image-upload-form.js
   const [fileUpload, setFileUpload] = useState("Choose an image...");
 
   function handleFileOnChange(e) {
