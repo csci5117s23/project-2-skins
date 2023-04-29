@@ -4,20 +4,14 @@ import { useAuth } from "@clerk/nextjs";
 import {
   Box,
   Stack,
-  Card,
   FormControl,
   MenuItem,
-  InputLabel,
-  Select,
   TextField,
   Button,
-  Autocomplete,
-  Chip,
   FormLabel,
   Typography,
   Paper,
   CssBaseline,
-  Container,
   CircularProgress,
   Tooltip,
 } from "@mui/material";
@@ -42,7 +36,6 @@ import {
 } from "@/modules/imageFunctions";
 
 // Custom component imports
-// import PhotoButtons from "./PhotoButtons";
 import AddTagComboBox from "./AddTagComboBox";
 import WebcamDialog from "./WebcamDialog";
 
@@ -216,7 +209,7 @@ export default function ClothesForm() {
   useEffect(() => {
     console.log("Page rendered.");
     async function processTags() {
-      // Process getting authorization key and user db tags
+      // Get auth key & user's tags
       if (userId) {
         // Ensure user is logged in
         const token = await getToken({ template: jwtTemplateName }); // Get auth token
@@ -237,7 +230,7 @@ export default function ClothesForm() {
         <CircularProgress />
       </>
     );
-  } else { // Content loaded
+  } else { // Page contents
     return (
       <>
         <CssBaseline />
@@ -285,11 +278,11 @@ export default function ClothesForm() {
                   setCategory(event.target.value);
                 }}
               >
-                <MenuItem value={"top"}>Top</MenuItem>
-                <MenuItem value={"bottom"}>Bottoms</MenuItem>
-                <MenuItem value={"shoes"}>Shoes</MenuItem>
-                <MenuItem value={"accessories"}>Accessories</MenuItem>
-                <MenuItem value={"onepiece"}>One Piece</MenuItem>
+                <MenuItem value={"Top"}>Top</MenuItem>
+                <MenuItem value={"Bottom"}>Bottoms</MenuItem>
+                <MenuItem value={"Shoes"}>Shoes</MenuItem>
+                <MenuItem value={"Accessories"}>Accessories</MenuItem>
+                <MenuItem value={"One Piece"}>One Piece</MenuItem>
               </TextField>
 
               {/* Name */}

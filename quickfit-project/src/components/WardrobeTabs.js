@@ -1,23 +1,33 @@
 import { React, useState, useEffect } from "react";
+import { useAuth } from "@clerk/nextjs";
 // MUI Component imports
-import {
-  Stack,
-  Tabs,
-  Tab,
-} from "@mui/material";
+import { Stack, Tabs, Tab, CircularProgress } from "@mui/material";
 import SwipeableViews from "react-swipeable-views";
+// Custom component imports
 import ClothingList from "./ClothingList";
 import SearchBar from "./SearchBar";
+// DB Clothes Function imports
+import {
+  getClothes,
+  getClothesByCategory,
+  addClothes,
+  editClothes,
+  deleteClothes,
+} from "@/modules/clothesFunctions";
 
 export default function WardrobeTabs() {
+  // --- Authorization ---------------------------------------------------
+  const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
+  const [loading, setLoading] = useState(true);
+
+  // --- Search bar -------------------------------------------------------
   const [value, setValue] = useState(0);
   const [search, setSearch] = useState("");
 
   // useEffect(() => {
   //   console.log(search);
   // }, [search]);
-
-
 
   return (
     <>
@@ -53,10 +63,22 @@ export default function WardrobeTabs() {
 }
 
 function TabPanel(props) {
-  const { value, search } = props;                // 
-  const [category, setCategory] = useState("");   // Current category we are viewing
-  const [clothes, setclothes] = useState("");     // List of all clothes from GET request
-  const [onePieces, setOnePieces] = useState([]); // List of all one piecce items from GET request
+  // --- Authorization ---------------------------------------------------
+  const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
+  const [loading, setLoading] = useState(true);
+
+  // --- Search ----------------------------------------------------------
+  const { value, search } = props; //
+
+  // --- Clothing lists --------------------------------------------------
+  const [category, setCategory] = useState(""); // Current category tab
+  const [clothes, setClothes] = useState(""); // List of all clothes from GET request
+  const [onePieces, setOnePieces] = useState([]); // List of user's one piece items
+  const [tops, setTops] = useState([]); // List of user's one piece items
+  const [bottoms, setBottoms] = useState([]); // List of user's one piece items
+  const [shoes, setShoes] = useState([]); // List of user's one piece items
+  const [accessories, setAccessories] = useState([]); // List of user's one piece items
 
   // --------------------------------------------------------------------------------------
   useEffect(() => {
@@ -75,6 +97,7 @@ function TabPanel(props) {
     if (value === 4) {
       setCategory("Accessories");
     }
+
     //TODO: Get request that gets the outfit that matches the search and category type
     //do a fetch to get our outfit given the arguments
     //   fetch(
@@ -82,21 +105,41 @@ function TabPanel(props) {
     //   )
     //   .then((res) => res.json())
     //   .then((data) => setClothes(data));
+    
   }, [search, value]);
 
   // Make get requests to populate clothing category lists
-  useEffect( () => {
+  useEffect(() => {
     async function processClothes() {
-
+      // Get auth key & user's clothing items
+      if (userId) {
+        // Ensure user is logged in
+        const token = await getToken({ template: jwtTemplateName }); // Get auth token
+        setClothes(await getClothes(token)); // Get user clothes from codehooks database
+        // set
+        // allClothes.filter( (item) => (item.category === category));
+        setLoading(false); // Once we get these things, we are no longer loading
+      }
     }
-  })
+    processClothes();
+    console.log(clothes);
+  }, [isLoaded]);
 
-
-
-  return ( 
-    <>
-      <ClothingList clothes={clothes || []} />
-    </>
-  );
+  // Load GET requests before showing any content
+  if (loading) {
+    return (
+      <>
+        LOADING...
+        <CircularProgress />
+      </>
+    );
+  } else {
+    // Page contents
+    return (
+      <>
+        <ClothingList clothes={clothes || []} />
+      </>
+    );
+  }
   // --------------------------------------------------------------------------------------
 }

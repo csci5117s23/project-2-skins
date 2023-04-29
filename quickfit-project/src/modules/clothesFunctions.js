@@ -39,10 +39,10 @@ export async function getClothes(authToken, id="") {
 // GET: Function get all of a user's categories based on category
 // ---------------------------------------------------------------
 // * Can get a specific ID if provided one.
-export async function getClothes(authToken, category, id="") {
+export async function getClothesByCategory(authToken, category, id="") {
     // Make request to get all clothes
     const allClothes = await getClothes(authToken, id);
-    
+
     try { // From list of all clothes, get the ones of the specified category
         const categoryClothes = allClothes.filter( (item) => (item.category === category));
         return categoryClothes;
