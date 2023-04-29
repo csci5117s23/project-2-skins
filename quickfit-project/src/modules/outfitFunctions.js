@@ -36,28 +36,18 @@ export async function getOutfits(authToken, id="") {
 }
 
 
-// ---------------------------------------------------------
-// GET: Function get all of a user's outfits
-// ---------------------------------------------------------
-// * Can get a specific ID if provided one.
-export async function getOutfits(authToken, id="") {
-    // Send GET request
-    try {
-        const result = await fetch(outfitUrl + "/" + id, {
-            'method': 'GET',
-            'headers': {
-                'Authorization': 'Bearer ' + authToken,
-                'x-api-key': apiKey,
-            }
-        })
-        // Return JSON list of user clothes
-        return await result.json();
+// ----------------------------------------------------------------
+// GET: Function get outfit based on input date worn (not created)
+// ----------------------------------------------------------------
+export async function getOutfitByDateWorn(authToken, date, id="") {
+    // Get all outfits
+    const allOutfits = await getOutfits(authToken, id);
+    try { // From list of all outfits, get the one of the specified date
+        console.log(date);
     } catch (error) {
-        console.log("Failed to get outfits. " + error);
+        console.log("Failed to get outfit by date. " + error);
     }
-}
-
-
+} 
 
 
 // ---------------------------------------------------------

@@ -43,9 +43,9 @@ export async function getClothes(authToken, category, id="") {
     // Make request to get all clothes
     const allClothes = await getClothes(authToken, id);
     
-    // From list of all clothes, get the ones of the specified category
-    try {
-        
+    try { // From list of all clothes, get the ones of the specified category
+        const categoryClothes = allClothes.filter( (item) => (item.category === category));
+        return categoryClothes;
     } catch (error) {
         console.log("Failed to get clothes of category: " + category + ". " + error);
     }

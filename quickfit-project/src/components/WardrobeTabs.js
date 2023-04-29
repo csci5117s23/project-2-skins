@@ -21,7 +21,7 @@ import {
   Tab,
 } from "@mui/material";
 import SwipeableViews from "react-swipeable-views";
-import WardrobePanel from "./ClothingList";
+import ClothingList from "./ClothingList";
 import SearchBar from "./SearchBar";
 
 export default function WardrobeTabs() {
@@ -75,19 +75,19 @@ function TabPanel(props) {
   const [OnePieces, setOnePieces] = useState([
     {
       category: "OnePiece",
-      clothingName: "Artizia black onepiece",
+      name: "Artizia black onepiece",
       tags: ["black", "tight"],
       createdOn: new Date(),
     },
     {
       category: "OnePiece",
-      clothingName: "Floral short dress",
+      name: "Floral short dress",
       tags: ["floral", "flowy", "short dress", "short sleeve"],
       createdOn: new Date(),
     },
     {
       category: "OnePiece",
-      clothingName: "Blue Overalls",
+      name: "Blue Overalls",
       tags: ["jean", "blue"],
       createdOn: new Date(),
     },
@@ -96,25 +96,25 @@ function TabPanel(props) {
   const [Tops, setTops] = useState([
     {
       category: "Top",
-      clothingName: "Black Nike T-Shirt",
+      name: "Black Nike T-Shirt",
       tags: ["black"],
       createdOn: new Date(),
     },
     {
       category: "Top",
-      clothingName: "Dark green Long sleeve",
+      name: "Dark green Long sleeve",
       tags: ["Green", "loose", "long sleeve"],
       createdOn: new Date(),
     },
     {
       category: "Top",
-      clothingName: "White Button up",
+      name: "White Button up",
       tags: ["white", "Button up"],
       createdOn: new Date(),
     },
     {
       category: "Top",
-      clothingName: "Red shein crop top",
+      name: "Red shein crop top",
       tags: ["cropped", "red", "shein"],
       createdOn: new Date(),
     },
@@ -123,19 +123,19 @@ function TabPanel(props) {
   const [Bottoms, setBottoms] = useState([
     {
       category: "Bottom",
-      clothingName: "Gray Nike Sweatplants",
+      name: "Gray Nike Sweatplants",
       tags: ["loose", "gray"],
       createdOn: new Date(),
     },
     {
       category: "Bottom",
-      clothingName: "Abrecombie Ripped Denim",
+      name: "Abrecombie Ripped Denim",
       tags: ["mom jeans", "baggy", "ripped"],
       createdOn: new Date(),
     },
     {
       category: "Bottom",
-      clothingName: "Black Mom Jeans",
+      name: "Black Mom Jeans",
       tags: ["black jeans", "mom jeans"],
       createdOn: new Date(),
     },
@@ -144,19 +144,19 @@ function TabPanel(props) {
   const [Shoes, setShoes] = useState([
     {
       category: "Shoes",
-      clothingName: "White Air Forces",
+      name: "White Air Forces",
       tags: ["White"],
       createdOn: new Date(),
     },
     {
       category: "Shoes",
-      clothingName: "Black high heels",
+      name: "Black high heels",
       tags: ["heels", "black"],
       createdOn: new Date(),
     },
     {
       category: "Shoes",
-      clothingName: "White Dr Martin Platforms",
+      name: "White Dr Martin Platforms",
       tags: ["white", "boots", "platforms"],
       createdOn: new Date(),
     },
@@ -165,19 +165,19 @@ function TabPanel(props) {
   const [Accessories, setAccessories] = useState([
     {
       category: "Accessories",
-      clothingName: "Heart Necklace",
+      name: "Heart Necklace",
       tags: ["Silver"],
       createdOn: new Date(),
     },
     {
       category: "Accessories",
-      clothingName: "Fluffy Tan Scarf",
+      name: "Fluffy Tan Scarf",
       tags: ["furry", "tan", "warm"],
       createdOn: new Date(),
     },
     {
       category: "Accessories",
-      clothingName: "Black Mittens",
+      name: "Black Mittens",
       tags: ["black", "warm"],
       createdOn: new Date(),
     },
@@ -209,23 +209,23 @@ function TabPanel(props) {
   }, [search, value]);
 
   //TODO: uncomment this after useEffect implemented
-  // return <WardrobePanel clothes={clothes} />;
+  // return <ClothingList clothes={clothes} />;
 
   //TODO:remove these after implementing useEffect------------
   if (value === 0) {
-    return <WardrobePanel clothes={OnePieces} />;
+    return <ClothingList clothes={OnePieces} />;
   }
   if (value === 1) {
-    return <WardrobePanel clothes={Tops} />;
+    return <ClothingList clothes={Tops} />;
   }
   if (value === 2) {
-    return <WardrobePanel clothes={Bottoms} />;
+    return <ClothingList clothes={Bottoms} />;
   }
   if (value === 3) {
-    return <WardrobePanel clothes={Shoes} />;
+    return <ClothingList clothes={Shoes} />;
   }
   if (value === 4) {
-    return <WardrobePanel clothes={Accessories} />;
+    return <ClothingList clothes={Accessories} />;
   }
   //--------------------------------------
 }

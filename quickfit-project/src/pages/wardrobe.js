@@ -55,7 +55,7 @@ export default function Wardrobe() {
 
       {/* 3. NavBar section */}
       <section>
-        <BottomNavigationContainer></BottomNavigationContainer>
+        <BottomNavigationContainer />
       </section>
     </>
   );

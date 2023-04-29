@@ -37,7 +37,7 @@ export default function ClothingCard(props) {
           <Box ml={1.5} mt={.2} >
             <Typography>
               <Box sx={{fontSize: {xs:20, md:30}}}>
-                {clothes["clothingName"]}
+                {clothes["name"]}
               </Box>
             </Typography>
             <Typography
