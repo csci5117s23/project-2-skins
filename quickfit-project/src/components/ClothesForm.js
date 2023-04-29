@@ -275,6 +275,7 @@ export default function ClothesForm() {
             {/* --- Images --- */}
             <InputHeader> Image</InputHeader>
             <PhotoButtons image={image} setImage={setImage} />
+            {/* Show preview of image */}
             {image && ( <img src={image} alt="captured-photo"/> )}
             
           </Stack>
