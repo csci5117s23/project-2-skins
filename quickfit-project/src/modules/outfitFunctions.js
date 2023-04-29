@@ -20,7 +20,7 @@ const apiKey = process.env.CH_API_KEY_RW;
 export async function getOutfits(authToken) {
     // Send GET request
     try {
-        const result = await fetch(clothesUrl, {
+        const result = await fetch(outfitUrl, {
             'method': 'GET',
             'headers': {
                 'Authorization': 'Bearer ' + authToken,
@@ -33,6 +33,27 @@ export async function getOutfits(authToken) {
         console.log("Failed to get outfits. " + error);
     }
 }
+
+// ---------------------------------------------------------
+// GET: Function get user outfit by id
+// ---------------------------------------------------------
+export async function getOutfitsById(authToken, id) {
+    // Send GET request
+    try {
+        const result = await fetch(outfitUrl+"/"+id, {
+            'method': 'GET',
+            'headers': {
+                'Authorization': 'Bearer ' + authToken,
+                'x-api-key': apiKey,
+            }
+        })
+        // Return JSON list of user clothes
+        return await result.json();
+    } catch (error) {
+        console.log("Failed to get outfits. " + error);
+    }
+}
+
 
 // ---------------------------------------------------------
 // POST: Function to add a user outfit
@@ -91,7 +112,7 @@ export async function editOutfit(authToken, outfit) {
 export async function deleteOutfit(authToken, outfit) {
     // Send DELETE request
     try {
-        const result = await fetch(clothesUrl + clothing._id, {
+        const result = await fetch(outfitUrl + clothing._id, {
             'method': 'DELETE',
             'headers': {
                 'Authorization': 'Bearer ' + authToken,

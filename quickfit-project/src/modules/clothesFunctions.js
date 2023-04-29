@@ -35,6 +35,26 @@ export async function getClothes(authToken) {
 }
 
 // ---------------------------------------------------------
+// GET: Function get clothes by ID
+// ---------------------------------------------------------
+export async function getClothesById(authToken, id) {
+    // Send GET request
+    try {
+        const result = await fetch(clothesUrl+"/"+id, {
+            'method': 'GET',
+            'headers': {
+                'Authorization': 'Bearer ' + authToken,
+                'x-api-key': apiKey,
+            }
+        })
+        // Return JSON list of user clothes
+        return await result.json();
+    } catch (error) {
+        console.log("Failed to get clothes. " + error);
+    }
+}
+
+// ---------------------------------------------------------
 // POST: Function to add a clothing article to user wardrobe
 // ---------------------------------------------------------
 export async function addClothes(authToken, clothing) {
