@@ -28,11 +28,10 @@ export async function getClothes(authToken, id="") {
                 'x-api-key': apiKey,
             }
         })
-        // Return JSON list of user clothes
-        return await result.json();
-        // const results = await result.json();
-        // const sortedResults = results.sort(sortAlphabetically);
-        // return sortedResults;
+        // Return JSON list of user clothes (sorted by category alphabetically)
+        const results = await result.json();
+        const sortedResults = results.sort(sortAlphabetically);
+        return sortedResults;
     } catch (error) {
         console.log("Failed to get clothes. " + error);
     }
