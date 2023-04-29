@@ -112,7 +112,7 @@ function TabPanel(props) {
 
     
     
-  }, [search]);
+  }, [search, value]);
 
   // Make get requests to populate clothing category lists
   useEffect(() => {

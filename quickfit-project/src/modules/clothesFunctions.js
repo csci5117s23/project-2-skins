@@ -29,9 +29,10 @@ export async function getClothes(authToken, id="") {
             }
         })
         // Return JSON list of user clothes
-        const results = await result.json();
-        const sortedResults = results.sort(sortAlphabetically);
-        return sortedResults;
+        return await result.json();
+        // const results = await result.json();
+        // const sortedResults = results.sort(sortAlphabetically);
+        // return sortedResults;
     } catch (error) {
         console.log("Failed to get clothes. " + error);
     }
@@ -55,6 +56,7 @@ export async function getClothesByCategory(authToken, category, id="") {
 export async function getClothesByName(authToken, category, query="", id="") {
     const categoryClothes = await getClothesByCategory(authToken, category, id);
     // From list of clothes of specified category, get results based on text input
+    return filterClothesByName(categoryClothes, query);
 }
 
 // --------------------------------------------------------------------------
@@ -62,6 +64,29 @@ export async function getClothesByName(authToken, category, query="", id="") {
 // --------------------------------------------------------------------------
 export function filterClothesByCategory(clothesList, category) {
     return Object.values(clothesList).filter( (item) => (item.category === category));
+}
+
+// --------------------------------------------------------------------------
+// Helper function to filter out by name for a parameter list of clothes
+// --------------------------------------------------------------------------
+export function filterClothesByName(clothesList, nameText) {
+    return Object.values(clothesList).filter( (item) => ((item.name.toLowerCase()).includes((nameText.toLowerCase()))));
+}
+
+// --------------------------------------------------------------------------
+// Helper function to filter out by tag for a parameter list of clothes
+// --------------------------------------------------------------------------
+export function filterClothesByTag(clothesList, tagText) {
+    return Object.values(clothesList).filter( 
+        (item) => ((item.tags).includes((tagText.toLowerCase())))
+    );
+}
+
+// -----------------------------------------------------------------------------
+// Helper function to filter out by name OR tag for a parameter list of clothes
+// ------------------------------------------------------------------------------
+export function filterClothesByNameOrTag(clothesList, tagText) {
+    return Object.values(clothesList).filter( (item) => ((item.name.toLowerCase()).includes((nameText.toLowerCase()))));
 }
 
 // --------------------------------------------------------------------------------------------------------
