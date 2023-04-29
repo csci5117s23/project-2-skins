@@ -11,18 +11,9 @@ import jwtDecode from 'jwt-decode';
 import fetch from 'node-fetch'
 
 // Process .env keys for getting images
-// const B2_KEY_ID = process.env.BACKBLAZE_KEY_ID;
-// const B2_APPLICATION_KEY = process.env.BACKBLAZE_APPLICATION_KEY;
-// const B2_BUCKET_ID = process.env.BACKBLAZE_BUCKET_ID;
-
-const B2_KEY_ID = "0356132eecfa";
-const B2_APPLICATION_KEY = "005141bec0175b8a3336ede277185637cd52591441";
-const B2_BUCKET_ID = "905315d66103c2ae8e7c0f1a";
-
-// An example route for https://<PROJECTID>.api.codehooks.io/dev/
-app.get('/', (req, res) => {
-  res.send('CRUD server ready')
-})
+const B2_KEY_ID = process.env.BACKBLAZE_KEY_ID;
+const B2_APPLICATION_KEY = process.env.BACKBLAZE_APPLICATION_KEY;
+const B2_BUCKET_ID = process.env.BACKBLAZE_BUCKET_ID;
 
 // --------------------------------------------------------------------------------------------------
 // README: 
@@ -80,8 +71,9 @@ const tagSchemaYup = object( {
 // API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev/image/[id]
 // Codehooks will auto generate '._id' property on clothing image db entry on POST
 const imageSchemaYup = object({
-  name: string().required(),
-  content: string().required(),
+  name: string().required(),                       // Image file name
+  content: string().required(),                    // Image base64-encoding
+  createdOn:     date().default(() => new Date()), // Date of when clothing article was created (POST date)
 });
 
 // Backblaze functions for images
