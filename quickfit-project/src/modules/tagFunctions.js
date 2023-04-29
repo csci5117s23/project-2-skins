@@ -30,7 +30,7 @@ export async function getTags(authToken) {
         // Return JSON list of user tags
         return await result.json();
     } catch (error) {
-        console.log("Failed to get tags. " + error);
+        console.log(error);
     }
 }
 
@@ -55,7 +55,7 @@ export async function addTag(authToken, tagName) {
         // Return newly-made tag entry
         return await result.json();
     } catch (error) {
-        console.log("Failed to add a tag. " + error);
+        console.log(error);
     }
 }
 
