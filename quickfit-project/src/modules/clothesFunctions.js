@@ -42,7 +42,6 @@ export async function getClothes(authToken, id="") {
 export async function getClothesByCategory(authToken, category, id="") {
     // Make request to get all clothes
     const allClothes = await getClothes(authToken, id);
-
     // From list of all clothes, get the ones of the specified category
     return filterClothesByCategory(allClothes, category);
 }

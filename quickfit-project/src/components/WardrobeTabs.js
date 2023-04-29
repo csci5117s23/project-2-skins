@@ -46,6 +46,7 @@ export default function WardrobeTabs() {
           aria-label="basic tabs example"
           variant="scrollable"
         >
+          <Tab label="All" />
           <Tab label="One Piece" />
           <Tab label="Tops" />
           <Tab label="Bottoms" />
@@ -66,11 +67,11 @@ function TabPanel(props) {
   const [loading, setLoading] = useState(true);
 
   // --- Search ----------------------------------------------------------
-  const { value, search } = props; //
+  const { value, search } = props;
 
   // --- Clothing lists --------------------------------------------------
-  const [category, setCategory] = useState(""); // Current category tab
-  const [clothes, setClothes] = useState(""); // List of all clothes from GET request
+  const [category, setCategory] = useState("All"); // Current category tab
+  const [clothes, setClothes] = useState([]); // List of all clothes from GET request
   const [onePieces, setOnePieces] = useState([]); // List of user's one piece items
   const [tops, setTops] = useState([]); // List of user's one piece items
   const [bottoms, setBottoms] = useState([]); // List of user's one piece items
@@ -78,25 +79,30 @@ function TabPanel(props) {
   const [accessories, setAccessories] = useState([]); // List of user's one piece items
 
   // --------------------------------------------------------------------------------------
+  // Update rendered JSX when wardrobe tab changes
+  // --------------------------------------------------------------------------------------
   useEffect(() => {
     if (value === 0 || value === null || value === undefined) {
-      setCategory("OnePieces");
+      setCategory("All");
     }
     if (value === 1) {
-      setCategory("Tops");
+      setCategory("One Piece");
     }
     if (value === 2) {
-      setCategory("Bottoms");
+      setCategory("Tops");
     }
     if (value === 3) {
-      setCategory("Shoes");
+      setCategory("Bottoms");
     }
     if (value === 4) {
+      setCategory("Shoes");
+    }
+    if (value === 5) {
       setCategory("Accessories");
     }
 
-    //TODO: Get request that gets the outfit that matches the search and category type
-    //do a fetch to get our outfit given the arguments
+    // TODO: Get request that gets the outfit that matches the search and category type
+    // do a fetch to get our outfit given the arguments
     //   fetch(
     //   "our end point/something?category=" + category + "&search=" + search
     //   )
@@ -122,7 +128,7 @@ function TabPanel(props) {
       }
     }
     processClothes();
-    console.log(clothes);
+    console.log(shoes);
   }, [isLoaded, value, search]);
 
   // Load GET requests before showing any content
@@ -134,20 +140,25 @@ function TabPanel(props) {
       </>
     );
   } else { // Page contents
-    // <ClothingList clothes={clothes || []} /> // All clothes
-    if (value === 0) {
+    
+    console.log("Category: " + category);
+    
+    if (category === "All") { // All clothes
+      return <ClothingList clothes={clothes || []} />
+    }
+    else if (category === "One Piece") { // List of one piece items
       return <ClothingList clothes={onePieces || []} />;
     }
-    else if (value === 1) {
+    else if (category === "Tops") { // List of tops
       return <ClothingList clothes={tops || []} />;
     }
-    else if (value === 2) {
+    else if (value === "Bottoms") { // List of bottoms
       return <ClothingList clothes={bottoms || []} />;
     }
-    else if (value === 3) {
-      return <ClothingList clothes={shoes || []} />;
+    else if (value === "Shoes") { // List of shoes
+      return <ClothingList clothes={shoes} />;
     }
-    else if (value === 4) {
+    else if (value === "Accessories") { // List of accessories
       return <ClothingList clothes={accessories || []} />;
     }
   }
