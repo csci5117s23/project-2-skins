@@ -26,10 +26,6 @@ export default function WardrobeTabs() {
   const [value, setValue] = useState(0);
   const [search, setSearch] = useState("");
 
-  // useEffect(() => {
-  //   console.log(search);
-  // }, [search]);
-
   return (
     <>
       <Stack
@@ -83,7 +79,7 @@ function TabPanel(props) {
 
   // --------------------------------------------------------------------------------------
   useEffect(() => {
-    if (value === 0) {
+    if (value === 0 || value === null || value === undefined) {
       setCategory("OnePieces");
     }
     if (value === 1) {
@@ -127,7 +123,7 @@ function TabPanel(props) {
     }
     processClothes();
     console.log(clothes);
-  }, [isLoaded, value]);
+  }, [isLoaded, value, search]);
 
   // Load GET requests before showing any content
   if (loading) {
@@ -137,23 +133,22 @@ function TabPanel(props) {
         <CircularProgress />
       </>
     );
-  } else {
-    // Page contents
-    // <ClothingList clothes={clothes || []} />
+  } else { // Page contents
+    // <ClothingList clothes={clothes || []} /> // All clothes
     if (value === 0) {
-      return <ClothingList clothes={OnePieces || []} />;
+      return <ClothingList clothes={onePieces || []} />;
     }
     else if (value === 1) {
-      return <ClothingList clothes={Tops || []} />;
+      return <ClothingList clothes={tops || []} />;
     }
     else if (value === 2) {
-      return <ClothingList clothes={Bottoms || []} />;
+      return <ClothingList clothes={bottoms || []} />;
     }
     else if (value === 3) {
-      return <ClothingList clothes={Shoes || []} />;
+      return <ClothingList clothes={shoes || []} />;
     }
     else if (value === 4) {
-      return <ClothingList clothes={Accessories || []} />;
+      return <ClothingList clothes={accessories || []} />;
     }
   }
   // --------------------------------------------------------------------------------------
