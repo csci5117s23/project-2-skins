@@ -17,10 +17,11 @@ const apiKey = process.env.CH_API_KEY_RW;
 // ---------------------------------------------------------
 // GET: Function get all of a user's outfits
 // ---------------------------------------------------------
-export async function getOutfits(authToken) {
+// * Can get a specific ID if provided one.
+export async function getOutfits(authToken, id="") {
     // Send GET request
     try {
-        const result = await fetch(outfitUrl, {
+        const result = await fetch(outfitUrl + "/" + id, {
             'method': 'GET',
             'headers': {
                 'Authorization': 'Bearer ' + authToken,
@@ -34,13 +35,15 @@ export async function getOutfits(authToken) {
     }
 }
 
+
 // ---------------------------------------------------------
-// GET: Function get user outfit by id
+// GET: Function get all of a user's outfits
 // ---------------------------------------------------------
-export async function getOutfitsById(authToken, id) {
+// * Can get a specific ID if provided one.
+export async function getOutfits(authToken, id="") {
     // Send GET request
     try {
-        const result = await fetch(outfitUrl+"/"+id, {
+        const result = await fetch(outfitUrl + "/" + id, {
             'method': 'GET',
             'headers': {
                 'Authorization': 'Bearer ' + authToken,
@@ -53,6 +56,8 @@ export async function getOutfitsById(authToken, id) {
         console.log("Failed to get outfits. " + error);
     }
 }
+
+
 
 
 // ---------------------------------------------------------
@@ -69,10 +74,10 @@ export async function addOutfit(authToken, outfit) {
                 'x-api-key': apiKey,
             },
             'body': JSON.stringify({
-                category: clothing.category,
-                name:     clothing.name,
-                color:    clothing.color,  
-                tags:     clothing.tags,
+                topId:      outfit._id || null,
+                bottomId:   outfit.bottom.name || null,
+                shoesId:    clothing.color || null,  
+                tags:     clothing.tags || null,
             }),
         });
         // Return newly-made clothing entry

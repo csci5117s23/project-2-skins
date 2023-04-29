@@ -17,10 +17,11 @@ const apiKey = process.env.CH_API_KEY_RW;
 // ---------------------------------------------------------
 // GET: Function get all of a user's clothes
 // ---------------------------------------------------------
-export async function getClothes(authToken) {
+// * Can get a specific ID if provided one.
+export async function getClothes(authToken, id="") {
     // Send GET request
     try {
-        const result = await fetch(clothesUrl, {
+        const result = await fetch(clothesUrl + "/" + id, {
             'method': 'GET',
             'headers': {
                 'Authorization': 'Bearer ' + authToken,
@@ -34,23 +35,19 @@ export async function getClothes(authToken) {
     }
 }
 
-// ---------------------------------------------------------
-// GET: Function get clothes by ID
-// ---------------------------------------------------------
-export async function getClothesById(authToken, id) {
-    // Send GET request
+// ---------------------------------------------------------------
+// GET: Function get all of a user's categories based on category
+// ---------------------------------------------------------------
+// * Can get a specific ID if provided one.
+export async function getClothes(authToken, category, id="") {
+    // Make request to get all clothes
+    const allClothes = await getClothes(authToken, id);
+    
+    // From list of all clothes, get the ones of the specified category
     try {
-        const result = await fetch(clothesUrl+"/"+id, {
-            'method': 'GET',
-            'headers': {
-                'Authorization': 'Bearer ' + authToken,
-                'x-api-key': apiKey,
-            }
-        })
-        // Return JSON list of user clothes
-        return await result.json();
+        
     } catch (error) {
-        console.log("Failed to get clothes. " + error);
+        console.log("Failed to get clothes of category: " + category + ". " + error);
     }
 }
 
