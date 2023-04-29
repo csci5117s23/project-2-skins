@@ -44,7 +44,7 @@ const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 //when you press that + button a new card will pop up
 //make cards have on click and when clicked, show a panel (modal) where you can choose a clothing item
 
-export default function ChooseFit() {
+export default function ChooseFit({date}) {
 
   return (
     <>
@@ -55,7 +55,7 @@ export default function ChooseFit() {
 
       {/* 2. Content section */}
       <section>
-      <OutfitForm/>
+      <OutfitForm date={date}/>
       </section>
 
       {/* 3. NavBar section */}

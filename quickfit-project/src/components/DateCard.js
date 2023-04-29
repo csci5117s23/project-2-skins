@@ -10,6 +10,7 @@ import {
   SignedIn,
   SignedOut,
 } from "@clerk/clerk-react"; // Clerk authorization imports
+import KeyboardArrowDownTwoToneIcon from '@mui/icons-material/KeyboardArrowDownTwoTone';
 
 import {
   AppBar,
@@ -37,13 +38,18 @@ export default function DateCard(props) {
         alignItems="center"
         justifyContent="center"
         direction="row"
+        sx={{color: "#555", "&:hover": {
+          color: "#f78c00"
+
+        },}}
       >
-        <Typography variant="h5" sx={{ color: "#696969" }}>
+        <Typography variant="h5" >
         <Box sx={{ fontWeight: "bold"}}>
           {date ? formatDate(date) : formatDate(new Date())}
           </Box>
         </Typography>
         <CalendarMonthTwoToneIcon />
+        <KeyboardArrowDownTwoToneIcon />
       </Stack>
     </>
   );

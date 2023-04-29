@@ -18,7 +18,7 @@ import {
   DialogContentText,
   DialogActions,
 } from "@mui/material";
-
+import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import CloseIcon from "@mui/icons-material/Close";
 import Dialog from "@mui/material/Dialog";
 import AddIcon from "@mui/icons-material/Add";
@@ -27,7 +27,16 @@ import ClothingList from "@/components/ClothingList";
 import SearchBar from "@/components/SearchBar";
 import DeleteForeverTwoToneIcon from "@mui/icons-material/DeleteForeverTwoTone";
 import AutorenewRoundedIcon from "@mui/icons-material/AutorenewRounded";
-export default function OutfitForm() {
+import AutoFixHighTwoToneIcon from '@mui/icons-material/AutoFixHighTwoTone';
+
+import { useRouter } from "next/router";
+
+export default function OutfitForm({date}) {
+  const router = useRouter();
+
+  //properties for the post request to add outfit
+  //if there is an outfit id do an update instead of post
+  const {outfitId} = router.query;
   const [onePiece, setOnePiece] = useState([]);
   const [tops, setTops] = useState([]);
   const [bottoms, setBottoms] = useState([]);
@@ -68,14 +77,12 @@ export default function OutfitForm() {
       setAccessories(removeItemFromList(accessories, clothingToDelete));
     }
     setOpenDelete(false);
-    // clothingToDelete
+
   };
   const removeItemFromList = (list, item) => {
-  
     const index = list.indexOf(item);
     if (index > -1) {
-      // only splice array when item is found
-      list.splice(index, 1); // 2nd parameter means remove one item only
+      list.splice(index, 1);
     }
 
     return list;
@@ -106,6 +113,12 @@ export default function OutfitForm() {
       clothingName: "Black Nike T-Shirt",
       tags: ["black"],
       createdOn: new Date(),
+    },    
+    {
+      category: "top",
+      clothingName: "White Nike T-Shirt",
+      tags: ["white"],
+      createdOn: new Date(),
     },
     {
       category: "bottom",
@@ -127,22 +140,32 @@ export default function OutfitForm() {
     },
   ]);
 
-  // handle selecting clothing from add
+  // handle selecting clothing from "add clothing" button
   const handleClickClothes = (clothes) => {
     // actual category name might have different spelling once implemented. watch out for that
     if (clothes["category"] == "onepiece") {
-      setOnePiece([clothes]);
+      if(onePiece.indexOf(clothes) < 0){
+        setOnePiece([clothes]);
+      }
     } else if (clothes["category"] == "top") {
-      const newTopsList = tops.concat(clothes);
-      setTops(newTopsList);
+        if(tops.indexOf(clothes) < 0){
+          const newTopsList = tops.concat(clothes);
+          setTops(newTopsList);  
+        }
     } else if (clothes["category"] == "bottom") {
-      const newBottomsList = bottoms.concat(clothes);
-      setBottoms(newBottomsList);
+        if(bottoms.indexOf(clothes) < 0){
+          const newBottomsList = bottoms.concat(clothes);
+          setBottoms(newBottomsList);
+        }
     } else if (clothes["category"] == "shoes") {
-      setShoes([clothes]);
+        if(shoes.indexOf(clothes) < 0){
+          setShoes([clothes]);
+        }      
     } else if (clothes["category"] == "accessory") {
-      const newAccessoriesList = accessories.concat(clothes);
-      setAccessories(newAccessoriesList);
+        if(accessories.indexOf(clothes) < 0){
+          const newAccessoriesList = accessories.concat(clothes);
+          setAccessories(newAccessoriesList);
+        }
     }
     setOpen(false);
   };
@@ -168,6 +191,7 @@ export default function OutfitForm() {
         mt={"4vw"}
         mb={"4vw"}
       >
+         
         {/* One Pieces */}
         <Card
           sx={{
@@ -175,7 +199,10 @@ export default function OutfitForm() {
               "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
           }}
         >
-          <Stack alignItems={"center"} width="80vw">
+          <Stack
+            alignItems={"center"}
+            sx={{ width: { xs: "90vw", md: "70vw" } }}
+          >
             <CardContent>
               <Typography variant="h5">One Piece</Typography>
             </CardContent>
@@ -207,7 +234,10 @@ export default function OutfitForm() {
               "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
           }}
         >
-          <Stack alignItems={"center"} width="80vw">
+          <Stack
+            alignItems={"center"}
+            sx={{ width: { xs: "90vw", md: "70vw" } }}
+          >
             <CardContent>
               <Typography variant="h5">Tops</Typography>
             </CardContent>
@@ -238,7 +268,10 @@ export default function OutfitForm() {
               "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
           }}
         >
-          <Stack alignItems={"center"} width="80vw">
+          <Stack
+            alignItems={"center"}
+            sx={{ width: { xs: "90vw", md: "70vw" } }}
+          >
             <CardContent>
               <Typography variant="h5">Bottoms</Typography>
             </CardContent>
@@ -269,7 +302,10 @@ export default function OutfitForm() {
               "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
           }}
         >
-          <Stack alignItems={"center"} width="80vw">
+          <Stack
+            alignItems={"center"}
+            sx={{ width: { xs: "90vw", md: "70vw" } }}
+          >
             <CardContent>
               <Typography variant="h5">Shoes</Typography>
             </CardContent>
@@ -300,7 +336,10 @@ export default function OutfitForm() {
               "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
           }}
         >
-          <Stack alignItems={"center"} width="80vw">
+          <Stack
+            alignItems={"center"}
+            sx={{ width: { xs: "90vw", md: "70vw" } }}
+          >
             <CardContent>
               <Typography variant="h5">Accessories</Typography>
             </CardContent>
@@ -323,7 +362,14 @@ export default function OutfitForm() {
             </>
           )}
         </Button>
-        <Button variant="contained">
+        <Button
+          variant="contained"
+        
+          sx={{ width: {xs: "50vw", md: "70vw"}, borderRadius:"1.25em", backgroundColor:"#c2c2c2", color:"#3C3F42" }}
+          onClick={() => {
+            router.push("/");
+          }}
+        >
           <Typography variant="h6">Submit outfit</Typography>
         </Button>
       </Stack>
@@ -335,7 +381,7 @@ export default function OutfitForm() {
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Choose a Fit
+              Choose a fit
             </Typography>
           </Toolbar>
         </AppBar>

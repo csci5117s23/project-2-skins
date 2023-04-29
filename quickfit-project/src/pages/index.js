@@ -14,7 +14,8 @@ import NoFitChosenLayout from "@/components/NoFitChosenLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export default function Home({date, setDate}) {
+
   return (
     <>
       <Head>
@@ -25,7 +26,7 @@ export default function Home() {
       </Head>
 
       <main>
-        <HomeLayout />
+        <HomeLayout date={date} setDate={setDate}/>
       </main>
     </>
   );
