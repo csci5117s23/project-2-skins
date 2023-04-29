@@ -51,7 +51,7 @@ export async function getClothesByCategory(authToken, category, id="") {
 // Helper function to filter out by category for a parameter list of clothes
 // --------------------------------------------------------------------------
 export function filterClothesByCategory(clothesList, category) {
-    return clothesList.filter( (item) => (item.category === category));
+    return Object.values(clothesList).filter( (item) => (item.category === category));
 }
 
 // ---------------------------------------------------------
