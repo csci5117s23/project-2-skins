@@ -4,15 +4,6 @@
  * Things the front-end can do: uplaod, download, delete
  * Things the front-end can't do: authorize accounts, get upload urls, get download urls
  *
- * Chapter 0. The setup
- *
- * 0.1. Create a B2 account
- * 0.2. Create a bucket
- * 0.3. Setup the CORS rules for the bucket
- * 0.4. Create an application key
- *
- * Chapter 1. The back-end
- *
  * 1.1. Authorize the account
  *  - This is done by making a request to the B2 API
  *  - We must pass in our application key and application id encoded in Base64
@@ -37,10 +28,23 @@
 // Code from Upper-Five tech share on codehooks image uploads:
 // https://github.com/jasonwoitalla/csci5117-upper-five-tech-share/blob/main/src/hooks/useCloudStorage.js
 
+
 import Hex from "crypto-js/enc-hex";
 import SHA1 from "crypto-js/sha1";
 import WordArray from "crypto-js/lib-typedarrays";
 
+// -------------- outfitFunctions.js ----------------
+/*
+ *  This file contains backend functions to make CRUD 
+ *  requests for outfits/set of clothes (for the current user).
+ * 
+ *  CRUD Functions: 
+ *      GET:    Get outfits
+ *      POST:   Create an outfit
+ *      PUT:    Edit and existing outfit
+ *      DELETE: Delete and existing outfit
+ */
+// -- Get necessary environment variables --
 const CODEHOOKS_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 const CODEHOOKS_KEY = process.env.CH_API_KEY_RW;
 

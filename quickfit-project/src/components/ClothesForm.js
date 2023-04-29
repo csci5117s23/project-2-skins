@@ -95,14 +95,14 @@ export default function ClothesForm() {
   // --------------------------------------------------
   // Function to add a clothing article from front-end
   // --------------------------------------------------
-  async function onHandleSubmit() {
+  async function onHandleSubmit(e) {
     // Create a clothing item from state variables to POST
     const clothingItem = {
       category: category,
       name: name,
       color: color,
       tags: getTagNames(inputTags),
-      // imageId: uploadImage(e),
+      imageId: uploadImage(e),
     };
     console.log("Clothing item on submit: ");
     console.log(clothingItem);
@@ -182,9 +182,9 @@ export default function ClothesForm() {
     // Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
     const thing = document.getElementById("imageFile").files[0];
-    const uploadRes = await useCloudUpload(token, thing);
-    // console.log("Uploaded result: " + uploadRes);
+    const uploadResult = await useCloudUpload(token, thing);
     setUploaded(!uploaded);
+    console.log("Upload result: " + uploadResult);
   }
 
   // --------------------------------------------------------------------
@@ -374,8 +374,7 @@ export default function ClothesForm() {
                   sx={{ width: "45%" }}
                   onClick={(event, value) => {
                     addNewTags();
-                    onHandleSubmit();
-                    uploadImage(event);
+                    onHandleSubmit(event);
                   }}
                 >
                   Submit

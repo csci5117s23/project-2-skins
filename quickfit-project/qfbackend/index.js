@@ -11,9 +11,14 @@ import jwtDecode from 'jwt-decode';
 import fetch from 'node-fetch'
 
 // Process .env keys for getting images
-const B2_KEY_ID = process.env.BACKBLAZE_KEY_ID;
-const B2_APPLICATION_KEY = process.env.BACKBLAZE_APPLICATION_KEY;
-const B2_BUCKET_ID = process.env.BACKBLAZE_BUCKET_ID;
+// ENVs don't get loaded from here unfortunately...
+// const B2_KEY_ID = process.env.BACKBLAZE_KEY_ID;
+// const B2_APPLICATION_KEY = process.env.BACKBLAZE_APPLICATION_KEY;
+// const B2_BUCKET_ID = process.env.BACKBLAZE_BUCKET_ID;
+
+const B2_KEY_ID = "0356132eecfa";
+const B2_APPLICATION_KEY = "005141bec0175b8a3336ede277185637cd52591441";
+const B2_BUCKET_ID = "905315d66103c2ae8e7c0f1a";
 
 // --------------------------------------------------------------------------------------------------
 // README: 
