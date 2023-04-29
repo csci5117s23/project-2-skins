@@ -11,6 +11,10 @@ import { object, string, number, date, InferType, bool, array } from 'yup';
 import jwtDecode from 'jwt-decode';
 import fetch from 'node-fetch'
 
+// Process .env keys for getting images
+const B2_KEY_ID = process.env.B2_KEY_ID;
+const B2_APPLICATION_KEY = process.env.B2_APPLICATION_KEY;
+const B2_BUCKET_ID = process.env.B2_BUCKET_ID;
 
 // An example route for https://<PROJECTID>.api.codehooks.io/dev/
 app.get('/', (req, res) => {
@@ -79,7 +83,7 @@ const clothesSchemaYup = object( {
   name:          string().required(),                 // Name of clothing (Black Nike hoodie, Red long sleeve from garage) 
   tags:          array().of(string()),                // List of user specified strings
   color:         string(),                            // User-specified color
-  // image                                            // User-uplodad image of clothing
+  imageId:       string(),                            // User-uplodad image of clothing
   createdOn:     date().default(() => new Date()),    // Date of when clothing article was created (POST date)
 })
 //////////////////////////////////////////////////////////////////////
@@ -111,6 +115,74 @@ const tagSchemaYup = object( {
 const imageSchemaYup = object({
   name: string().required(),
   content: string().required(),
+});
+
+// Backblaze functions for images
+async function getAuthDetails() {
+  console.log("Getting Backblaze auth details");
+	console.log("From bucket: " + B2_BUCKET_ID);
+
+  // Encode backblaze account ID and key in base64
+  let encoded = Buffer.from(B2_KEY_ID + ":" + B2_APPLICATION_KEY).toString("base64");
+
+  // Fetch backblaze authorization details
+  const response = await fetch(
+      "https://api.backblazeb2.com/b2api/v2/b2_authorize_account",
+      {
+          method: "GET",
+          headers: {
+              Authorization: "Basic " + encoded,
+          },
+      }
+  );
+  const data = await response.json();
+  console.log("Returning details");
+  console.log("Url: " + data.apiUrl);
+  console.log("Auth: " + data.authorizationToken);
+
+  // Give user apiUrl, authToken, and the download url to
+  return {
+      apiUrl: data.apiUrl,
+      authToken: data.authorizationToken,
+      downloadUrl: data.downloadUrl,
+  };
+}
+
+app.get("/get_upload_url", async (req, res) => {
+  // 1. Get the auth details
+  let authDetails = await getAuthDetails();
+
+  // 2. Make the fetch request to get the upload URL
+  const response = await fetch(
+      `${authDetails.apiUrl}/b2api/v2/b2_get_upload_url?bucketId=${B2_BUCKET_ID}`,
+      {
+          method: "GET",
+          headers: {
+              Authorization: authDetails.authToken,
+          },
+      }
+  );
+  const data = await response.json();
+  // Optional, error checking
+  if (!data.uploadUrl || !data.authorizationToken) {
+      res.status(500).send("Failed to get upload URL");
+      return;
+  }
+  res.json({
+      uploadUrl: data.uploadUrl,
+      uploadAuth: data.authorizationToken,
+  });
+});
+
+app.post("/store_file_id", async (req, res) => {
+  const conn = await Datastore.open();
+  const doc = await conn.insertOne("image", req.body);
+  res.status(201).json(doc);
+});
+
+app.get("/get_all_images", async (req, res) => {
+  const conn = await Datastore.open();
+  conn.getMany("image").json(res);
 });
 
 
@@ -265,5 +337,5 @@ const imageSchemaYup = object({
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
-crudlify(app, { clothes: clothesSchemaYup, outfit: outfitSchemaYup, tag: tagSchemaYup, image: imageSchemaYup });
+crudlify(app, { clothes: clothesSchemaYup, outfit: outfitSchemaYup, tag: tagSchemaYup, image: imageSchemaYup }, options);
 export default app.init();

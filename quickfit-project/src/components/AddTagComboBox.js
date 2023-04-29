@@ -46,6 +46,11 @@ export default function AddTagComboBox( {userTags, setInputTags, getTags, addTag
           {option.name}
 
           {/* Delete button */}
+          <Tooltip title="Delete tag">
+            <IconButton onClick={ () => { deleteTag(option._id); } }>
+              <ClearIcon/>
+            </IconButton>
+          </Tooltip>
         </li>
       )}
       renderInput={(params) => (
