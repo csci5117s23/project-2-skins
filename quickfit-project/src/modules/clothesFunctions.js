@@ -29,7 +29,9 @@ export async function getClothes(authToken, id="") {
             }
         })
         // Return JSON list of user clothes
-        return await result.json();
+        const results = await result.json();
+        const sortedResults = results.sort(sortAlphabetically);
+        return sortedResults;
     } catch (error) {
         console.log("Failed to get clothes. " + error);
     }
@@ -51,6 +53,17 @@ export async function getClothesByCategory(authToken, category, id="") {
 // --------------------------------------------------------------------------
 export function filterClothesByCategory(clothesList, category) {
     return Object.values(clothesList).filter( (item) => (item.category === category));
+}
+
+// --------------------------------------------------------------------------------------------------------
+// Helper function to sort clothes list by category alphabetically
+// Reference: https://stackoverflow.com/questions/19259233/sorting-json-by-specific-element-alphabetically
+// --------------------------------------------------------------------------------------------------------
+export function sortAlphabetically(item1, item2) {
+    // Case-insensitive comparison
+    item1 = String(item1.category).toLowerCase();
+    item2 = String(item2.category).toLowerCase();
+    return (item1 < item2) ? -1 : (item1 > item2) ? 1 : 0;
 }
 
 // ---------------------------------------------------------

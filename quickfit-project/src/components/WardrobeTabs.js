@@ -140,9 +140,8 @@ function TabPanel(props) {
       </>
     );
   } else { // Page contents
-    
-    console.log("Category: " + category);
-    
+
+    // Clothing lists based on tab
     if (category === "All") { // All clothes
       return <ClothingList clothes={clothes || []} />
     }
