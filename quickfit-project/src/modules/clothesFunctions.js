@@ -38,7 +38,7 @@ export async function getClothes(authToken, id="") {
 }
 
 // ---------------------------------------------------------------
-// GET: Function get all of a user's categories based on category
+// GET: Function get all of a user's clothes based on category
 // ---------------------------------------------------------------
 // * Can get a specific ID if provided one.
 export async function getClothesByCategory(authToken, category, id="") {
@@ -46,6 +46,15 @@ export async function getClothesByCategory(authToken, category, id="") {
     const allClothes = await getClothes(authToken, id);
     // From list of all clothes, get the ones of the specified category
     return filterClothesByCategory(allClothes, category);
+}
+
+// --------------------------------------------------------------------
+// GET: Function get all of a user's clothes based on category & name
+// --------------------------------------------------------------------
+// * Can get a specific ID if provided one.
+export async function getClothesByName(authToken, category, query="", id="") {
+    const categoryClothes = await getClothesByCategory(authToken, category, id);
+    // From list of clothes of specified category, get results based on text input
 }
 
 // --------------------------------------------------------------------------

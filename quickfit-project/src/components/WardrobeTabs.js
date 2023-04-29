@@ -1,7 +1,12 @@
 import { React, useState, useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
 // MUI Component imports
-import { Stack, Tabs, Tab, CircularProgress } from "@mui/material";
+import { 
+  Stack, 
+  Tabs, 
+  Tab, 
+  CircularProgress 
+} from "@mui/material";
 import SwipeableViews from "react-swipeable-views";
 // Custom component imports
 import ClothingList from "./ClothingList";
@@ -17,12 +22,7 @@ import {
 } from "@/modules/clothesFunctions";
 
 export default function WardrobeTabs() {
-  // --- Authorization ---------------------------------------------------
-  const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
-  const { isLoaded, userId, sessionId, getToken } = useAuth();
-  const [loading, setLoading] = useState(true);
-
-  // --- Search bar -------------------------------------------------------
+  // --- Search bar state hooks -----------------------------------------
   const [value, setValue] = useState(0);
   const [search, setSearch] = useState("");
 
@@ -79,27 +79,28 @@ function TabPanel(props) {
   const [accessories, setAccessories] = useState([]); // List of user's one piece items
 
   // --------------------------------------------------------------------------------------
-  // Update rendered JSX when wardrobe tab changes
+  // Update rendered JSX when wardrobe tab changes OR if search results change
   // --------------------------------------------------------------------------------------
   useEffect(() => {
     if (value === 0 || value === null || value === undefined) {
       setCategory("All");
     }
-    if (value === 1) {
+    else if (value === 1) {
       setCategory("One Piece");
     }
-    if (value === 2) {
+    else if (value === 2) {
       setCategory("Tops");
     }
-    if (value === 3) {
+    else if (value === 3) {
       setCategory("Bottoms");
     }
-    if (value === 4) {
+    else if (value === 4) {
       setCategory("Shoes");
     }
-    if (value === 5) {
+    else if (value === 5) {
       setCategory("Accessories");
     }
+    // Filter search results based on tab and user text input
 
     // TODO: Get request that gets the outfit that matches the search and category type
     // do a fetch to get our outfit given the arguments
@@ -108,15 +109,16 @@ function TabPanel(props) {
     //   )
     //   .then((res) => res.json())
     //   .then((data) => setClothes(data));
+
     
-  }, [search, value]);
+    
+  }, [search]);
 
   // Make get requests to populate clothing category lists
   useEffect(() => {
     async function processClothes() {
       // Get auth key & user's clothing items
-      if (userId) {
-        // Ensure user is logged in
+      if (userId) { // Ensure user is logged in before sending GET requests
         const token = await getToken({ template: jwtTemplateName }); // Get auth token
         setClothes(await getClothes(token)); // Get user clothes from codehooks database
         setOnePieces(filterClothesByCategory(clothes, "One Piece")); // Filter one piece items
@@ -126,22 +128,23 @@ function TabPanel(props) {
         setAccessories(filterClothesByCategory(clothes, "Accessories")); // Filter accessories
         setLoading(false); // Once we get these things, we are no longer loading
       }
-    }
+    } // Get all clothes lists
     processClothes();
-    console.log(shoes);
-  }, [isLoaded, value, search]);
+  }, [isLoaded, value]);
 
   // Load GET requests before showing any content
   if (loading) {
-    return (
-      <>
+    return ( // Notify users contents are loading
+      <> 
         LOADING...
         <CircularProgress />
       </>
     );
   } else { // Page contents
 
-    // Clothing lists based on tab
+    // ------------------------------------------------------------------
+    // Clothing lists based on current tab
+    // ------------------------------------------------------------------
     if (category === "All") { // All clothes
       return <ClothingList clothes={clothes || []} />
     }
@@ -161,5 +164,6 @@ function TabPanel(props) {
       return <ClothingList clothes={accessories || []} />;
     }
   }
-  // --------------------------------------------------------------------------------------
+  // ------------------------------------------------------------------
+  // ------------------------------------------------------------------
 }
