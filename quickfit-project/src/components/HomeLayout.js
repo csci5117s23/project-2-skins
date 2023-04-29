@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 // import styles from '@/styles/Home.module.css'
 import { SignedIn } from "@clerk/clerk-react"; // Clerk authorization imports
 
-import { Grid, Button, Stack } from "@mui/material";
+import { Grid, Button, Stack, Box, Typography } from "@mui/material";
 import DateWeatherWidget from "@/components/DateWeatherWidget";
 import Header from "@/components/Header";
 import BottomNavigationContainer from "@/components/BottomNavigationContainer";
@@ -61,16 +61,14 @@ export default function UILayout() {
       {/* 2. Content section */}
       <section>
         <SignedIn>
-          <DateWeatherWidget date={date} setDate={setDate} />
-          <Stack className="mainContainer" width="100vw" spacing={2} alignItems="center" justifyContent="center">
-          
           <Button variant="contained" onClick={()=>{setOutfit(null)}}>clear outfit</Button>
-
+          <Stack width="100vw" spacing={2} alignItems="center" justifyContent="center">
+          <DateWeatherWidget date={date} setDate={setDate} />
             {outfit ? outfit.map((clothes) => {
               return (
                 <ClothingCard clothes={clothes} />
-              );
-            }): <NoFitChosenLayout/>}
+                );
+              }): <NoFitChosenLayout/>}
             <BottomNavigationContainer />
           </Stack>
         </SignedIn>

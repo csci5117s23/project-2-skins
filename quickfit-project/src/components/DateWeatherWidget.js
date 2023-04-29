@@ -20,9 +20,11 @@ import CalenderCard from "./CalenderCard";
 
 export default function DateWeatherWidget(props) {
   const { date, setDate } = props;
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   var d = new Date();
   var yesterday = d.setDate(d.getDate() - 1);
   var nextMonth = d.setDate(d.getDate() + 30);
@@ -32,11 +34,11 @@ export default function DateWeatherWidget(props) {
         onClick={handleOpen}
         sx={{
           backgroundImage: "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
-          backgroundSize: "30vw",
+          backgroundSize: "25vh",
           backgroundColor: "#FFFFFF",
           margin: "1.5vh",
           "&:hover": {
-            backgroundColor: "#f2f2f2",
+            backgroundColor: "#f2f2f2", 
           },
         }}
       >
@@ -46,7 +48,7 @@ export default function DateWeatherWidget(props) {
           spacing={1}
           minHeight="8vh"
           direction="row"
-          sx={{ cursor: "pointer" }}
+          sx={{ cursor: "pointer",  width: {xs:"90vw", md:"70vw"},}}
         >
           {date > yesterday && date < nextMonth ? (
             <>

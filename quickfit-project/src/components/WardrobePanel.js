@@ -28,17 +28,22 @@ import {
 } from "@mui/material";
 import ClothingCard from "@/components/ClothingCard";
 
-export default function WardrobePanel(props) {
-  const { clothes } = props;
+export default function ClothingList(props) {
+  const { clothes, clickFunction} = props;
 
-  console.log(clothes);
   return (
     <Stack spacing={1.5} width="100vw" alignItems="center" justifyContent="center">
       {clothes.map((cloth) => {
-        return (
-            <ClothingCard clothes={cloth} />
-        );
-      })}
+              return (
+                <div
+                  onClick={() => {
+                    clickFunction?clickFunction(cloth):null;
+                  }}
+                >
+                  <ClothingCard clothes={cloth} />
+                </div>
+              );
+            })}
     </Stack>
   );
 }
