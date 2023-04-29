@@ -1,26 +1,23 @@
 // -------------- clothesFunctions.js ----------------
 /*
  *  This file contains backend functions to make CRUD 
- *  requests for clothing tags (for the current user).
+ *  requests for clothing articles (for the current user).
  * 
  *  CRUD Functions: 
- *      GET:    Get clothing tags
- *      POST:   Create a clothing tag
- *      PUT:    Edit and existing clothing tag
- *      DELETE: Delete and existing clothing tag
+ *      GET:    Get clothing articles
+ *      POST:   Create a clothing article
+ *      PUT:    Edit and existing clothing article
+ *      DELETE: Delete and existing clothing article
  */
 // -- Get necessary environment variables --
 const backendBase = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 const clothesUrl = backendBase + "/clothes";
-const jwtTemplateName = "codehooks-quickfit";
+const apiKey = process.env.CH_API_KEY_RW;
 
 // ---------------------------------------------------------
-// GET: Function get all of a user's clothes
+// GET: Function get all of a user's outfits
 // ---------------------------------------------------------
 export async function getClothes() {
-    // Get authorization token from JWT codehooks template
-    const token = await getToken({ template: jwtTemplateName });
-    
     // Send GET request
     const result = await fetch(clothesUrl, {
         'method': 'GET',
@@ -64,9 +61,6 @@ export async function addClothes(authToken, clothing) {
 // PUT: Function to edit an existing clothing article from user wardrobe
 // -------------------------------------------------------------------------
 export async function editClothes(clothing) {
-    // Get authorization token from JWT codehooks template
-    const token = await getToken({ template: jwtTemplateName });
-
     // Send PUT request
     const result = await fetch(clothesUrl + clothing._id, {
         'method': 'PUT',
@@ -86,9 +80,6 @@ export async function editClothes(clothing) {
 // DELETE: Function to remove a clothing article from user wardrobe
 // -----------------------------------------------------------------
 export async function deleteClothes(authToken, clothing) {
-    // Get authorization token from JWT codehooks template
-    const token = await getToken({ template: jwtTemplateName });
-
     // Send DELETE request
     const result = await fetch(clothesUrl + clothing._id, {
         'method': 'DELETE',

@@ -3,10 +3,9 @@
  *  This file contains backend functions to make CRUD 
  *  requests for clothing tags (for the current user).
  * 
- *  CRUD Functions: 
+ *  CRUD Functions (exclude PUT/edit):
  *      GET:    Get clothing tags
  *      POST:   Create a clothing tag
- *      PUT:    Edit and existing clothing tag
  *      DELETE: Delete and existing clothing tag
  */
 // -- Get necessary environment variables --
@@ -23,7 +22,7 @@ export async function getTags(authToken) {
         const result = await fetch(tagsUrl, {
             'method': 'GET',
             'headers': {
-                // 'Authorization': 'Bearer ' + authToken,
+                'Authorization': 'Bearer ' + authToken,
                 'x-api-key': apiKey,
             }
         })
@@ -46,7 +45,8 @@ export async function addTag(authToken, tagName) {
             'method': 'POST',
             'headers': {
                 'Authorization': 'Bearer ' + authToken,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'x-api-key': apiKey,
             },
             'body': JSON.stringify({
                 name: tagName,
@@ -59,27 +59,6 @@ export async function addTag(authToken, tagName) {
     }
 }
 
-// -------------------------------------------------------------------------
-// PUT: Function to edit an existing user tag
-// -------------------------------------------------------------------------
-export async function editTag(authToken, tag) {
-    // Send PUT request
-    try {
-        const result = await fetch(tagsUrl + tag._id, {
-            'method': 'PUT',
-            'headers': {
-                'Authorization': 'Bearer ' + authToken,
-                'Content-Type': 'application/json'
-            },
-            'body': JSON.stringify({tag})
-        });
-        // Return newly-edited tag JSON
-        return await result.json();
-    } catch (error) {
-        console.log("Failed to edit tag. " + error);
-    }
-}
-
 // -----------------------------------------------------------------
 // DELETE: Function to remove a tag 
 // -----------------------------------------------------------------
@@ -89,7 +68,8 @@ export async function deleteTag(authToken, tag) {
         const result = await fetch(tagsUrl + tag._id, {
             'method': 'DELETE',
             'headers': {
-                'Authorization': 'Bearer ' + authToken
+                'Authorization': 'Bearer ' + authToken,
+                'x-api-key': apiKey,
             },
         })
         // Return removed tag as JSON

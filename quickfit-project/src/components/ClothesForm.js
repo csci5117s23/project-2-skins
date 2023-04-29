@@ -160,7 +160,7 @@ export default function ClothesForm() {
     }
     process();
     console.log(userTags);
-  }, [isLoaded, userTags]);
+  }, [isLoaded]);
 
   if (loading) {
     return (
@@ -217,9 +217,7 @@ export default function ClothesForm() {
                 }}
               >
                 <MenuItem value={"top"}>Top</MenuItem>
-                <MenuItem value={"sweater"}>Sweater</MenuItem>
                 <MenuItem value={"bottom"}>Bottoms</MenuItem>
-                <MenuItem value={"jacket"}>Jacket</MenuItem>
                 <MenuItem value={"shoes"}>Shoes</MenuItem>
                 <MenuItem value={"accessories"}>Accessories</MenuItem>
                 <MenuItem value={"onepiece"}>One Piece</MenuItem>
