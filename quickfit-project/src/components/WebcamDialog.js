@@ -50,6 +50,7 @@ export default function WebcamDialog( { image, setImage } ) {
           color="secondary"
           aria-label="upload webcam photo"
           component="label"
+          sx={{ width: 150 }}
           onClick={handleClickOpen}
           endIcon={<PhotoCamera />}
         >

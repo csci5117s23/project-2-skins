@@ -1,7 +1,8 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
 // MUI Imports
 import {
   Autocomplete,
+  Box,
   Button,
   Chip,
   CssBaseline,
@@ -21,9 +22,18 @@ import DriveFolderUploadRoundedIcon from "@mui/icons-material/DriveFolderUploadR
 
 // Camera-imports
 import WebcamDialog from "./WebcamDialog";
-import ImageUploadForm from "./ImageUploadForm";
 
 export default function PhotoButtons( { image, setImage }) {
+  const [fileUpload, setFileUpload] = useState("Choose an image...");
+
+  function handleFileOnChange(e) {
+      setFileUpload(e.target.files[0].name);
+  }
+
+  // useEffect(() => {
+  //   setFileUpload("Choose an image...");
+  // }, [reset]);
+    
   return (
     <>
       <CssBaseline />
@@ -34,6 +44,7 @@ export default function PhotoButtons( { image, setImage }) {
             variant="outlined"
             component="label"
             color="secondary"
+            sx={{ width: 150}}
             endIcon={<DriveFolderUploadRoundedIcon />}
           >
             Upload
@@ -42,17 +53,17 @@ export default function PhotoButtons( { image, setImage }) {
               accept="image/*" 
               multiple 
               type="file" 
-              
+              onChange={handleFileOnChange}
             />
           </Button>
         </Tooltip>
-
-        
-
-        {/* Take photo (from camera) */}
-        <WebcamDialog image={image} setImage={setImage} />
+        {/* Image file name */}
+        <Box>{fileUpload}</Box>
       </Stack>
-      <ImageUploadForm/>
+
+      {/* Take photo (from camera) */}
+      <WebcamDialog image={image} setImage={setImage} />
+      
     </>
   );
 }
