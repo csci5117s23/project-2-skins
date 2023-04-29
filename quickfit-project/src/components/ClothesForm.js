@@ -19,7 +19,10 @@ import {
   CssBaseline,
   Container,
   CircularProgress,
+  Tooltip,
 } from "@mui/material";
+// MUI Icon imports
+import DriveFolderUploadRoundedIcon from "@mui/icons-material/DriveFolderUploadRounded";
 
 // DB Clothes Function imports
 import {
@@ -44,8 +47,9 @@ import {
 } from "@/modules/imageFunctions"
 
 // Custom component imports
-import PhotoButtons from "./PhotoButtons";
+// import PhotoButtons from "./PhotoButtons";
 import AddTagComboBox from "./AddTagComboBox";
+import WebcamDialog from "./WebcamDialog";
 
 // Header text styling for each form input
 function InputHeader(props) {
@@ -75,6 +79,7 @@ export default function ClothesForm() {
   const [userTags, setUserTags] = useState([]); // Clothing tags previously made by user (store here)
   const [inputTags, setInputTags] = useState([]); // Clothing tags to apply to this entry
   const [image, setImage] = useState(null);
+  const [fileUpload, setFileUpload] = useState("Choose an image...");
 
   // ----------------------------------------
   // Function to reset clothes form inputs
@@ -167,6 +172,25 @@ export default function ClothesForm() {
     let uploadRes = await useCloudUpload(image);
     setUploaded(!uploaded);
   }
+
+  // --------------------------------------------------------------------
+  // To handle change in uploaded image file
+  // --------------------------------------------------------------------
+  function handleFileOnChange(e) {
+    console.log(e.target.files);
+    if (!e.target.files || e.target.files.length === 0) {
+      setFileUpload(null)
+      return
+    }
+
+    const objectUrl = URL.createObjectURL(e.target.files[0]);
+    setImage(objectUrl);
+
+    const objectName = e.target.files[0].name;
+    setFileUpload(objectName);
+  }
+
+
 
   // --------------------------------------------------------------------
   // Run on every render.
@@ -283,8 +307,35 @@ export default function ClothesForm() {
               />
 
               {/* --- Images --- */}
-              <InputHeader> Image</InputHeader>
-              <PhotoButtons image={image} setImage={setImage} />
+              <InputHeader>Image</InputHeader>
+              {/* <PhotoButtons image={image} setImage={setImage} /> */}
+              <Stack direction="row" alignItems="center" spacing={2}>
+                {/* Upload photo button */}
+                <Tooltip title="Upload a photo">
+                  <Button
+                    variant="outlined"
+                    component="label"
+                    color="secondary"
+                    sx={{ width: 150}}
+                    endIcon={<DriveFolderUploadRoundedIcon />}
+                  >
+                    Upload
+                    <input 
+                      hidden 
+                      accept="image/*" 
+                      multiple 
+                      type="file" 
+                      onChange={handleFileOnChange}
+                    />
+                  </Button>
+                </Tooltip>
+                {/* Image file name */}
+                <Box>{fileUpload}</Box>
+              </Stack>
+
+              {/* Take photo (from camera) */}
+              <WebcamDialog image={image} setImage={setImage} setFileUpload={setFileUpload} />
+
               {/* Show preview of image */}
               {image && ( <img src={image} alt="captured-photo"/> )}
         

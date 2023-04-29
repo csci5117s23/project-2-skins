@@ -41,8 +41,8 @@ import Hex from "crypto-js/enc-hex";
 import SHA1 from "crypto-js/sha1";
 import WordArray from "crypto-js/lib-typedarrays";
 
-const CODEHOOKS_URL = process.env.NEXT_PUBLIC_API_URL;
-const CODEHOOKS_KEY = process.env.NEXT_PUBLIC_API_KEY;
+const CODEHOOKS_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
+const CODEHOOKS_KEY = process.env.CH_API_KEY_RW;
 
 export async function useCloudUpload(file) {
     // 1. Fetch the upload URL
