@@ -15,20 +15,24 @@ import {
   Modal,
   Toolbar,
   Container,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 
 import CloseIcon from "@mui/icons-material/Close";
 import Dialog from "@mui/material/Dialog";
 import AddIcon from "@mui/icons-material/Add";
 import ClothingCard from "@/components/ClothingCard";
-import ClothingList from "@/components/WardrobePanel";
+import ClothingList from "@/components/ClothingList";
 import SearchBar from "@/components/SearchBar";
-import DeleteForeverTwoToneIcon from '@mui/icons-material/DeleteForeverTwoTone';
-
+import DeleteForeverTwoToneIcon from "@mui/icons-material/DeleteForeverTwoTone";
+import AutorenewRoundedIcon from "@mui/icons-material/AutorenewRounded";
 export default function OutfitForm() {
-  //TODO: add the rest of the clothing categories
-  const [top, setTop] = useState([]);
-  const [bottom, setBottom] = useState([]);
+  const [onePiece, setOnePiece] = useState([]);
+  const [tops, setTops] = useState([]);
+  const [bottoms, setBottoms] = useState([]);
+  const [shoes, setShoes] = useState([]);
+  const [accessories, setAccessories] = useState([]);
 
   // States to show clothing list when "add [clothing]" button clicked
   const [open, setOpen] = useState(false);
@@ -46,42 +50,100 @@ export default function OutfitForm() {
 
   const handleCloseDelete = () => {
     setClothingToDelete(null);
-    setOpenDelete(false)
+    setOpenDelete(false);
+  };
+
+  // take the ClothingToDelete and remove it from the list
+  // removing an item from list found on https://semicolon.dev/tutorial/javascript/remove-matching-object-from-js-array
+  const handleDelete = () => {
+    if (clothingToDelete["category"] == "onepiece") {
+      setOnePiece([]);
+    } else if (clothingToDelete["category"] == "top") {
+      setTops(removeItemFromList(tops, clothingToDelete));
+    } else if (clothingToDelete["category"] == "bottom") {
+      setBottoms(removeItemFromList(bottoms, clothingToDelete));
+    } else if (clothingToDelete["category"] == "shoes") {
+      setShoes([]);
+    } else if (clothingToDelete["category"] == "accessory") {
+      setAccessories(removeItemFromList(accessories, clothingToDelete));
+    }
+    setOpenDelete(false);
+    // clothingToDelete
+  };
+  const removeItemFromList = (list, item) => {
+  
+    const index = list.indexOf(item);
+    if (index > -1) {
+      // only splice array when item is found
+      list.splice(index, 1); // 2nd parameter means remove one item only
+    }
+
+    return list;
   };
 
   //list of clothes from the get request
   const [clothes, setClothes] = useState([
     {
-      category: "OnePiece",
+      category: "onepiece",
       clothingName: "Artizia black onepiece",
       tags: ["black", "tight"],
       createdOn: new Date(),
     },
     {
-      category: "OnePiece",
+      category: "onepiece",
       clothingName: "Floral short dress",
       tags: ["floral", "flowy", "short dress", "short sleeve"],
       createdOn: new Date(),
     },
     {
-      category: "OnePiece",
+      category: "onepiece",
       clothingName: "Blue Overalls",
       tags: ["jean", "blue"],
       createdOn: new Date(),
     },
+    {
+      category: "top",
+      clothingName: "Black Nike T-Shirt",
+      tags: ["black"],
+      createdOn: new Date(),
+    },
+    {
+      category: "bottom",
+      clothingName: "Dark green cargos",
+      tags: ["Green", "loose", "cargo"],
+      createdOn: new Date(),
+    },
+    {
+      category: "shoes",
+      clothingName: "White air forces",
+      tags: ["white"],
+      createdOn: new Date(),
+    },
+    {
+      category: "accessory",
+      clothingName: "Silver necklace",
+      tags: ["silver", "shiny"],
+      createdOn: new Date(),
+    },
   ]);
 
-  //handle selecting clothing from add
+  // handle selecting clothing from add
   const handleClickClothes = (clothes) => {
-    //TODO: add the rest of the if else cases
-
-    //actual category name might have different spelling once implemented. watch out for that
-    if (clothes["category"] === "OnePiece") {
-    } else if (clothes["category"] === "Top") {
-      //add clothes to the state list
-      // setTop() logic to append top to the end
+    // actual category name might have different spelling once implemented. watch out for that
+    if (clothes["category"] == "onepiece") {
+      setOnePiece([clothes]);
+    } else if (clothes["category"] == "top") {
+      const newTopsList = tops.concat(clothes);
+      setTops(newTopsList);
+    } else if (clothes["category"] == "bottom") {
+      const newBottomsList = bottoms.concat(clothes);
+      setBottoms(newBottomsList);
+    } else if (clothes["category"] == "shoes") {
+      setShoes([clothes]);
+    } else if (clothes["category"] == "accessory") {
+      const newAccessoriesList = accessories.concat(clothes);
+      setAccessories(newAccessoriesList);
     }
-
     setOpen(false);
   };
 
@@ -118,14 +180,24 @@ export default function OutfitForm() {
               <Typography variant="h5">One Piece</Typography>
             </CardContent>
           </Stack>
-        </Card >
-        <ClothingList clothes={clothes} clickFunction={handleOpenDelete}/>
+        </Card>
+        {/* List of clothing items, takes in list of clothes object and onClick function */}
+        <ClothingList clothes={onePiece} clickFunction={handleOpenDelete} />
         <Button
           variant="outlined"
           sx={{ width: { xs: "60vw" }, height: { xs: "5vh" } }}
           onClick={handleOpen}
         >
-          Add One Piece <AddIcon />{" "}
+          {onePiece.length > 0 ? (
+            <>
+              Replace <AutorenewRoundedIcon />
+            </>
+          ) : (
+            <>
+              Add One Piece
+              <AddIcon />
+            </>
+          )}
         </Button>
 
         {/* Tops */}
@@ -141,13 +213,22 @@ export default function OutfitForm() {
             </CardContent>
           </Stack>
         </Card>
-          
+        <ClothingList clothes={tops} clickFunction={handleOpenDelete} />
         <Button
           onClick={handleOpen}
           variant="outlined"
           sx={{ width: { xs: "60vw" }, height: { xs: "5vh" } }}
         >
-          Add Top <AddIcon />{" "}
+          {tops.length > 0 ? (
+            <>
+              Add Another Top
+              <AddIcon />
+            </>
+          ) : (
+            <>
+              Add Top <AddIcon />
+            </>
+          )}
         </Button>
 
         {/* Bottoms */}
@@ -163,12 +244,22 @@ export default function OutfitForm() {
             </CardContent>
           </Stack>
         </Card>
+        <ClothingList clothes={bottoms} clickFunction={handleOpenDelete} />
         <Button
           onClick={handleOpen}
           variant="outlined"
           sx={{ width: { xs: "60vw" }, height: { xs: "5vh" } }}
         >
-          Add Bottom <AddIcon />{" "}
+          {bottoms.length > 0 ? (
+            <>
+              Add Another bottom
+              <AddIcon />
+            </>
+          ) : (
+            <>
+              Add bottom <AddIcon />
+            </>
+          )}
         </Button>
 
         {/* Shoes */}
@@ -184,13 +275,22 @@ export default function OutfitForm() {
             </CardContent>
           </Stack>
         </Card>
-
+        <ClothingList clothes={shoes} clickFunction={handleOpenDelete} />
         <Button
           onClick={handleOpen}
           variant="outlined"
           sx={{ width: { xs: "60vw" }, height: { xs: "5vh" } }}
         >
-          Add Shoes <AddIcon />{" "}
+          {shoes.length > 0 ? (
+            <>
+              Replace <AutorenewRoundedIcon />
+            </>
+          ) : (
+            <>
+              Add Shoes
+              <AddIcon />
+            </>
+          )}
         </Button>
 
         {/* Accessories */}
@@ -206,13 +306,22 @@ export default function OutfitForm() {
             </CardContent>
           </Stack>
         </Card>
-
+        <ClothingList clothes={accessories} clickFunction={handleOpenDelete} />
         <Button
           onClick={handleOpen}
           variant="outlined"
           sx={{ width: { xs: "60vw" }, height: { xs: "5vh" } }}
         >
-          Add Accessories <AddIcon />{" "}
+          {accessories.length > 0 ? (
+            <>
+              Add Another Accessory
+              <AddIcon />
+            </>
+          ) : (
+            <>
+              Add Accessory <AddIcon />
+            </>
+          )}
         </Button>
         <Button variant="contained">
           <Typography variant="h6">Submit outfit</Typography>
@@ -228,47 +337,14 @@ export default function OutfitForm() {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Choose a Fit
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              save
-            </Button>
           </Toolbar>
         </AppBar>
         <Card
           sx={{
-            backgroundColor: "#3C3F42",
-          }}
-        >
-          <Stack
-            spacing={1.5}
-            width="100vw"
-            height="100vw"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <SearchBar />
-            <ClothingList clothes={clothes} clickFunction={handleClickClothes}/>
-          </Stack>
-        </Card>
-      </Dialog>
-      {/* Clothing list popup, shows when "add [clothing]" button clicked */}/
-      <Dialog fullScreen open={open} onClose={handleClose}>
-        <AppBar sx={{ position: "relative" }}>
-          <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={handleClose}>
-              <CloseIcon />
-            </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Choose a Fit
-            </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              save
-            </Button>
-          </Toolbar>
-        </AppBar>
-        <Card
-          sx={{
-            backgroundColor: "#3C3F42",
-            height:"100vh",
+            backgroundImage:
+              "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
+            height: "100vh",
+            overflow: "auto",
           }}
         >
           <Stack
@@ -276,32 +352,34 @@ export default function OutfitForm() {
             width="100vw"
             alignItems="center"
             justifyContent="center"
+            mb={2}
           >
-            <SearchBar />
-            {clothes.map((cloth) => {
-              return (
-                <div
-                  onClick={() => {
-                    handleClickClothes(cloth);
-                  }}
-                >
-                  <ClothingCard clothes={clothes} />
-                </div>
-              );
-            })}
+            <SearchBar color={"#000000"} />
+            <ClothingList
+              clothes={clothes}
+              clickFunction={handleClickClothes}
+            />
           </Stack>
         </Card>
       </Dialog>
-      
       {/* Delete clothing button popup, shows when clothing card is clicked */}
-      <Modal
-        open={openDelete}
-        onClose={handleCloseDelete}
-      >
-        <Box >
-            <Button variant="contained"> Remove Clothing </Button>
-        </Box>
-      </Modal>
+      <div>
+        <Dialog open={openDelete} onClose={handleCloseDelete}>
+          <Stack alignItems="center" m={2} mb={0}>
+            <DialogContentText>
+              Are you sure you want to delete this clothing?
+            </DialogContentText>
+            <DialogActions>
+              <Button onClick={handleCloseDelete} variant="contained">
+                Cancel
+              </Button>
+              <Button onClick={handleDelete} variant="contained" color="error">
+                Delete
+              </Button>
+            </DialogActions>
+          </Stack>
+        </Dialog>
+      </div>
     </>
   );
 }
