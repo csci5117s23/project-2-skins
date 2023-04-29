@@ -62,7 +62,6 @@ export async function addClothes(authToken, clothing) {
         console.log("Error. Clothing category/name empty");
         return;
     }
-
     // Send POST request
     try {
         const result = await fetch(clothesUrl, {

@@ -152,13 +152,13 @@ function TabPanel(props) {
     else if (category === "Tops") { // List of tops
       return <ClothingList clothes={tops || []} />;
     }
-    else if (value === "Bottoms") { // List of bottoms
+    else if (category === "Bottoms") { // List of bottoms
       return <ClothingList clothes={bottoms || []} />;
     }
-    else if (value === "Shoes") { // List of shoes
+    else if (category === "Shoes") { // List of shoes
       return <ClothingList clothes={shoes} />;
     }
-    else if (value === "Accessories") { // List of accessories
+    else if (category === "Accessories") { // List of accessories
       return <ClothingList clothes={accessories || []} />;
     }
   }
