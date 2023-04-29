@@ -54,7 +54,7 @@ export async function useCloudUpload(file) {
     });
     const data = await response.json();
 
-    // 2. Create file details
+    // 2. Apply file details 
     const fileName = file.name;
     const mimeType = file.type;
     const fileSize = file.size;
