@@ -22,7 +22,8 @@ export async function getOutfits(authToken) {
     const result = await fetch(clothesUrl, {
         'method': 'GET',
         'headers': {
-            'Authorization': 'Bearer ' + authToken
+            'Authorization': 'Bearer ' + authToken,
+            'x-api-key': apiKey,
         }
     })
     // Return JSON list of user clothes
@@ -30,21 +31,16 @@ export async function getOutfits(authToken) {
 }
 
 // ---------------------------------------------------------
-// POST: Function to add a clothing article to user wardrobe
+// POST: Function to add a user outfit
 // ---------------------------------------------------------
 export async function addClothes(authToken, outfit) {
-    // If category or name is empty, don't add clothing article.
-    if (clothing.category === "" || clothing.name === "") {
-        console.log("Error. Clothing category/name empty");
-        return;
-    }
-
     // Send POST request
-    const result = await fetch(clothesUrl, {
+    const result = await fetch(outfitUrl, {
         'method': 'POST',
         'headers': {
             'Authorization': 'Bearer ' + authToken,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
         },
         'body': JSON.stringify({
             category: clothing.category,
@@ -58,21 +54,19 @@ export async function addClothes(authToken, outfit) {
 }
 
 // -------------------------------------------------------------------------
-// PUT: Function to edit an existing clothing article from user wardrobe
+// PUT: Function to edit an existing user outfit
 // -------------------------------------------------------------------------
-export async function editClothes(clothing) {
-    // Get authorization token from JWT codehooks template
-    const token = await getToken({ template: jwtTemplateName });
-
+export async function editOutfit(authToken, outfit) {
     // Send PUT request
-    const result = await fetch(clothesUrl + clothing._id, {
+    const result = await fetch(outfitUrl + outfit._id, {
         'method': 'PUT',
         'headers': {
-            // 'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
+            'Authorization': 'Bearer ' + authToken,
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
         },
         'body': JSON.stringify({
-            clothing
+            outfit
         })
     });
     // Return newly-made clothing entry
@@ -80,17 +74,15 @@ export async function editClothes(clothing) {
 }
 
 // -----------------------------------------------------------------
-// DELETE: Function to remove a clothing article from user wardrobe
+// DELETE: Function to remove am user outfit
 // -----------------------------------------------------------------
-export async function deleteClothes(authToken, clothing) {
-    // Get authorization token from JWT codehooks template
-    const token = await getToken({ template: jwtTemplateName });
-
+export async function deleteOutfit(authToken, outfit) {
     // Send DELETE request
     const result = await fetch(clothesUrl + clothing._id, {
         'method': 'DELETE',
         'headers': {
-            'Authorization': 'Bearer ' + authToken
+            'Authorization': 'Bearer ' + authToken,
+            'x-api-key': apiKey,
         },
     })
     // Return removed article as JSON
