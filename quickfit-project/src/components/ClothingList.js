@@ -29,7 +29,7 @@ import {
 import ClothingCard from "@/components/ClothingCard";
 
 export default function ClothingList(props) {
-  const { clothes, clickFunction} = props;
+  const { clothes, clickFunction } = props;
 
   return (
     <Stack spacing={1.5} width="100vw" alignItems="center" justifyContent="center">

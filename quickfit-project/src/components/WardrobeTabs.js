@@ -1,22 +1,7 @@
 import { React, useState, useEffect } from "react";
-import Head from "next/head"; // Next-js imports
-import Image from "next/image";
-import { Inter } from "next/font/google";
+// MUI Component imports
 import {
-  ClerkProvider,
-  SignUp,
-  SignIn,
-  SignedIn,
-  SignedOut,
-} from "@clerk/clerk-react"; // Clerk authorization imports
-
-import {
-  AppBar,
-  Box,
-  Typography,
   Stack,
-  Grid,
-  TextField,
   Tabs,
   Tab,
 } from "@mui/material";
@@ -28,10 +13,11 @@ export default function WardrobeTabs() {
   const [value, setValue] = useState(0);
   const [search, setSearch] = useState("");
 
-  
   // useEffect(() => {
   //   console.log(search);
   // }, [search]);
+
+
 
   return (
     <>
@@ -67,122 +53,12 @@ export default function WardrobeTabs() {
 }
 
 function TabPanel(props) {
-  const { value, search } = props;
-  const [category, setCategory] = useState("");
-  const [clothes, setclothes] = useState({});
+  const { value, search } = props;                // 
+  const [category, setCategory] = useState("");   // Current category we are viewing
+  const [clothes, setclothes] = useState("");     // List of all clothes from GET request
+  const [onePieces, setOnePieces] = useState([]); // List of all one piecce items from GET request
 
-  //remove these states after useEffect------------
-  const [OnePieces, setOnePieces] = useState([
-    {
-      category: "OnePiece",
-      name: "Artizia black onepiece",
-      tags: ["black", "tight"],
-      createdOn: new Date(),
-    },
-    {
-      category: "OnePiece",
-      name: "Floral short dress",
-      tags: ["floral", "flowy", "short dress", "short sleeve"],
-      createdOn: new Date(),
-    },
-    {
-      category: "OnePiece",
-      name: "Blue Overalls",
-      tags: ["jean", "blue"],
-      createdOn: new Date(),
-    },
-  ]);
-
-  const [Tops, setTops] = useState([
-    {
-      category: "Top",
-      name: "Black Nike T-Shirt",
-      tags: ["black"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Top",
-      name: "Dark green Long sleeve",
-      tags: ["Green", "loose", "long sleeve"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Top",
-      name: "White Button up",
-      tags: ["white", "Button up"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Top",
-      name: "Red shein crop top",
-      tags: ["cropped", "red", "shein"],
-      createdOn: new Date(),
-    },
-  ]);
-
-  const [Bottoms, setBottoms] = useState([
-    {
-      category: "Bottom",
-      name: "Gray Nike Sweatplants",
-      tags: ["loose", "gray"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Bottom",
-      name: "Abrecombie Ripped Denim",
-      tags: ["mom jeans", "baggy", "ripped"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Bottom",
-      name: "Black Mom Jeans",
-      tags: ["black jeans", "mom jeans"],
-      createdOn: new Date(),
-    },
-  ]);
-
-  const [Shoes, setShoes] = useState([
-    {
-      category: "Shoes",
-      name: "White Air Forces",
-      tags: ["White"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Shoes",
-      name: "Black high heels",
-      tags: ["heels", "black"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Shoes",
-      name: "White Dr Martin Platforms",
-      tags: ["white", "boots", "platforms"],
-      createdOn: new Date(),
-    },
-  ]);
-
-  const [Accessories, setAccessories] = useState([
-    {
-      category: "Accessories",
-      name: "Heart Necklace",
-      tags: ["Silver"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Accessories",
-      name: "Fluffy Tan Scarf",
-      tags: ["furry", "tan", "warm"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Accessories",
-      name: "Black Mittens",
-      tags: ["black", "warm"],
-      createdOn: new Date(),
-    },
-  ]);
-  //-------------------------------------------
+  // --------------------------------------------------------------------------------------
   useEffect(() => {
     if (value === 0) {
       setCategory("OnePieces");
@@ -208,24 +84,19 @@ function TabPanel(props) {
     //   .then((data) => setClothes(data));
   }, [search, value]);
 
-  //TODO: uncomment this after useEffect implemented
-  // return <ClothingList clothes={clothes} />;
+  // Make get requests to populate clothing category lists
+  useEffect( () => {
+    async function processClothes() {
 
-  //TODO:remove these after implementing useEffect------------
-  if (value === 0) {
-    return <ClothingList clothes={OnePieces} />;
-  }
-  if (value === 1) {
-    return <ClothingList clothes={Tops} />;
-  }
-  if (value === 2) {
-    return <ClothingList clothes={Bottoms} />;
-  }
-  if (value === 3) {
-    return <ClothingList clothes={Shoes} />;
-  }
-  if (value === 4) {
-    return <ClothingList clothes={Accessories} />;
-  }
-  //--------------------------------------
+    }
+  })
+
+
+
+  return ( 
+    <>
+      <ClothingList clothes={clothes || []} />
+    </>
+  );
+  // --------------------------------------------------------------------------------------
 }

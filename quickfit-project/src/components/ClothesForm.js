@@ -215,7 +215,7 @@ export default function ClothesForm() {
   // --------------------------------------------------------------------
   useEffect(() => {
     console.log("Page rendered.");
-    async function process() {
+    async function processTags() {
       // Process getting authorization key and user db tags
       if (userId) {
         // Ensure user is logged in
@@ -225,7 +225,7 @@ export default function ClothesForm() {
         setFileUploadText("Choose an image..."); // Set file upload text
       }
     }
-    process();
+    processTags();
     console.log(userTags);
   }, [isLoaded, inputTags]);
 
