@@ -19,55 +19,64 @@ import {
 
 export default function ClothingCard(props) {
   const { clothes } = props;
-  const handleDelete = () => {
-    console.info("Implement deleting the chip/tag when coming here later");
-  };
+
   // Dont render if theres no clothes
   if (!clothes) {
     return <></>;
   }
 
   return (
-    <Card sx={{ display: "flex" }} >
-      <Grid container width="80vw" justifyContent="space-between">
+    <>
+    <Card sx={{ display: "flex" }}>
+      <Grid
+        container
+        sx={{ width: { xs: "90vw", md: "70vw" },height: {xs:"15vh", md:"25vh"}  }}
+        justifyContent="space-between"
+      >
         <Grid item xs={6}>
-            <CardContent>
-              <Typography variant="h6">{clothes["clothingName"]}</Typography>
-              <Typography
-                gutterBottom
-                component="div"
-                color="text.secondary"
-                variant="h7"
-              >
+          <Box ml={1.5} mt={.2} >
+            <Typography>
+              <Box sx={{fontSize: {xs:20, md:30}}}>
+                {clothes["clothingName"]}
+              </Box>
+            </Typography>
+            <Typography
+              gutterBottom
+              component="div"
+              color="text.secondary"
+            >
+              <Box sx={{fontSize: {xs:15, md:25}}}>
                 {clothes["category"]}
-              </Typography>
-              <Grid container>
-                {clothes["tags"]?.map((tag) => {
-                  return (
-                    <Grid item xs="auto">
-                      <Chip
-                        label={tag}
-                        size="small"
-                        variant="outlined"
-                        onDelete={handleDelete}
-                      />
-                    </Grid>
-                  );
-                })}
-              </Grid>
-            </CardContent>
+              </Box>
+            </Typography>
+          </Box>
+              <Box sx={{ml:.5, display: "flex", flexWrap: 'wrap'}}>
+                     {clothes["tags"]?.map((tag) => {
+                       return (
+                           <Chip varient="outlined" label={tag} size="small" sx={{mt:.25, mr:.25, backgroundColor:"#DDD"}} />
+                       );
+                     })}
+                   </Box>
         </Grid>
-        <Grid item xs={6} >
-          <Box display="flex" justifyContent="flex-end" >
-          <Box
-            component="img"
-            sx={{ backgroundColor: "#000000", height: "100%", maxHeight:{xs:"20vh"} }}
-            src="https://www.babyshop.com/images/1063852/card_xlarge.jpg"
-            alt="Clothing Image"
-          />
+        <Grid item xs={6}>
+          <Box display="flex" justifyContent="flex-end">
+            <Box
+              component="img"
+              sx={{
+                backgroundColor: "#000000",
+                maxWidth: "100%",
+                maxHeight: {xs:"15vh", md:"25vh"},
+              }}
+              src="https://dtpmhvbsmffsz.cloudfront.net/posts/2015/08/12/55cba8312035ea03bf02284f/m_55cba8312035ea03bf022850.jpg"
+              alt="Clothing Image"
+            />
           </Box>
         </Grid>
       </Grid>
     </Card>
+
+ 
+       
+            </>
   );
 }

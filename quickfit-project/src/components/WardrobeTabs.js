@@ -21,7 +21,7 @@ import {
   Tab,
 } from "@mui/material";
 import SwipeableViews from "react-swipeable-views";
-import WardrobePanel from "./WardrobePanel";
+import WardrobePanel from "./ClothingList";
 import SearchBar from "./SearchBar";
 
 export default function WardrobeTabs() {
@@ -60,7 +60,7 @@ export default function WardrobeTabs() {
           <Tab label="Accessories" />
         </Tabs>
       </Stack>
-      <SearchBar setSearch={setSearch} />
+      <SearchBar setSearch={setSearch} color={"#FFD36E"} />
       <TabPanel value={value} search={search} />
     </>
   );

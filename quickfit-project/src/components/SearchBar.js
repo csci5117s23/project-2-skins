@@ -28,7 +28,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 export default function SearchBar(props) {
-  const { setSearch } = props;
+  const { setSearch, color } = props;
   return (
     <Stack alignItems="center">
       <TextField
@@ -36,16 +36,24 @@ export default function SearchBar(props) {
         label="Search..."
         variant="outlined"
         onChange={(e) => {
-          setSearch(e.target.value);
+          setSearch ? setSearch(e.target.value) : null;
         }}
         sx={{
           margin: "1em",
-          input: { color: "#FFD36E" },
-          label: { color: "#FFD36E" },
-          width: {md:"35vw"},
+          input: { color: color },
+          label: { color: color },
+          width: { md: "35vw" },
           "& .MuiOutlinedInput-root": {
             "& fieldset": {
-              borderColor: "#FFD36E",
+              borderColor: color,
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: color,
+            },
+          },
+          "& .MuiInputLabel-root": {
+            "&.Mui-focused ": {
+              color: color,
             },
           },
         }}

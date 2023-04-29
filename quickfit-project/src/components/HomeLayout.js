@@ -62,13 +62,17 @@ export default function UILayout() {
       <section>
         <SignedIn>
           <Button variant="contained" onClick={()=>{setOutfit(null)}}>clear outfit</Button>
-          <Stack width="100vw" spacing={2} alignItems="center" justifyContent="center">
+          <Stack width="100vw" spacing={2} alignItems="center" justifyContent="center" >
           <DateWeatherWidget date={date} setDate={setDate} />
+          <Box alignItems="center" justifyContent="center" sx={{display: "flex", flexWrap: 'wrap', width:"73vw" }}>
             {outfit ? outfit.map((clothes) => {
               return (
-                <ClothingCard clothes={clothes} />
+                <Box sx={{m:1, width:{xs:"100vw",md:"34vw"}}}><ClothingCard clothes={clothes} /></Box>
+                
                 );
               }): <NoFitChosenLayout/>}
+          </Box>
+            
             <BottomNavigationContainer />
           </Stack>
         </SignedIn>
