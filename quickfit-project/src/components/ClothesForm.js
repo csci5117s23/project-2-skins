@@ -88,7 +88,7 @@ export default function ClothesForm() {
     setInputTags([]);
     setImage(null);
     setImageFile(null);
-    setImageFileUploadText("Choose an image...");
+    setFileUploadText("Choose an image...");
   }
 
   // --- Clothes functions ---
@@ -177,14 +177,14 @@ export default function ClothesForm() {
   // --------------------------------------------------------------------
   // Code referenced from Upper Five tech share: https://github.com/jasonwoitalla/csci5117-upper-five-tech-share/blob/main/src/pages/cloud-storage.js
   async function uploadImage(e) {
-    // e.preventDefault();
-    // console.log(imageFile);
+    e.preventDefault();
+
     // Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
     const thing = document.getElementById("imageFile").files[0];
     const uploadRes = await useCloudUpload(token, thing);
-    console.log("Uploaded result: " + uploadRes);
-    // setUploaded(!uploaded);
+    // console.log("Uploaded result: " + uploadRes);
+    setUploaded(!uploaded);
   }
 
   // --------------------------------------------------------------------

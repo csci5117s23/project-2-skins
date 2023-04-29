@@ -45,7 +45,7 @@ const CODEHOOKS_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 const CODEHOOKS_KEY = process.env.CH_API_KEY_RW;
 
 export async function useCloudUpload(authToken, file) {
-    // Fetch upload URL
+    // 1. Fetch upload URL
     try {
         const response = await fetch(CODEHOOKS_URL+"/get_upload_url", {
             method: "GET",
@@ -56,7 +56,7 @@ export async function useCloudUpload(authToken, file) {
         });
         const data = await response.json();
 
-        // Get file details
+        // 2. Get file details
         const fileName = file.name;
         const mimeType = file.type;
         const fileSize = file.size;
@@ -66,7 +66,7 @@ export async function useCloudUpload(authToken, file) {
         reader.addEventListener("loadend", async (e) => {
             const checksum = SHA1(WordArray.create(reader.result)).toString(Hex);
 
-            // Use the upload URL to upload the file
+            // 3. Use the upload URL to upload the file
             const uploadResponse = await fetch(data.uploadUrl, {
                 method: "POST",
                 headers: {
@@ -79,8 +79,6 @@ export async function useCloudUpload(authToken, file) {
                 body: file,
             });
             const uploadData = await uploadResponse.json();
-
-            console.log("UPLOAD DATA " + JSON.stringify(uploadData));
 
             // 4. Image uploaded, store the image details in the database
             fetch(`${CODEHOOKS_URL}/store_file_id`, {

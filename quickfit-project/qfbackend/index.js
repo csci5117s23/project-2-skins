@@ -155,7 +155,7 @@ app.get("/get_download_url", async (req, res) => {
   });
 });
 
-// NOTE: Changed 'images' to 'image'
+// NOTE: Changed 'images' to 'image' since image collection path is .../dev/image
 app.post("/store_file_id", async (req, res) => {
   const conn = await Datastore.open();
   const doc = await conn.insertOne("image", req.body);
