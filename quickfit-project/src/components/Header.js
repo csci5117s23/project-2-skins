@@ -13,13 +13,21 @@ import {
   Divider,
   Modal,
   Container,
+  IconButton,
+  MenuIcon,
+  MenuItem,
+  Tooltip,
+  Avatar,
+  Grid,
+  Toolbar,
+  Menu,
 } from "@mui/material";
-import Toolbar from "@mui/material/Toolbar";
+
+import CheckroomRoundedIcon from "@mui/icons-material/CheckroomRounded";
+
+import AdbIcon from "@mui/icons-material/Adb";
 import { UserButton } from "@clerk/nextjs";
 import { useRouter } from "next/router";
-
-const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
   const router = useRouter();
@@ -92,4 +100,5 @@ function ResponsiveAppBar() {
     </AppBar>
   );
 }
+
 export default ResponsiveAppBar;

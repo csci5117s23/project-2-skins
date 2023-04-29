@@ -28,53 +28,9 @@ export default function ClothingCard(props) {
   }
 
   return (
-    // <Stack alignItems="center" spacing={2} mt={0.5}>
-    //   <Card
-    //     sx={{
-    //       display: 'flex',
-    //       width: "43vw",
-    //       "@media (min-width: 800px)": {
-    //         width: "30vw",
-    //       },
-    //     }}
-    //   >
-    //     <Stack direction="row">
-    //     <CardContent>
-    //       <Typography variant="h5">{clothes["clothingName"]}</Typography>
-    //       <Typography
-    //         gutterBottom
-    //         variant="body2"
-    //         component="div"
-    //         color="text.secondary"
-    //       >
-    //         {clothes["category"]}
-    //       </Typography>
-    //       <Grid container>
-    //         {clothes["tags"]?.map((tag) => {
-    //           return (
-    //             <Grid item xs="auto">
-    //               <Chip
-    //                 label={tag}
-    //                 size="small"
-    //                 variant="outlined"
-    //                 onDelete={handleDelete}
-    //               />
-    //             </Grid>
-    //           );
-    //         })}
-    //       </Grid>
-    //     </CardContent>
-    //     <Box
-    //       sx={{ height: 140, backgroundColor: "gray" }}
-    //     />
-
-    //     </Stack>
-    //   </Card>
-    // </Stack>
-
-    <Card sx={{ display: "flex" }}>
+    <Card sx={{ display: "flex" }} >
       <Grid container width="80vw" justifyContent="space-between">
-        <Grid item xs={7}>
+        <Grid item xs={6}>
             <CardContent>
               <Typography variant="h6">{clothes["clothingName"]}</Typography>
               <Typography
@@ -101,13 +57,15 @@ export default function ClothingCard(props) {
               </Grid>
             </CardContent>
         </Grid>
-        <Grid item xs={5}>
-          <CardMedia
+        <Grid item xs={6} >
+          <Box display="flex" justifyContent="flex-end" >
+          <Box
             component="img"
-            sx={{ backgroundColor: "#000000", height: "100%", width: "100%" }}
-            image="/static/images/cards/live-from-space.jpg"
+            sx={{ backgroundColor: "#000000", height: "100%", maxHeight:{xs:"20vh"} }}
+            src="https://www.babyshop.com/images/1063852/card_xlarge.jpg"
             alt="Clothing Image"
           />
+          </Box>
         </Grid>
       </Grid>
     </Card>

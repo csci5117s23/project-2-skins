@@ -42,6 +42,7 @@ export default function SearchBar(props) {
           margin: "1em",
           input: { color: "#FFD36E" },
           label: { color: "#FFD36E" },
+          width: {md:"35vw"},
           "& .MuiOutlinedInput-root": {
             "& fieldset": {
               borderColor: "#FFD36E",

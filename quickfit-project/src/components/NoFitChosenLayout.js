@@ -1,4 +1,3 @@
-import * as React from "react";
 
 import {
   AppBar,
@@ -22,10 +21,14 @@ export default function NoFitChosenLayout() {
   return (
     <Stack
       spacing={3}
+      
       height={"55vh"}
       alignItems="center"
       justifyContent="center"
       sx={{
+        // display: { xs: "none", md: "flex" },
+        width: {xs:"90vw", md:"70vw"},
+        mt:"5vh",
         borderStyle:"solid",
         borderColor:"#FFFFFF",
         borderRadius:"1.5vh"
