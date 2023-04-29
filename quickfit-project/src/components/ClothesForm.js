@@ -178,11 +178,12 @@ export default function ClothesForm() {
   // Code referenced from Upper Five tech share: https://github.com/jasonwoitalla/csci5117-upper-five-tech-share/blob/main/src/pages/cloud-storage.js
   async function uploadImage(e) {
     // e.preventDefault();
-
-    console.log("Image: " + image);
-    console.log("File: " + imageFile);
-    // let uploadRes = await useCloudUpload(image);
-    // console.log("Uploaded result: " + uploadRes);
+    // console.log(imageFile);
+    // Get authorization token from JWT codehooks template
+    const token = await getToken({ template: jwtTemplateName });
+    const thing = document.getElementById("imageFile").files[0];
+    const uploadRes = await useCloudUpload(token, thing);
+    console.log("Uploaded result: " + uploadRes);
     // setUploaded(!uploaded);
   }
 
@@ -209,7 +210,7 @@ export default function ClothesForm() {
   }
 
   // --------------------------------------------------------------------
-  // Run on every render.
+  // Run on every render (loaded, if tags change)
   // --------------------------------------------------------------------
   useEffect(() => {
     console.log("Page rendered.");
@@ -372,9 +373,9 @@ export default function ClothesForm() {
                   variant="contained"
                   sx={{ width: "45%" }}
                   onClick={(event, value) => {
-                    // addNewTags();
-                    // onHandleSubmit();
-                    uploadImage();
+                    addNewTags();
+                    onHandleSubmit();
+                    uploadImage(event);
                   }}
                 >
                   Submit

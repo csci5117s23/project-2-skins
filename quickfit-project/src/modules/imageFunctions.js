@@ -44,55 +44,63 @@ import WordArray from "crypto-js/lib-typedarrays";
 const CODEHOOKS_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 const CODEHOOKS_KEY = process.env.CH_API_KEY_RW;
 
-export async function useCloudUpload(file) {
-    // 1. Fetch the upload URL
-    const response = await fetch(`${CODEHOOKS_URL}/get_upload_url`, {
-        method: "GET",
-        headers: {
-            "x-api-key": CODEHOOKS_KEY,
-        },
-    });
-    const data = await response.json();
-
-    // 2. Apply file details 
-    const fileName = file.name;
-    const mimeType = file.type;
-    const fileSize = file.size;
-
-    const reader = new FileReader();
-
-    reader.addEventListener("loadend", async (e) => {
-        const checksum = SHA1(WordArray.create(reader.result)).toString(Hex);
-
-        // 3. Use the upload URL to upload the file
-        const uploadResponse = await fetch(data.uploadUrl, {
-            method: "POST",
+export async function useCloudUpload(authToken, file) {
+    // Fetch upload URL
+    try {
+        const response = await fetch(CODEHOOKS_URL+"/get_upload_url", {
+            method: "GET",
             headers: {
-                Authorization: data.uploadAuth,
-                "Content-Type": mimeType,
-                "Content-Length": fileSize,
-                "X-Bz-File-Name": fileName,
-                "X-Bz-Content-Sha1": checksum,
-            },
-            body: file,
-        });
-        const uploadData = await uploadResponse.json();
-
-        // 4. Image uploaded, store the image details in the database
-        fetch(`${CODEHOOKS_URL}/store_file_id`, {
-            method: "POST",
-            headers: {
+                "Authorization": "Bearer " + authToken,
                 "x-api-key": CODEHOOKS_KEY,
-                "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                name: uploadData.fileName,
-                id: uploadData.fileId,
-            }),
         });
-    });
+        const data = await response.json();
 
-    reader.readAsArrayBuffer(file);
+        // Get file details
+        const fileName = file.name;
+        const mimeType = file.type;
+        const fileSize = file.size;
+
+        const reader = new FileReader();
+
+        reader.addEventListener("loadend", async (e) => {
+            const checksum = SHA1(WordArray.create(reader.result)).toString(Hex);
+
+            // Use the upload URL to upload the file
+            const uploadResponse = await fetch(data.uploadUrl, {
+                method: "POST",
+                headers: {
+                    "Authorization": data.uploadAuth,
+                    "Content-Type": mimeType,
+                    "Content-Length": fileSize,
+                    "X-Bz-File-Name": fileName,
+                    "X-Bz-Content-Sha1": checksum,
+                },
+                body: file,
+            });
+            const uploadData = await uploadResponse.json();
+
+            console.log("UPLOAD DATA " + JSON.stringify(uploadData));
+
+            // 4. Image uploaded, store the image details in the database
+            fetch(`${CODEHOOKS_URL}/store_file_id`, {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + authToken,
+                    "x-api-key": CODEHOOKS_KEY,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name: uploadData.fileName,
+                    id: uploadData.fileId,
+                }),
+            });
+        });
+
+        reader.readAsArrayBuffer(file);
+    } catch (error) {
+        console.log("Failed to cloud upload image. " + error);
+    }
 }
 
 export async function useCloudDownloadLatest() {
