@@ -18,6 +18,7 @@ import {
   Paper,
   CssBaseline,
   Container,
+  CircularProgress,
 } from "@mui/material";
 
 // DB Clothes Function imports
@@ -159,128 +160,135 @@ export default function ClothesForm() {
     }
     process();
     console.log(userTags);
-  }, [isLoaded]);
+  }, [isLoaded, userTags]);
 
-  // JSX
-  return (
-    <>
-      <CssBaseline />
-      {/* Clothes form container */}
-      <Box
-        sx={{
-          m: { xs: 0, sm: 1, md: 3, xl: 5 },
-          p: { xs: 2, sm: 3, md: 4, xl: 5 },
-          height: "87vh",
-          bgcolor: "white",
-        }}
-      >
-        {/* Clothing form */}
-        <FormControl fullWidth>
-          {/* Form header */}
-          <FormLabel>
-            <Paper
-              elevation={2}
-              sx={{
-                textAlign: "center",
-                mb: 2,
-                py: 1,
-                borderRadius: 2,
-                border: "1px solid grey",
-              }}
-            >
-              <Typography variant="h7" sx={{ fontWeight: "bold" }}>
-                Add clothes to your wardrobe
-              </Typography>
-            </Paper>
-          </FormLabel>
-
-          {/* Form fields */}
-          <Stack spacing={1}>
-            {/* Category */}
-            <InputHeader> Enter clothing details </InputHeader>
-            <TextField
-              select
-              label="Category*"
-              value={category}
-              onChange={(event) => {
-                setCategory(event.target.value);
-              }}
-            >
-              <MenuItem value={"top"}>Top</MenuItem>
-              <MenuItem value={"sweater"}>Sweater</MenuItem>
-              <MenuItem value={"bottom"}>Bottoms</MenuItem>
-              <MenuItem value={"jacket"}>Jacket</MenuItem>
-              <MenuItem value={"shoes"}>Shoes</MenuItem>
-              <MenuItem value={"accessories"}>Accessories</MenuItem>
-              <MenuItem value={"onepiece"}>One Piece</MenuItem>
-            </TextField>
-
-            {/* Name */}
-            {/* <InputHeader> Name </InputHeader> */}
-            <TextField
-              variant="outlined"
-              label="Name*"
-              value={name}
-              placeholder="(Required) Enter a name"
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-            />
-
-            {/* Color */}
-            {/* <InputHeader> Color </InputHeader> */}
-            <TextField
-              variant="outlined"
-              label="Color"
-              value={color}
-              placeholder="(Optional) Please enter a color"
-              onChange={(e) => {
-                setColor(e.target.value);
-              }}
-            />
-
-            {/* --- Tags --- */}
-            <InputHeader> Tags </InputHeader>
-            <AddTagComboBox
-              userTags={userTags}
-              setInputTags={setInputTags}
-              getTags={getTags}
-              addTag={addTag}
-              editTag={editTag}
-              deleteTag={deleteTag}
-            />
-
-        
-     
-
-            {/* --- Submit --- */}
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                pt: 2,
-              }}
-            >
-              <Button
-                variant="contained"
-                sx={{ width: "45%" }}
-                onClick={() => {
-                  addNewTags();
-                  onHandleSubmit();
+  if (loading) {
+    return (
+      <>
+        LOADING...
+        <CircularProgress />
+      </>
+    )
+  } else {
+    // JSX
+    return (
+      <>
+        <CssBaseline />
+        {/* Clothes form container */}
+        <Box
+          sx={{
+            m: { xs: 0, sm: 1, md: 3, xl: 5 },
+            p: { xs: 2, sm: 3, md: 4, xl: 5 },
+            height: "100%",
+            minHeight: "90vh",
+            bgcolor: "white",
+          }}
+        >
+          {/* Clothing form */}
+          <FormControl fullWidth>
+            {/* Form header */}
+            <FormLabel>
+              <Paper
+                elevation={2}
+                sx={{
+                  textAlign: "center",
+                  mb: 2,
+                  py: 1,
+                  borderRadius: 2,
+                  border: "1px solid grey",
                 }}
               >
-                Submit
-              </Button>
-            </Box>
-            {/* --- Images --- */}
-            <InputHeader> Image</InputHeader>
-            <PhotoButtons image={image} setImage={setImage} />
-            {/* Show preview of image */}
-            {image && ( <img src={image} alt="captured-photo"/> )}
-            
-          </Stack>
-        </FormControl>
-      </Box>
-    </>
-  );
+                <Typography variant="h7" sx={{ fontWeight: "bold" }}>
+                  Add clothes to your wardrobe
+                </Typography>
+              </Paper>
+            </FormLabel>
+
+            {/* Form fields */}
+            <Stack spacing={1}>
+              {/* Category */}
+              <InputHeader> Enter clothing details </InputHeader>
+              <TextField
+                select
+                label="Category*"
+                value={category}
+                onChange={(event) => {
+                  setCategory(event.target.value);
+                }}
+              >
+                <MenuItem value={"top"}>Top</MenuItem>
+                <MenuItem value={"sweater"}>Sweater</MenuItem>
+                <MenuItem value={"bottom"}>Bottoms</MenuItem>
+                <MenuItem value={"jacket"}>Jacket</MenuItem>
+                <MenuItem value={"shoes"}>Shoes</MenuItem>
+                <MenuItem value={"accessories"}>Accessories</MenuItem>
+                <MenuItem value={"onepiece"}>One Piece</MenuItem>
+              </TextField>
+
+              {/* Name */}
+              {/* <InputHeader> Name </InputHeader> */}
+              <TextField
+                variant="outlined"
+                label="Name*"
+                value={name}
+                placeholder="(Required) Enter a name"
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+              />
+
+              {/* Color */}
+              {/* <InputHeader> Color </InputHeader> */}
+              <TextField
+                variant="outlined"
+                label="Color"
+                value={color}
+                placeholder="(Optional) Please enter a color"
+                onChange={(e) => {
+                  setColor(e.target.value);
+                }}
+              />
+
+              {/* --- Tags --- */}
+              <InputHeader> Tags </InputHeader>
+              <AddTagComboBox
+                userTags={userTags}
+                setInputTags={setInputTags}
+                getTags={getTags}
+                addTag={addTag}
+                editTag={editTag}
+                deleteTag={deleteTag}
+              />
+
+              {/* --- Images --- */}
+              <InputHeader> Image</InputHeader>
+              <PhotoButtons image={image} setImage={setImage} />
+              {/* Show preview of image */}
+              {image && ( <img src={image} alt="captured-photo"/> )}
+        
+              {/* --- Submit --- */}
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  pt: 2,
+                }}
+              >
+                <Button
+                  variant="contained"
+                  sx={{ width: "45%" }}
+                  onClick={() => {
+                    addNewTags();
+                    onHandleSubmit();
+                  }}
+                >
+                  Submit
+                </Button>
+              </Box>
+            </Stack>
+          </FormControl>
+        </Box>
+      </>
+    );
+  }
 }

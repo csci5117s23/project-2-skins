@@ -33,7 +33,7 @@ export default function AddTagComboBox( {userTags, setInputTags, getTags, addTag
       multiple
       freeSolo
       id="checkboxes-tags"
-      options={userTags}
+      options={userTags || []}
       disableCloseOnSelect
       getOptionLabel={(option) => option.name || option}  // || statement for user freeSolo inputs
       renderOption={(props, option, { selected }) => (
@@ -47,7 +47,7 @@ export default function AddTagComboBox( {userTags, setInputTags, getTags, addTag
 
           {/* Delete button */}
           <Tooltip title="Delete tag">
-            <IconButton onClick={ () => { deleteTag(option._id); } }>
+            <IconButton onClick={ () => { deleteTag(option); } }>
               <ClearIcon/>
             </IconButton>
           </Tooltip>

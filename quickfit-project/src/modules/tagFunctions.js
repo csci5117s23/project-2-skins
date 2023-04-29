@@ -23,7 +23,7 @@ export async function getTags(authToken) {
         const result = await fetch(tagsUrl, {
             'method': 'GET',
             'headers': {
-                'Authorization': 'Bearer ' + authToken,
+                // 'Authorization': 'Bearer ' + authToken,
                 'x-api-key': apiKey,
             }
         })
@@ -76,7 +76,7 @@ export async function editTag(authToken, tag) {
         // Return newly-edited tag JSON
         return await result.json();
     } catch (error) {
-        console.log(error);
+        console.log("Failed to edit tag. " + error);
     }
 }
 
@@ -95,6 +95,6 @@ export async function deleteTag(authToken, tag) {
         // Return removed tag as JSON
         return await result.json();
     } catch (error) {
-        console.log(error);
+        console.log("Failed to delete tag. " + error);
     }
 }

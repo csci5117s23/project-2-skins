@@ -27,7 +27,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function WebcamDialog( { image, setImage } ) {
+export default function WebcamDialog( { image, setImage, setFileUpload } ) {
   const [open, setOpen] = React.useState(false);
 
   // Function to open up webcam dialog/popup
@@ -86,7 +86,7 @@ export default function WebcamDialog( { image, setImage } ) {
         </AppBar>
 
         {/* Camera container */}
-        <DualCamera handleCloseDialog={handleCloseDialog} image={image} setImage={setImage} />
+        <DualCamera handleCloseDialog={handleCloseDialog} image={image} setImage={setImage} setFileUpload={setFileUpload} />
       </Dialog>
     </>
   );

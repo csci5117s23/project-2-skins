@@ -27,12 +27,22 @@ export default function PhotoButtons( { image, setImage }) {
   const [fileUpload, setFileUpload] = useState("Choose an image...");
 
   function handleFileOnChange(e) {
-      setFileUpload(e.target.files[0].name);
+    console.log(e.target.files);
+    if (!e.target.files || e.target.files.length === 0) {
+      setFileUpload(null)
+      return
+    }
+    
+    const objectUrl = URL.createObjectURL(e.target.files[0]);
+    setImage(objectUrl);
+
+    const objectName = e.target.files[0].name;
+    setFileUpload(objectName);
   }
 
-  // useEffect(() => {
-  //   setFileUpload("Choose an image...");
-  // }, [reset]);
+  useEffect(() => {
+    setFileUpload("Choose an image...");
+  }, []);
     
   return (
     <>
@@ -53,7 +63,7 @@ export default function PhotoButtons( { image, setImage }) {
               accept="image/*" 
               multiple 
               type="file" 
-              onChange={ (event, value) => { handleFileOnChange(event); setImage(value); }}
+              onChange={handleFileOnChange}
             />
           </Button>
         </Tooltip>
@@ -62,7 +72,7 @@ export default function PhotoButtons( { image, setImage }) {
       </Stack>
 
       {/* Take photo (from camera) */}
-      <WebcamDialog image={image} setImage={setImage} />
+      <WebcamDialog image={image} setImage={setImage} setFileUpload={setFileUpload} />
       
     </>
   );

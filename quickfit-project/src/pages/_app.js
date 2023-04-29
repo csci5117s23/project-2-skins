@@ -1,7 +1,7 @@
 import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from '@clerk/nextjs';
 import { useRouter } from 'next/router';
 import SignInPage from "@/components/SignInPage";
-import {createTheme, ThemeProvider} from '@mui/material'
+import {createTheme, responsiveFontSizes, ThemeProvider} from '@mui/material'
 
 import { orange, yellow } from '@mui/material/colors';
 
@@ -33,7 +33,7 @@ export default function App({ Component, pageProps }) {
   const { pathname } = useRouter();
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={responsiveFontSizes(theme)}>
       <ClerkProvider {...pageProps} publishableKey={clerkPubKey}>
         
         <SignedIn>
