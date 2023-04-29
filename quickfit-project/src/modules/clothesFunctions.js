@@ -43,12 +43,15 @@ export async function getClothesByCategory(authToken, category, id="") {
     // Make request to get all clothes
     const allClothes = await getClothes(authToken, id);
 
-    try { // From list of all clothes, get the ones of the specified category
-        const categoryClothes = allClothes.filter( (item) => (item.category === category));
-        return categoryClothes;
-    } catch (error) {
-        console.log("Failed to get clothes of category: " + category + ". " + error);
-    }
+    // From list of all clothes, get the ones of the specified category
+    return filterClothesByCategory(allClothes, category);
+}
+
+// --------------------------------------------------------------------------
+// Helper function to filter out by category for a parameter list of clothes
+// --------------------------------------------------------------------------
+export function filterClothesByCategory(clothesList, category) {
+    return clothesList.filter( (item) => (item.category === category));
 }
 
 // ---------------------------------------------------------

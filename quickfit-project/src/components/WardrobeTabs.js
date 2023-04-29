@@ -10,6 +10,7 @@ import SearchBar from "./SearchBar";
 import {
   getClothes,
   getClothesByCategory,
+  filterClothesByCategory,
   addClothes,
   editClothes,
   deleteClothes,
@@ -116,8 +117,11 @@ function TabPanel(props) {
         // Ensure user is logged in
         const token = await getToken({ template: jwtTemplateName }); // Get auth token
         setClothes(await getClothes(token)); // Get user clothes from codehooks database
-        // set
-        // allClothes.filter( (item) => (item.category === category));
+        setOnePieces(filterClothesByCategory(clothes, "One Piece")); // Filter one piece items
+        setTops(filterClothesByCategory(clothes, "Top")); // Filter top items
+        setBottoms(filterClothesByCategory(clothes, "Bottom")); // Filter bottom items
+        setShoes(filterClothesByCategory(clothes, "Shoes")); // Filter shoes
+        setAccessories(filterClothesByCategory(clothes, "Accessories")); // Filter accessories
         setLoading(false); // Once we get these things, we are no longer loading
       }
     }

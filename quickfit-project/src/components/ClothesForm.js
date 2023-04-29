@@ -172,12 +172,17 @@ export default function ClothesForm() {
   async function uploadImage(e) {
     e.preventDefault();
 
+    // Don't do anything if image file not provided.
+    if (imageFile === null || imageFile === undefined) {
+      console.log("No image provided.");
+      return;
+    }
+
     // Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
     const thing = document.getElementById("imageFile").files[0];
     const uploadResult = await useCloudUpload(token, thing);
     setUploaded(!uploaded);
-    console.log("Upload result: " + uploadResult);
     return uploadResult._id;
   }
 
