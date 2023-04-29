@@ -19,15 +19,19 @@ const apiKey = process.env.CH_API_KEY_RW;
 // ---------------------------------------------------------
 export async function getOutfits(authToken) {
     // Send GET request
-    const result = await fetch(clothesUrl, {
-        'method': 'GET',
-        'headers': {
-            'Authorization': 'Bearer ' + authToken,
-            'x-api-key': apiKey,
-        }
-    })
-    // Return JSON list of user clothes
-    return await result.json();
+    try {
+        const result = await fetch(clothesUrl, {
+            'method': 'GET',
+            'headers': {
+                'Authorization': 'Bearer ' + authToken,
+                'x-api-key': apiKey,
+            }
+        })
+        // Return JSON list of user clothes
+        return await result.json();
+    } catch (error) {
+        console.log("Failed to get outfits. " + error);
+    }
 }
 
 // ---------------------------------------------------------
@@ -35,22 +39,26 @@ export async function getOutfits(authToken) {
 // ---------------------------------------------------------
 export async function addOutfit(authToken, outfit) {
     // Send POST request
-    const result = await fetch(outfitUrl, {
-        'method': 'POST',
-        'headers': {
-            'Authorization': 'Bearer ' + authToken,
-            'Content-Type': 'application/json',
-            'x-api-key': apiKey,
-        },
-        'body': JSON.stringify({
-            category: clothing.category,
-            name:     clothing.name,
-            color:    clothing.color,  
-            tags:     clothing.tags,
-        }),
-    })
-    // Return newly-made clothing entry
-    return await result.json();
+    try {
+        const result = await fetch(outfitUrl, {
+            'method': 'POST',
+            'headers': {
+                'Authorization': 'Bearer ' + authToken,
+                'Content-Type': 'application/json',
+                'x-api-key': apiKey,
+            },
+            'body': JSON.stringify({
+                category: clothing.category,
+                name:     clothing.name,
+                color:    clothing.color,  
+                tags:     clothing.tags,
+            }),
+        })
+        // Return newly-made clothing entry
+        return await result.json();
+    } catch (error) {
+        console.log("Failed to add outfit. " + error);
+    }
 }
 
 // -------------------------------------------------------------------------
@@ -58,19 +66,23 @@ export async function addOutfit(authToken, outfit) {
 // -------------------------------------------------------------------------
 export async function editOutfit(authToken, outfit) {
     // Send PUT request
-    const result = await fetch(outfitUrl + outfit._id, {
-        'method': 'PUT',
-        'headers': {
-            'Authorization': 'Bearer ' + authToken,
-            'Content-Type': 'application/json',
-            'x-api-key': apiKey,
-        },
-        'body': JSON.stringify({
-            outfit
-        })
-    });
-    // Return newly-made clothing entry
-    return await result.json();
+    try {
+        const result = await fetch(outfitUrl + outfit._id, {
+            'method': 'PUT',
+            'headers': {
+                'Authorization': 'Bearer ' + authToken,
+                'Content-Type': 'application/json',
+                'x-api-key': apiKey,
+            },
+            'body': JSON.stringify({
+                outfit
+            })
+        });
+        // Return newly-made clothing entry
+        return await result.json();
+    } catch (error) {
+        console.log("Failed to edit outfit. " + error);
+    }
 }
 
 // -----------------------------------------------------------------
@@ -78,13 +90,17 @@ export async function editOutfit(authToken, outfit) {
 // -----------------------------------------------------------------
 export async function deleteOutfit(authToken, outfit) {
     // Send DELETE request
-    const result = await fetch(clothesUrl + clothing._id, {
-        'method': 'DELETE',
-        'headers': {
-            'Authorization': 'Bearer ' + authToken,
-            'x-api-key': apiKey,
-        },
-    })
-    // Return removed article as JSON
-    return await result.json();
+    try {
+        const result = await fetch(clothesUrl + clothing._id, {
+            'method': 'DELETE',
+            'headers': {
+                'Authorization': 'Bearer ' + authToken,
+                'x-api-key': apiKey,
+            },
+        })
+        // Return removed article as JSON
+        return await result.json();
+    } catch (error) {
+        console.log("Failed to delete outfit. " + error);
+    }
 }
