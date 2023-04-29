@@ -250,7 +250,10 @@ export default function ClothesForm() {
               deleteTag={deleteTag}
             />
 
-        
+            {/* --- Images --- */}
+            <InputHeader> Image</InputHeader>
+            <PhotoButtons image={image} setImage={setImage} />
+            {image && ( <img src={image} alt="captured-photo"/> )}
      
 
             {/* --- Submit --- */}
