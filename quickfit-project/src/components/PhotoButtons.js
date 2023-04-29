@@ -53,7 +53,7 @@ export default function PhotoButtons( { image, setImage }) {
               accept="image/*" 
               multiple 
               type="file" 
-              onChange={ (value) => { handleFileOnChange(); setImage(value); }}
+              onChange={ (event, value) => { handleFileOnChange(event); setImage(value); }}
             />
           </Button>
         </Tooltip>
