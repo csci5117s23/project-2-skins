@@ -51,6 +51,7 @@ const CODEHOOKS_KEY = process.env.CH_API_KEY_RW;
 export async function useCloudUpload(authToken, file) {
     // 1. Fetch upload URL
     try {
+        let codehooksImageEntry;
         const response = await fetch(CODEHOOKS_URL+"/get_upload_url", {
             method: "GET",
             headers: {
@@ -85,7 +86,7 @@ export async function useCloudUpload(authToken, file) {
             const uploadData = await uploadResponse.json();
 
             // 4. Image uploaded, store the image details in the database
-            fetch(`${CODEHOOKS_URL}/store_file_id`, {
+            codehooksImageEntry = await fetch(`${CODEHOOKS_URL}/store_file_id`, {
                 method: "POST",
                 headers: {
                     "Authorization": "Bearer " + authToken,
@@ -98,8 +99,8 @@ export async function useCloudUpload(authToken, file) {
                 }),
             });
         });
-
         reader.readAsArrayBuffer(file);
+        return await codehooksImageEntry.json();
     } catch (error) {
         console.log("Failed to cloud upload image. " + error);
     }

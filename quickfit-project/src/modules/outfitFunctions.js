@@ -53,7 +53,7 @@ export async function addOutfit(authToken, outfit) {
                 color:    clothing.color,  
                 tags:     clothing.tags,
             }),
-        })
+        });
         // Return newly-made clothing entry
         return await result.json();
     } catch (error) {

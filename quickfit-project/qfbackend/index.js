@@ -76,9 +76,9 @@ const tagSchemaYup = object( {
 // API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev/image/[id]
 // Codehooks will auto generate '._id' property on clothing image db entry on POST
 const imageSchemaYup = object({
-  name: string().required(),                       // Image file name
-  content: string().required(),                    // Image base64-encoding
-  createdOn:     date().default(() => new Date()), // Date of when clothing article was created (POST date)
+  name:       string().required(),              // Image file name
+  content:    string().required(),              // Image base64-encoding
+  createdOn:  date().default(() => new Date()), // Date of when clothing article was created (POST date)
 });
 
 // Backblaze functions for images

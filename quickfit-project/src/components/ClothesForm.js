@@ -185,6 +185,7 @@ export default function ClothesForm() {
     const uploadResult = await useCloudUpload(token, thing);
     setUploaded(!uploaded);
     console.log("Upload result: " + uploadResult);
+    return uploadResult._id;
   }
 
   // --------------------------------------------------------------------
