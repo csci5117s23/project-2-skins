@@ -28,7 +28,7 @@ export default function PhotoButtons( { image, setImage }) {
     <>
       <CssBaseline />
       <Stack direction="row" alignItems="center" spacing={2}>
-        {/* Upload photo */}
+        {/* Upload photo button */}
         <Tooltip title="Upload a photo">
           <Button
             variant="outlined"
@@ -37,9 +37,17 @@ export default function PhotoButtons( { image, setImage }) {
             endIcon={<DriveFolderUploadRoundedIcon />}
           >
             Upload
-            <input hidden accept="image/*" multiple type="file" />
+            <input 
+              hidden 
+              accept="image/*" 
+              multiple 
+              type="file" 
+              
+            />
           </Button>
         </Tooltip>
+
+        
 
         {/* Take photo (from camera) */}
         <WebcamDialog image={image} setImage={setImage} />
