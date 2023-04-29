@@ -127,7 +127,7 @@ function TabPanel(props) {
     }
     processClothes();
     console.log(clothes);
-  }, [isLoaded]);
+  }, [isLoaded, value]);
 
   // Load GET requests before showing any content
   if (loading) {
@@ -139,11 +139,22 @@ function TabPanel(props) {
     );
   } else {
     // Page contents
-    return (
-      <>
-        <ClothingList clothes={clothes || []} />
-      </>
-    );
+    // <ClothingList clothes={clothes || []} />
+    if (value === 0) {
+      return <ClothingList clothes={OnePieces || []} />;
+    }
+    else if (value === 1) {
+      return <ClothingList clothes={Tops || []} />;
+    }
+    else if (value === 2) {
+      return <ClothingList clothes={Bottoms || []} />;
+    }
+    else if (value === 3) {
+      return <ClothingList clothes={Shoes || []} />;
+    }
+    else if (value === 4) {
+      return <ClothingList clothes={Accessories || []} />;
+    }
   }
   // --------------------------------------------------------------------------------------
 }
