@@ -65,7 +65,7 @@ export async function addTag(authToken, tagName) {
 export async function deleteTag(authToken, tag) {
     // Send DELETE request
     try {
-        const result = await fetch(tagsUrl + tag._id, {
+        const result = await fetch(tagsUrl + "/" + tag._id, {
             'method': 'DELETE',
             'headers': {
                 'Authorization': 'Bearer ' + authToken,
@@ -75,6 +75,7 @@ export async function deleteTag(authToken, tag) {
         // Return removed tag as JSON
         return await result.json();
     } catch (error) {
+        console.log(tag);
         console.log("Failed to delete tag. " + error);
     }
 }

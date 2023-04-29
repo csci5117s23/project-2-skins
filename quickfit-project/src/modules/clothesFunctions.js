@@ -23,7 +23,8 @@ export async function getClothes(authToken) {
         const result = await fetch(clothesUrl, {
             'method': 'GET',
             'headers': {
-                'Authorization': 'Bearer ' + authToken
+                'Authorization': 'Bearer ' + authToken,
+                'x-api-key': apiKey,
             }
         })
         // Return JSON list of user clothes
@@ -49,13 +50,14 @@ export async function addClothes(authToken, clothing) {
             'method': 'POST',
             'headers': {
                 'Authorization': 'Bearer ' + authToken,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'x-api-key': apiKey,
             },
             'body': JSON.stringify({
                 category: clothing.category,
                 name:     clothing.name,
                 color:    clothing.color,  
-                tags:     JSON.stringify(clothing.tags),
+                tags:     clothing.tags,
             }),
         })
         // Return newly-made clothing entry
@@ -75,7 +77,8 @@ export async function editClothes(authToken, clothing) {
             'method': 'PUT',
             'headers': {
                 'Authorization': 'Bearer ' + authToken,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'x-api-key': apiKey,
             },
             'body': JSON.stringify({
                 clothing
@@ -97,7 +100,8 @@ export async function deleteClothes(authToken, clothing) {
         const result = await fetch(clothesUrl + clothing._id, {
             'method': 'DELETE',
             'headers': {
-                'Authorization': 'Bearer ' + authToken
+                'Authorization': 'Bearer ' + authToken,
+                'x-api-key': apiKey,
             },
         })
         // Return removed article as JSON

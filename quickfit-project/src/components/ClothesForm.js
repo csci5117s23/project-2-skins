@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 // MUI Component imports
 import {
@@ -81,9 +81,9 @@ export default function ClothesForm() {
   const [image, setImage] = useState(null);
   const [fileUpload, setFileUpload] = useState("Choose an image...");
 
-  // ----------------------------------------
-  // Function to reset clothes form inputs
-  // ----------------------------------------
+  // -----------------------------------------------------------------
+  // Function to reset clothes form inputs after form submission
+  // -----------------------------------------------------------------
   function resetForm() {
     setCategory("");
     setColor("");
@@ -101,8 +101,9 @@ export default function ClothesForm() {
       category: category,
       name: name,
       color: color,
-      tags: inputTags,
+      tags: getTagNames(inputTags),
     };
+    console.log("Clothing item on submit: ");
     console.log(clothingItem);
 
     // Get authorization token from JWT codehooks template
@@ -125,14 +126,9 @@ export default function ClothesForm() {
       console.log("No tags entered.");
       return;
     }
-    // 2) Get all user-inputted tag names if there are any objects
-    const inputTagNames = inputTags.map((tag) => {
-      if (tag.name) {
-        return tag.name;
-      } else if (typeof tag === "string" || tag instanceof String) {
-        return tag;
-      }
-    });
+    // 2) Get all user-inputted tag names if there are any tag objects
+    const inputTagNames = getTagNames(inputTags);
+
     // 3) Get existing user tag names
     const existingTagNames = userTags.map((tag) => {
       return tag.name;
@@ -160,6 +156,20 @@ export default function ClothesForm() {
     });
   }
 
+  // -------------------------------------------------------------------
+  // Function to convert a list of tags to just a list of tag names
+  // -------------------------------------------------------------------
+  function getTagNames(tagList) {
+    const inputTagNames = inputTags.map((tag) => {
+      if (tag.name) {
+        return tag.name;
+      } else if (typeof tag === "string" || tag instanceof String) {
+        return tag;
+      }
+    });
+    return inputTagNames;
+  }
+
   // --- Image functions ---
   // --------------------------------------------------------------------
   // To upload an image from form:
@@ -180,7 +190,7 @@ export default function ClothesForm() {
     console.log(e.target.files);
     if (!e.target.files || e.target.files.length === 0) {
       setFileUpload(null)
-      return
+      return;
     }
 
     const objectUrl = URL.createObjectURL(e.target.files[0]);
@@ -195,7 +205,7 @@ export default function ClothesForm() {
   // --------------------------------------------------------------------
   // Run on every render.
   // --------------------------------------------------------------------
-  React.useEffect(() => {
+  useEffect(() => {
     console.log("Page rendered.");
     async function process() {
       // Process getting authorization key and user db tags
@@ -208,7 +218,7 @@ export default function ClothesForm() {
     }
     process();
     console.log(userTags);
-  }, [isLoaded]);
+  }, [isLoaded, inputTags]);
 
   if (loading) {
     return (

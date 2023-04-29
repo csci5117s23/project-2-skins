@@ -28,7 +28,25 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 export default function AddTagComboBox( {userTags, setInputTags, getTags, addTag, editTag, deleteTag} ) {
+  // --- Authorization ---------------------------------------------------
+  const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
+  const { getToken } = useAuth();
+
+  // ------------------------------------------------------------------
+  // Function to handle deleting tag from autocomplete select dropdown
+  // ------------------------------------------------------------------
+  async function handleDelete(tag) {
+    // Get authorization token from JWT codehooks template
+    const token = await getToken({ template: jwtTemplateName });
+    const result = await deleteTag(token, tag)
+  }
+
+  // ------------------------------------------------------------------
+  // Refresh userTags on each page render
+  // ------------------------------------------------------------------
+
   return (
+    
     <Autocomplete
       multiple
       freeSolo
@@ -47,7 +65,7 @@ export default function AddTagComboBox( {userTags, setInputTags, getTags, addTag
 
           {/* Delete button */}
           <Tooltip title="Delete tag">
-            <IconButton onClick={ () => { deleteTag(option); } }>
+            <IconButton onClick={ () => { handleDelete(option); } }>
               <ClearIcon/>
             </IconButton>
           </Tooltip>
