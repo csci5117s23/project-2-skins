@@ -33,18 +33,13 @@ import {
 } from "@/modules/clothesFunctions";
 
 // DB Tag Function imports
-import { 
-  getTags, 
-  addTag,
-  editTag, 
-  deleteTag 
-} from "@/modules/tagFunctions";
+import { getTags, addTag, editTag, deleteTag } from "@/modules/tagFunctions";
 
 // DB Image Function imports
 import {
   useCloudUpload,
   useCloudDownloadLatest,
-} from "@/modules/imageFunctions"
+} from "@/modules/imageFunctions";
 
 // Custom component imports
 // import PhotoButtons from "./PhotoButtons";
@@ -78,8 +73,10 @@ export default function ClothesForm() {
   const [name, setName] = useState(""); // Clothing entry name
   const [userTags, setUserTags] = useState([]); // Clothing tags previously made by user (store here)
   const [inputTags, setInputTags] = useState([]); // Clothing tags to apply to this entry
-  const [image, setImage] = useState(null);
-  const [fileUpload, setFileUpload] = useState("Choose an image...");
+  const [image, setImage] = useState(null); // Image URL to take/preview on front end
+  const [imageFile, setImageFile] = useState(null); // Image file to upload to cloud storage
+  const [fileUploadText, setFileUploadText] = useState("Choose an image..."); // Image file name/text
+  const [uploaded, setUploaded] = useState(false); // Status of whether or not an image was uploaded to cloud
 
   // -----------------------------------------------------------------
   // Function to reset clothes form inputs after form submission
@@ -89,6 +86,9 @@ export default function ClothesForm() {
     setColor("");
     setName("");
     setInputTags([]);
+    setImage(null);
+    setImageFile(null);
+    setImageFileUploadText("Choose an image...");
   }
 
   // --- Clothes functions ---
@@ -102,6 +102,7 @@ export default function ClothesForm() {
       name: name,
       color: color,
       tags: getTagNames(inputTags),
+      // imageId: uploadImage(e),
     };
     console.log("Clothing item on submit: ");
     console.log(clothingItem);
@@ -141,7 +142,7 @@ export default function ClothesForm() {
     });
     // 5) Ensure list of tags are unique from one another (convert to Set and back to array)
     newTags = Array.from(new Set(newTags));
-    
+
     // 6) Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
 
@@ -176,11 +177,13 @@ export default function ClothesForm() {
   // --------------------------------------------------------------------
   // Code referenced from Upper Five tech share: https://github.com/jasonwoitalla/csci5117-upper-five-tech-share/blob/main/src/pages/cloud-storage.js
   async function uploadImage(e) {
-    e.preventDefault();
+    // e.preventDefault();
 
-    const image = document.getElementById("imageField").files[0];
-    let uploadRes = await useCloudUpload(image);
-    setUploaded(!uploaded);
+    console.log("Image: " + image);
+    console.log("File: " + imageFile);
+    // let uploadRes = await useCloudUpload(image);
+    // console.log("Uploaded result: " + uploadRes);
+    // setUploaded(!uploaded);
   }
 
   // --------------------------------------------------------------------
@@ -188,19 +191,22 @@ export default function ClothesForm() {
   // --------------------------------------------------------------------
   function handleFileOnChange(e) {
     console.log(e.target.files);
+    // Check for if a file was provided or not
     if (!e.target.files || e.target.files.length === 0) {
-      setFileUpload(null)
+      setFileUploadText(null);
       return;
     }
+    // Set image file
+    setImageFile(e.target.files[0]);
 
+    // Set image URL
     const objectUrl = URL.createObjectURL(e.target.files[0]);
     setImage(objectUrl);
-
+    
+    // Set image text/name
     const objectName = e.target.files[0].name;
-    setFileUpload(objectName);
+    setFileUploadText(objectName);
   }
-
-
 
   // --------------------------------------------------------------------
   // Run on every render.
@@ -214,21 +220,22 @@ export default function ClothesForm() {
         const token = await getToken({ template: jwtTemplateName }); // Get auth token
         setUserTags(await getTags(token)); // Get user tasks from codehooks database
         setLoading(false); // Once we get these things, we are no longer loading
+        setFileUploadText("Choose an image..."); // Set file upload text
       }
     }
     process();
     console.log(userTags);
   }, [isLoaded, inputTags]);
 
+  // Load GET requests before showing any content
   if (loading) {
     return (
       <>
         LOADING...
         <CircularProgress />
       </>
-    )
-  } else {
-    // JSX
+    );
+  } else { // Content loaded
     return (
       <>
         <CssBaseline />
@@ -244,6 +251,7 @@ export default function ClothesForm() {
         >
           {/* Clothing form */}
           <FormControl fullWidth>
+
             {/* Form header */}
             <FormLabel>
               <Paper
@@ -264,6 +272,7 @@ export default function ClothesForm() {
 
             {/* Form fields */}
             <Stack spacing={1}>
+
               {/* Category */}
               <InputHeader> Enter clothing details </InputHeader>
               <TextField
@@ -282,7 +291,6 @@ export default function ClothesForm() {
               </TextField>
 
               {/* Name */}
-              {/* <InputHeader> Name </InputHeader> */}
               <TextField
                 variant="outlined"
                 label="Name*"
@@ -294,7 +302,6 @@ export default function ClothesForm() {
               />
 
               {/* Color */}
-              {/* <InputHeader> Color </InputHeader> */}
               <TextField
                 variant="outlined"
                 label="Color"
@@ -318,7 +325,6 @@ export default function ClothesForm() {
 
               {/* --- Images --- */}
               <InputHeader>Image</InputHeader>
-              {/* <PhotoButtons image={image} setImage={setImage} /> */}
               <Stack direction="row" alignItems="center" spacing={2}>
                 {/* Upload photo button */}
                 <Tooltip title="Upload a photo">
@@ -326,29 +332,34 @@ export default function ClothesForm() {
                     variant="outlined"
                     component="label"
                     color="secondary"
-                    sx={{ width: 150}}
+                    sx={{ width: 150 }}
                     endIcon={<DriveFolderUploadRoundedIcon />}
                   >
                     Upload
-                    <input 
-                      hidden 
-                      accept="image/*" 
-                      multiple 
-                      type="file" 
+                    <input
+                      hidden
+                      id="imageFile"
+                      accept="image/*"
+                      multiple
+                      type="file"
                       onChange={handleFileOnChange}
                     />
                   </Button>
                 </Tooltip>
                 {/* Image file name */}
-                <Box>{fileUpload}</Box>
+                <Box>{fileUploadText}</Box>
               </Stack>
 
               {/* Take photo (from camera) */}
-              <WebcamDialog image={image} setImage={setImage} setFileUpload={setFileUpload} />
+              <WebcamDialog
+                image={image}
+                setImage={setImage}
+                setFileUploadText={setFileUploadText}
+              />
 
               {/* Show preview of image */}
-              {image && ( <img src={image} alt="captured-photo"/> )}
-        
+              {image && <img src={image} alt="captured-photo" />}
+
               {/* --- Submit --- */}
               <Box
                 sx={{
@@ -360,9 +371,10 @@ export default function ClothesForm() {
                 <Button
                   variant="contained"
                   sx={{ width: "45%" }}
-                  onClick={() => {
-                    addNewTags();
-                    onHandleSubmit();
+                  onClick={(event, value) => {
+                    // addNewTags();
+                    // onHandleSubmit();
+                    uploadImage();
                   }}
                 >
                   Submit

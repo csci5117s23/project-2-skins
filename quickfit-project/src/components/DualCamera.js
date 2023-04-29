@@ -19,7 +19,7 @@ import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
-export default function DualCamera( { handleCloseDialog, image, setImage, setFileUpload } ) {
+export default function DualCamera( { handleCloseDialog, image, setImage, setFileUploadText } ) {
     // --- Camera-related hooks & functions --------------------------------------
     // For setting up camera capture, settings, and which camera to choose
     const webcamRef = useRef(null);
@@ -152,7 +152,7 @@ export default function DualCamera( { handleCloseDialog, image, setImage, setFil
                                 onClick={ () => {
                                     setImage(image);
                                     handleCloseDialog();
-                                    setFileUpload("Using camera image...");
+                                    setFileUploadText("Using camera image...");
                                 }}
                             >
                                 <CheckCircleIcon/>
