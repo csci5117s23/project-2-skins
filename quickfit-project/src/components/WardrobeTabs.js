@@ -23,7 +23,7 @@ import {
 
 export default function WardrobeTabs() {
   // --- Search bar state hooks -----------------------------------------
-  const [value, setValue] = useState(0);
+  const [tabValue, setTabValue] = useState(0);
   const [search, setSearch] = useState("");
 
   return (
@@ -39,9 +39,9 @@ export default function WardrobeTabs() {
         }}
       >
         <Tabs
-          value={value}
+          value={tabValue}
           onChange={(e, value) => {
-            setValue(value);
+            setTabValue(value);
           }}
           aria-label="basic tabs example"
           variant="scrollable"
@@ -55,7 +55,7 @@ export default function WardrobeTabs() {
         </Tabs>
       </Stack>
       <SearchBar setSearch={setSearch} color={"#FFD36E"} />
-      <TabPanel value={value} search={search} />
+      <TabPanel tabValue={tabValue} search={search} />
     </>
   );
 }
@@ -67,7 +67,7 @@ function TabPanel(props) {
   const [loading, setLoading] = useState(true);
 
   // --- Search ----------------------------------------------------------
-  const { value, search } = props;
+  const { tabValue, search } = props;
 
   // --- Clothing lists --------------------------------------------------
   const [category, setCategory] = useState("All"); // Current category tab
@@ -82,22 +82,22 @@ function TabPanel(props) {
   // Update rendered JSX when wardrobe tab changes OR if search results change
   // --------------------------------------------------------------------------------------
   useEffect(() => {
-    if (value === 0 || value === null || value === undefined) {
+    if (tabValue === 0 || tabValue === null || tabValue === undefined) {
       setCategory("All");
     }
-    else if (value === 1) {
+    else if (tabValue === 1) {
       setCategory("One Piece");
     }
-    else if (value === 2) {
+    else if (tabValue === 2) {
       setCategory("Tops");
     }
-    else if (value === 3) {
+    else if (tabValue === 3) {
       setCategory("Bottoms");
     }
-    else if (value === 4) {
+    else if (tabValue === 4) {
       setCategory("Shoes");
     }
-    else if (value === 5) {
+    else if (tabValue === 5) {
       setCategory("Accessories");
     }
     // Filter search results based on tab and user text input
@@ -112,7 +112,7 @@ function TabPanel(props) {
 
     
     
-  }, [search, value]);
+  }, [search, tabValue]);
 
   // Make get requests to populate clothing category lists
   useEffect(() => {
@@ -130,7 +130,7 @@ function TabPanel(props) {
       }
     } // Get all clothes lists
     processClothes();
-  }, [isLoaded, value]);
+  }, [isLoaded, tabValue]);
 
   // Load GET requests before showing any content
   if (loading) {
