@@ -16,6 +16,9 @@ import {
   getClothes,
   getClothesByCategory,
   filterClothesByCategory,
+  filterClothesByName,
+  filterClothesByTag,
+  filterClothesByNameOrTag,
   addClothes,
   editClothes,
   deleteClothes,
@@ -77,50 +80,52 @@ function TabPanel(props) {
   const [bottoms, setBottoms] = useState([]); // List of user's one piece items
   const [shoes, setShoes] = useState([]); // List of user's one piece items
   const [accessories, setAccessories] = useState([]); // List of user's one piece items
+  const [shownClothes, setShownClothes] = useState([]); // List of clothes that appear on screen
 
-  // --------------------------------------------------------------------------------------
-  // Update rendered JSX when wardrobe tab changes OR if search results change
-  // --------------------------------------------------------------------------------------
+  // --------------------------------------------------------------------------
+  // Update page render when wardrobe tab changes OR if search results change
+  // --------------------------------------------------------------------------
   useEffect(() => {
-    if (tabValue === 0 || tabValue === null || tabValue === undefined) {
-      setCategory("All");
+    // Filter search results based on tab and user text input (name & tags)
+    if (userId) { 
+      // Display "All" tab
+      if (tabValue === 0 || tabValue === null || tabValue === undefined) {
+        setCategory("All");
+        setShownClothes(filterClothesByName(clothes, search));
+      } // Display all "One Piece" tab
+      else if (tabValue === 1) {
+        setCategory("One Piece");
+        setShownClothes(filterClothesByName(onePieces, search));
+      } // Display "Tops" tab
+      else if (tabValue === 2) {
+        setCategory("Tops");
+        setShownClothes(filterClothesByName(tops, search));
+      } // Display "Bottoms" tab
+      else if (tabValue === 3) {
+        setCategory("Bottoms");
+        setShownClothes(filterClothesByName(bottoms, search));
+      } // Display "Shoes" tab
+      else if (tabValue === 4) {
+        setCategory("Shoes");
+        setShownClothes(filterClothesByName(shoes, search));
+      } // Display "Accessories" tab
+      else if (tabValue === 5) {
+        setCategory("Accessories");
+        setShownClothes(filterClothesByName(accessories, search));
+      }
     }
-    else if (tabValue === 1) {
-      setCategory("One Piece");
-    }
-    else if (tabValue === 2) {
-      setCategory("Tops");
-    }
-    else if (tabValue === 3) {
-      setCategory("Bottoms");
-    }
-    else if (tabValue === 4) {
-      setCategory("Shoes");
-    }
-    else if (tabValue === 5) {
-      setCategory("Accessories");
-    }
-    // Filter search results based on tab and user text input
-
-    // TODO: Get request that gets the outfit that matches the search and category type
-    // do a fetch to get our outfit given the arguments
-    //   fetch(
-    //   "our end point/something?category=" + category + "&search=" + search
-    //   )
-    //   .then((res) => res.json())
-    //   .then((data) => setClothes(data));
-
-    
-    
   }, [search, tabValue]);
 
-  // Make get requests to populate clothing category lists
-  useEffect(() => {
+  // --------------------------------------------------------------
+  // Make initial GET requests to populate clothing category lists
+  // --------------------------------------------------------------
+  useEffect(() => { 
     async function processClothes() {
       // Get auth key & user's clothing items
       if (userId) { // Ensure user is logged in before sending GET requests
         const token = await getToken({ template: jwtTemplateName }); // Get auth token
         setClothes(await getClothes(token)); // Get user clothes from codehooks database
+        setShownClothes(await getClothes(token)); // Get clothes to show on screen based on current search
         setOnePieces(filterClothesByCategory(clothes, "One Piece")); // Filter one piece items
         setTops(filterClothesByCategory(clothes, "Top")); // Filter top items
         setBottoms(filterClothesByCategory(clothes, "Bottom")); // Filter bottom items
@@ -130,7 +135,7 @@ function TabPanel(props) {
       }
     } // Get all clothes lists
     processClothes();
-  }, [isLoaded, tabValue]);
+  }, [isLoaded]);
 
   // Load GET requests before showing any content
   if (loading) {
@@ -142,28 +147,8 @@ function TabPanel(props) {
     );
   } else { // Page contents
 
-    // ------------------------------------------------------------------
-    // Clothing lists based on current tab
-    // ------------------------------------------------------------------
-    if (category === "All") { // All clothes
-      return <ClothingList clothes={clothes || []} />
-    }
-    else if (category === "One Piece") { // List of one piece items
-      return <ClothingList clothes={onePieces || []} />;
-    }
-    else if (category === "Tops") { // List of tops
-      return <ClothingList clothes={tops || []} />;
-    }
-    else if (category === "Bottoms") { // List of bottoms
-      return <ClothingList clothes={bottoms || []} />;
-    }
-    else if (category === "Shoes") { // List of shoes
-      return <ClothingList clothes={shoes} />;
-    }
-    else if (category === "Accessories") { // List of accessories
-      return <ClothingList clothes={accessories || []} />;
-    }
+    // Clothing lists based on current tab, search (names & tags)
+    return <ClothingList clothes={shownClothes || []} />
+  
   }
-  // ------------------------------------------------------------------
-  // ------------------------------------------------------------------
 }
