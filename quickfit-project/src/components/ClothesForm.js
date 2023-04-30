@@ -284,7 +284,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
   if (loading) {
     return (
       <>
-        <Stack justifyContent="center" alignItems="center" height="80vh">
+        <Stack justifyContent="center" alignItems="center" height="80vh" width="80vw">
           <CircularProgress />
         </Stack>
       </>
