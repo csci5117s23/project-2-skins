@@ -90,7 +90,7 @@ export default function ClothingSearchList( { category, addFunction } ) {
         setShownClothes(filterClothesByNameOrTag(accessories, search));
       }
     }
-  }, [search]);
+  }, [search, category]);
 
   // --------------------------------------------------------------
   // Make initial GET requests to populate clothing category lists

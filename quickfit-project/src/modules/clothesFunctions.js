@@ -25,7 +25,6 @@ export async function getClothes(authToken, id="") {
             'method': 'GET',
             'headers': {
                 'Authorization': 'Bearer ' + authToken,
-                'x-api-key': apiKey,
             }
         })
         // Return JSON list of user clothes (sorted by category alphabetically)
