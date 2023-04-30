@@ -36,7 +36,7 @@ export default function ClothingCard(props) {
       <Tooltip title="Edit clothing item">
         <Card 
           sx={{ display: "flex" }} 
-          onClick={handleClickOpen} 
+          // onClick={handleClickOpen} 
         >
           <Grid
             container
@@ -84,7 +84,7 @@ export default function ClothingCard(props) {
                   component="img"
                   sx={{
                     backgroundColor: "#000000",
-                    maxWidth: "100%",
+                    maxWidth: { xs: "15vh", md: "25vh"},
                     maxHeight: { xs: "100%" },
                   }}
                   src="https://dtpmhvbsmffsz.cloudfront.net/posts/2015/08/12/55cba8312035ea03bf02284f/m_55cba8312035ea03bf022850.jpg"

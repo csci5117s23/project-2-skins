@@ -139,7 +139,7 @@ export function TabPanel(props) {
       }
     } // Get all clothes lists
     processClothes();
-  }, [isLoaded]);
+  }, [isLoaded, tabValue]);
 
   // Load GET requests before showing any content
   if (loading) {
@@ -147,9 +147,9 @@ export function TabPanel(props) {
       <> 
         <Stack spacing={1.5} width="100vw" alignItems="center" justifyContent="center">
           <Card sx={{backgroundColor:"#EEE"}}>
-          <Stack direction="row" alignItems="center" m={1} spacing={1} justifyContent="space-around"width="70vw" height="13vh">
-            <Skeleton height="5vh" width="60vw"/>
-          </Stack>
+            <Stack direction="row" alignItems="center" m={1} spacing={1} justifyContent="space-around"width="70vw" height="13vh">
+              <Skeleton height="5vh" width="60vw"/>
+            </Stack>
           </Card>
         </Stack>
       </>
