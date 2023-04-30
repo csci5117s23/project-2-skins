@@ -22,9 +22,7 @@ import {
   Toolbar,
   Menu,
 } from "@mui/material";
-
 import CheckroomRoundedIcon from "@mui/icons-material/CheckroomRounded";
-
 import AdbIcon from "@mui/icons-material/Adb";
 import { UserButton } from "@clerk/nextjs";
 import { useRouter } from "next/router";

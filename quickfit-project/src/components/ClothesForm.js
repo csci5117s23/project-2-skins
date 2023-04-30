@@ -14,6 +14,7 @@ import {
   CssBaseline,
   CircularProgress,
   Tooltip,
+  Card,
 } from "@mui/material";
 // MUI Icon imports
 import DriveFolderUploadRoundedIcon from "@mui/icons-material/DriveFolderUploadRounded";
@@ -237,7 +238,7 @@ export default function ClothesForm( {clothingToEdit = null} ) {
     // Set image URL
     const objectUrl = URL.createObjectURL(e.target.files[0]);
     setImage(objectUrl);
-    
+
     // Set image text/name
     const objectName = e.target.files[0].name;
     setFileUploadText(objectName);
@@ -266,15 +267,28 @@ export default function ClothesForm( {clothingToEdit = null} ) {
   if (loading) {
     return (
       <>
-        LOADING...
-        <CircularProgress />
+        <Stack justifyContent="center" alignItems="center" height="100vh">
+          <CircularProgress />
+        </Stack>
       </>
     );
-  } else { // Page contents
+  } else {
+    // Page contents
     return (
       <>
         <CssBaseline />
         {/* Clothes form container */}
+        <Box sx={{
+            p: { xs: 2, sm: 3, md: 4, xl: 5 },
+            // height: "100%",
+            height: "90vh",
+            maxHeight: "90vh",
+            overflow: 'auto',
+            backgroundImage: "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)"
+          }}>
+
+          <Box height={"100vh"}>
+        <Card>
         <Box
           sx={{
             m:  { xs: 0 },
@@ -289,7 +303,6 @@ export default function ClothesForm( {clothingToEdit = null} ) {
         >
           {/* Clothing form */}
           <FormControl fullWidth>
-
             {/* Form header */}
             <FormLabel>
               <Paper
@@ -317,9 +330,8 @@ export default function ClothesForm( {clothingToEdit = null} ) {
 
             {/* Form fields */}
             <Stack spacing={1}>
-
               {/* Category */}
-              <InputHeader> Enter clothing details </InputHeader>
+              <InputHeader > Enter clothing details </InputHeader>
               <TextField
                 select
                 label="Category*"
@@ -376,8 +388,7 @@ export default function ClothesForm( {clothingToEdit = null} ) {
                   <Button
                     variant="outlined"
                     component="label"
-                    color="secondary"
-                    sx={{ width: 150 }}
+                    sx={{ width: 150, color:"#3C3F42", borderColor:"#3C3F42" }}
                     endIcon={<DriveFolderUploadRoundedIcon />}
                   >
                     Upload
@@ -457,6 +468,9 @@ export default function ClothesForm( {clothingToEdit = null} ) {
 
             </Stack>
           </FormControl>
+        </Box>
+        </Card>
+          </Box>
         </Box>
       </>
     );
