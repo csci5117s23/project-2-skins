@@ -53,7 +53,7 @@ export default function ClothingCard(props) {
                   {clothes["tags"]?.map((tag) => {
                     return (
                       <Chip
-                        key={tag}
+                        key={tag + clothes._id + String(Math.random(500000))}
                         varient="outlined"
                         label={tag}
                         size="small"

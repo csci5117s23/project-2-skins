@@ -29,9 +29,25 @@ import {
   deleteClothes,
 } from "@/modules/clothesFunctions";
 
-export default function WardrobeTabs() {
+export default function WardrobeTabs( { clickFunction, category } ) {
+  // Get initial tab based on which add button clicked in add/edit outfit form
+  let initialTab;
+  if (category === "One Piece") {
+    initialTab = 1;
+  } else if (category === "Top") {
+    initialTab = 2;
+  } else if (category === "Bottom") {
+    initialTab = 3; 
+  } else if (category === "Shoes") {
+    initialTab = 4;
+  } else if (category === "Accessories") {
+    initialTab = 5;
+  } else {
+    initialTab = 0;
+  }
+
   // --- Search bar state hooks -----------------------------------------
-  const [tabValue, setTabValue] = useState(0);
+  const [tabValue, setTabValue] = useState(initialTab);
   const [search, setSearch] = useState("");
 
   return (
@@ -64,7 +80,7 @@ export default function WardrobeTabs() {
         </Tabs>
       </Stack>
       <SearchBar setSearch={setSearch} color={"#FFD36E"} />
-      <TabPanel tabValue={tabValue} search={search} />
+      <TabPanel tabValue={tabValue} search={search} clickFunction={clickFunction} category={category}/>
     </>
   );
 }
@@ -74,12 +90,12 @@ function TabPanel(props) {
   const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   const [loading, setLoading] = useState(true);
+  const [updated, setUpdated] = useState(true);
 
   // --- Search ----------------------------------------------------------
-  const { tabValue, search } = props;
+  const { tabValue, search, clickFunction, category} = props;
 
   // --- Clothing lists --------------------------------------------------
-  const [category, setCategory] = useState("All"); // Current category tab
   const [clothes, setClothes] = useState([]); // List of all clothes from GET request
   const [onePieces, setOnePieces] = useState([]); // List of user's one piece items
   const [tops, setTops] = useState([]); // List of user's one piece items
@@ -92,7 +108,6 @@ function TabPanel(props) {
 
   // State of whether or not dialog is open
   const [open, setOpen] = useState(false);
-  const [updated, setUpdated] = useState(false);
   const [selectedClothing, setSelectedClothing] = useState(null);
 
   const handleClickOpen = (Clothing) => {
@@ -128,27 +143,21 @@ function TabPanel(props) {
   const handleTabs = () => {
     // Display "All" tab
     if (tabValue === 0 || tabValue === null || tabValue === undefined) {
-      setCategory("All");
       setShownClothes(filterClothesByNameOrTag(clothes, search));
     } // Display all "One Piece" tab
     else if (tabValue === 1) {
-      setCategory("One Piece");
       setShownClothes(filterClothesByNameOrTag(onePieces, search));
     } // Display "Tops" tab
     else if (tabValue === 2) {
-      setCategory("Tops");
       setShownClothes(filterClothesByNameOrTag(tops, search));
     } // Display "Bottoms" tab
     else if (tabValue === 3) {
-      setCategory("Bottoms");
       setShownClothes(filterClothesByNameOrTag(bottoms, search));
     } // Display "Shoes" tab
     else if (tabValue === 4) {
-      setCategory("Shoes");
       setShownClothes(filterClothesByNameOrTag(shoes, search));
     } // Display "Accessories" tab
     else if (tabValue === 5) {
-      setCategory("Accessories");
       setShownClothes(filterClothesByNameOrTag(accessories, search));
     }
   };
@@ -214,7 +223,6 @@ function TabPanel(props) {
     );
   } else {
     // Page contents
-
     // Clothing lists based on current tab, search (names & tags)
     return (
       <>

@@ -52,6 +52,7 @@ function ClothingData(props) {
 
   // --- Clothing lists --------------------------------------------------
   const [category, setCategory] = useState(categoryInput); // Current category tab
+  const [updated, setUpdated] = useState(true);
   const [clothes, setClothes] = useState([]); // List of all clothes from GET request
   const [onePieces, setOnePieces] = useState([]); // List of user's one piece items
   const [tops, setTops] = useState([]); // List of user's one piece items
