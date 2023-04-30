@@ -42,6 +42,7 @@ import WardrobeTabs from "./WardrobeTabs";
 import {
   getOutfits,
   getOutfitByDateWorn,
+  getOutfitArrayFromIds,
   addOutfit,
   editOutfit,
   deleteOutfit,
@@ -59,6 +60,8 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
   // if there is an outfit id do an update instead of post
   // --- Main form state hooks & functions --------------------------------------------------------------
   const {outfitId} = router.query;
+  const [outfit, setOutfit] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState("");
   const [onePiece, setOnePiece] = useState([]);
   const [tops, setTops] = useState([]);
@@ -144,16 +147,16 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
 
   //  
   useEffect(() => {
-    console.log("inuse effect")
-    if (outfitId) { 
-      console.log("outfit id not null")
-      for (const clothing of outfit) {
-        console.log(clothing)
-        handleClickClothes(clothing);
-      }   
+    // Perform query to get the current day's outfit
+    async function processOutfit() {
+      const token = await getToken({ template: jwtTemplateName });
+      const outfitIds = await getOutfitByDateWorn(token, date);
+      const outfitDetails = await getOutfitArrayFromIds(token, outfitIds[0]);
+      setOutfit(outfitDetails);
+      setLoading(false);
     }
-    
-  }, [category]);
+    processOutfit();
+  }, [date, category]);
 
     
   const getOutfit = (outfitId) =>{

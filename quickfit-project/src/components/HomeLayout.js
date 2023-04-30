@@ -33,8 +33,9 @@ export default function UILayout({ date, setDate }) {
   const { getToken } = useAuth();
 
   const router = useRouter();
-  const [outfit, setOutfit] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [outfit, setOutfit] = useState(null);         // List of all clothing entries w/ their details
+  const [outfitCoho, setOutfitCoho] = useState(null); // just need a way to store the outfit ID since not stored in 'outfit'
+  const [loading, setLoading] = useState(true);       // Load GET requests before rendering content
   
   // const [outfit, setOutfit] = useState([
   //   {
@@ -64,20 +65,13 @@ export default function UILayout({ date, setDate }) {
   // ]);
 
   useEffect(() => {
-    //TODO: Get request that gets the outfit that matches the date
-    //do a fetch to get our outfit given a date
-    //   fetch(
-    //   "our end point/something?date=" + date
-    //   )
-    //   .then((res) => res.json())
-    //   .then((data) => setOutfit(data));
-
     // Perform query to get the current day's outfit
     async function processOutfit() {
       const token = await getToken({ template: jwtTemplateName });
       const outfitIds = await getOutfitByDateWorn(token, date);
       const outfitDetails = await getOutfitArrayFromIds(token, outfitIds[0]);
       setOutfit(outfitDetails);
+      setOutfitCoho(outfitIds[0]);
       setLoading(false);
     }
     processOutfit();
@@ -142,7 +136,7 @@ export default function UILayout({ date, setDate }) {
                       router.push({
                         //TODO:figure out how to get outfit id and then pass the value to query
                         pathname: "/choosefit",
-                        query: { outfitId: "outfit id" },
+                        query: { outfitId: outfitCoho._id }, // not including this since codehooks queries are really stupid
                       });
                     }}
                   >
