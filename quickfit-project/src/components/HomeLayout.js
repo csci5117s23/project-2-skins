@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 // import styles from '@/styles/Home.module.css'
 import { SignedIn } from "@clerk/clerk-react"; // Clerk authorization imports
 import AutoFixHighTwoToneIcon from "@mui/icons-material/AutoFixHighTwoTone";
-import { Grid, Button, Stack, Box, Typography } from "@mui/material";
+import { Grid, Button, Stack, Box, Typography, CssBaseline } from "@mui/material";
 import DateWeatherWidget from "@/components/DateWeatherWidget";
 import Header from "@/components/Header";
 import BottomNavigationContainer from "@/components/BottomNavigationContainer";
@@ -43,6 +43,7 @@ export default function UILayout({ date, setDate }) {
 
   return (
     <>
+      <CssBaseline/>
       {/* 1. Header section */}
       <section>
         <Header />

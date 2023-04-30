@@ -67,7 +67,7 @@ export default function WardrobeTabs() {
   );
 }
 
-function TabPanel(props) {
+export function TabPanel(props) {
   // --- Authorization ---------------------------------------------------
   const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
   const { isLoaded, userId, sessionId, getToken } = useAuth();
@@ -151,15 +151,11 @@ function TabPanel(props) {
             <Skeleton height="5vh" width="60vw"/>
           </Stack>
           </Card>
-    </Stack>
-        
-        
+        </Stack>
       </>
     );
   } else { // Page contents
-
     // Clothing lists based on current tab, search (names & tags)
     return <ClothingList clothes={shownClothes || []} />
-  
   }
 }

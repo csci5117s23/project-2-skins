@@ -298,7 +298,6 @@ export default function ClothesForm( {clothingToEdit = null} ) {
             height: "100%",
             minHeight: "95vh",
             width: '100%',
-            bgcolor: "white",
           }}
         >
           {/* Clothing form */}
