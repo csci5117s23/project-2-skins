@@ -55,10 +55,10 @@ export default function OutfitForm(props) {
   const [bottomsItem, setBottoms] = useState(null); // Outfit bottom
   const [shoesItem, setShoes] = useState(null); // Outfit shoes
   const [accessoryItems, setAccessories] = useState(null); // Outfit accessories
+  const [category, setCategory] = useState("All");
 
-  //properties for the post request to add outfit
-  //if there is an outfit id do an update instead of post
-  //TODO:uncomment line below
+  // properties for the post request to add outfit
+  // if there is an outfit id do an update instead of post
   const {outfitId} = router.query;
 
   // States to show clothing list when "add [clothing]" button clicked
@@ -108,25 +108,25 @@ export default function OutfitForm(props) {
   // Handle selecting clothing from "add clothing" button
   const handleClickClothes = (clothes) => {
     if (clothes["category"] == "One Piece") { // One piece items
-      if(onePiece.indexOf(clothes) < 0){
+      if (onePiece.indexOf(clothes) < 0){
         setOnePiece([clothes]);
       }
     } else if (clothes["category"] == "Top") { // Top items
-        if(tops.indexOf(clothes) < 0){
+        if (tops.indexOf(clothes) < 0){
           const newTopsList = tops.concat(clothes);
           setTops(newTopsList);  
         }
     } else if (clothes["category"] == "Bottom") { // Bottom items
-        if(bottoms.indexOf(clothes) < 0){
+        if (bottoms.indexOf(clothes) < 0){
           const newBottomsList = bottoms.concat(clothes);
           setBottoms(newBottomsList);
         }
     } else if (clothes["category"] == "Shoes") { // Shoe items
-        if(shoes.indexOf(clothes) < 0){
+        if (shoes.indexOf(clothes) < 0){
           setShoes([clothes]);
         }      
     } else if (clothes["category"] == "Accessories") { // Accessory items
-        if(accessories.indexOf(clothes) < 0){
+        if (accessories.indexOf(clothes) < 0){
           const newAccessoriesList = accessories.concat(clothes);
           setAccessories(newAccessoriesList);
         }
@@ -134,7 +134,6 @@ export default function OutfitForm(props) {
     setOpen(false);
   };
 
-  //  
   useEffect(() => {
     console.log("inuse effect")
     if (outfitId) { 
@@ -295,7 +294,7 @@ export default function OutfitForm(props) {
           )}
         </Button>
 
-        {/* Accessories */}
+        {/* --- Accessories --------------------------------------------------------- */}
         <Card
           sx={{ backgroundImage: "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)" }}
         >
@@ -308,10 +307,9 @@ export default function OutfitForm(props) {
             </CardContent>
           </Stack>
         </Card>
-        <Button
-          onClick={handleOpen}
-          variant="outlined"
+        <Button variant="outlined"
           sx={{ width: { xs: "60vw" }, height: { xs: "5vh" } }}
+          onClick={handleOpen}
         >
           {accessories.length > 0 ? (
             <>
@@ -324,9 +322,7 @@ export default function OutfitForm(props) {
             </>
           )}
         </Button>
-        <Button
-          variant="contained"
-        
+        <Button variant="contained"
           sx={{ width: {xs: "50vw", md: "70vw"}, borderRadius:"1.25em", backgroundColor:"#c2c2c2", color:"#3C3F42" }}
           onClick={() => {
             router.push("/");
@@ -367,6 +363,7 @@ export default function OutfitForm(props) {
           </Stack>
         </Card>
       </Dialog>
+
       {/* Delete clothing button popup, shows when clothing card is clicked */}
       <div>
         <Dialog open={openDelete} onClose={handleCloseDelete}>
