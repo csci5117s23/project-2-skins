@@ -15,34 +15,9 @@ import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutl
 // Load any necessary ENV variables
 const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
-export default function UILayout({date, setDate}) {
+export default function UILayout({ date, setDate }) {
   const router = useRouter();
-  const [outfit, setOutfit] = useState([
-    {
-      category: "Top",
-      clothingName: "Black Nike T-Shirt",
-      tags: ["black"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Bottom",
-      clothingName: "Dark green cargos",
-      tags: ["Green", "loose", "cargo"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Shoes",
-      clothingName: "White air forces",
-      tags: ["white"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Accessory",
-      clothingName: "Silver necklace",
-      tags: ["silver", "shiny"],
-      createdOn: new Date(),
-    },
-  ]);
+  const [outfit, setOutfit] = useState(null);
 
   useEffect(() => {
     //TODO: Get request that gets the outfit that matches the date
@@ -65,7 +40,6 @@ export default function UILayout({date, setDate}) {
     d.setDate(d.getDate() + 1);
     setDate(d);
   };
-
 
   return (
     <>
@@ -94,27 +68,31 @@ export default function UILayout({date, setDate}) {
               <Button variant="contained" onClick={handlePreviousDayClick}>
                 <ArrowBackIosNewOutlinedIcon />
               </Button>
-              <Button
-                variant="contained"
-                size="large"
-                sx={{
-                  "&:hover": {
-                    backgroundColor: "#f2f2f2",
-                  },
-                }}
-                onClick={() => {
-                  router.push({
-                    //TODO:figure out how to get outfit id and then pass the value to query
-                    pathname: "/choosefit",
-                    query: { outfitId: 'outfit id' },
-                  });
-                }}
-              >
-                <Box mr="1vw" sx={{ fontWeight: "bold", color: "#555" }}>
-                  Edit Outfit{" "}
-                </Box>
-                <EditTwoToneIcon sx={{ color: "#555" }} />
-              </Button>
+
+              {outfit ? (
+                <Button
+                  variant="contained"
+                  size="large"
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: "#f2f2f2",
+                    },
+                  }}
+                  onClick={() => {
+                    router.push({
+                      //TODO:figure out how to get outfit id and then pass the value to query
+                      pathname: "/choosefit",
+                      query: { outfitId: "outfit id" },
+                    });
+                  }}
+                >
+                  <Box mr="1vw" sx={{ fontWeight: "bold", color: "#555" }}>
+                    Edit Outfit{" "}
+                  </Box>
+                  <EditTwoToneIcon sx={{ color: "#555" }} />
+                </Button>
+              ) : null}
+
               <Button variant="contained" onClick={handleNextDayClick}>
                 <ArrowForwardIosOutlinedIcon />
               </Button>
@@ -123,7 +101,7 @@ export default function UILayout({date, setDate}) {
             <Box
               alignItems="center"
               justifyContent="center"
-              sx={{ display: "flex", flexWrap: "wrap", width: "73vw" }}
+              sx={{ display: "flex", flexWrap: "wrap", width: "82vw" }}
             >
               {outfit ? (
                 outfit.map((clothes) => {

@@ -47,12 +47,11 @@ export default function WebcamDialog( { image, setImage, setFileUploadText } ) {
       <Tooltip title="Take a photo">
         <Button
           variant="outlined"
-          color="secondary"
           aria-label="upload webcam photo"
           component="label"
-          sx={{ width: 150 }}
+          sx={{ width: 150, color:"#3C3F42", borderColor:"#3C3F42" }}
           onClick={handleClickOpen}
-          endIcon={<PhotoCamera />}
+          endIcon={<PhotoCamera/>}
         >
           Use camera
         </Button>

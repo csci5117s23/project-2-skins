@@ -26,8 +26,7 @@ export default function NoFitChosenLayout() {
       alignItems="center"
       justifyContent="center"
       sx={{
-        // display: { xs: "none", md: "flex" },
-        width: {xs:"90vw", md:"70vw"},
+        width: {xs:"100vw", md:"70vw"},
         mt:"5vh",
         borderStyle:"solid",
         borderColor:"#FFFFFF",

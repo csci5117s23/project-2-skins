@@ -5,9 +5,11 @@ import {
   Stack, 
   Tabs, 
   Tab, 
-  CircularProgress 
+  CircularProgress,
+  Skeleton,
+  Card,
+  Box
 } from "@mui/material";
-import SwipeableViews from "react-swipeable-views";
 // Custom component imports
 import ClothingList from "./ClothingList";
 import SearchBar from "./SearchBar";
@@ -39,7 +41,7 @@ export default function WardrobeTabs() {
         }}
       >
         <Tabs
-          value={value}
+          value={tabValue}
           variant="scrollable"
           allowScrollButtonsMobile
           onChange={(e, value) => {
@@ -48,6 +50,7 @@ export default function WardrobeTabs() {
           aria-label="basic tabs example"
 
         >
+          <Tab label="All" sx={{padding: "1px"}} />
           <Tab label="One Piece" sx={{padding: "1px"}} />
           <Tab label="Tops" sx={{padding: "1px"}}/>
           <Tab label="Bottoms" sx={{padding: "1px"}}/>
@@ -137,8 +140,15 @@ function TabPanel(props) {
   if (loading) {
     return ( // Notify users contents are loading
       <> 
-        LOADING...
-        <CircularProgress />
+        <Stack spacing={1.5} width="100vw" alignItems="center" justifyContent="center">
+          <Card sx={{backgroundColor:"#EEE"}}>
+          <Stack direction="row" alignItems="center" m={1} spacing={1} justifyContent="space-around"width="70vw" height="13vh">
+            <Skeleton height="5vh" width="60vw"/>
+          </Stack>
+          </Card>
+    </Stack>
+        
+        
       </>
     );
   } else { // Page contents

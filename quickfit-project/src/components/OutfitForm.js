@@ -31,11 +31,42 @@ import AutoFixHighTwoToneIcon from '@mui/icons-material/AutoFixHighTwoTone';
 
 import { useRouter } from "next/router";
 
-export default function OutfitForm({date}) {
+export default function OutfitForm(props) {
+  const {date} = props;
   const router = useRouter();
+
+  //TODO: delete this after implementing edit form
+  const outfit = [
+    {
+      category: "top",
+      name: "Black Nike T-Shirt",
+      tags: ["black"],
+      createdOn: new Date(),
+    },
+    {
+      category: "bottom",
+      name: "Dark green cargos",
+      tags: ["Green", "loose", "cargo"],
+      createdOn: new Date(),
+    },
+    {
+      category: "shoes",
+      name: "White air forces",
+      tags: ["white"],
+      createdOn: new Date(),
+    },
+    {
+      category: "accessory",
+      name: "Silver necklace",
+      tags: ["silver", "shiny"],
+      createdOn: new Date(),
+    },
+  ];
+
 
   //properties for the post request to add outfit
   //if there is an outfit id do an update instead of post
+  //TODO:uncomment line below
   const {outfitId} = router.query;
   const [onePiece, setOnePiece] = useState([]);
   const [tops, setTops] = useState([]);
@@ -79,12 +110,12 @@ export default function OutfitForm({date}) {
     setOpenDelete(false);
 
   };
+  //helper function returns a list that has item removed from it
   const removeItemFromList = (list, item) => {
     const index = list.indexOf(item);
     if (index > -1) {
       list.splice(index, 1);
     }
-
     return list;
   };
 
@@ -92,53 +123,55 @@ export default function OutfitForm({date}) {
   const [clothes, setClothes] = useState([
     {
       category: "onepiece",
-      clothingName: "Artizia black onepiece",
+      name: "Artizia black onepiece",
       tags: ["black", "tight"],
       createdOn: new Date(),
     },
     {
       category: "onepiece",
-      clothingName: "Floral short dress",
+      name: "Floral short dress",
       tags: ["floral", "flowy", "short dress", "short sleeve"],
       createdOn: new Date(),
     },
     {
       category: "onepiece",
-      clothingName: "Blue Overalls",
+      name: "Blue Overalls",
       tags: ["jean", "blue"],
       createdOn: new Date(),
     },
     {
       category: "top",
-      clothingName: "Black Nike T-Shirt",
+      name: "Black Nike T-Shirt",
       tags: ["black"],
       createdOn: new Date(),
     },    
     {
       category: "top",
-      clothingName: "White Nike T-Shirt",
+      name: "White Nike T-Shirt",
       tags: ["white"],
       createdOn: new Date(),
     },
     {
       category: "bottom",
-      clothingName: "Dark green cargos",
+      name: "Dark green cargos",
       tags: ["Green", "loose", "cargo"],
       createdOn: new Date(),
     },
     {
       category: "shoes",
-      clothingName: "White air forces",
+      name: "White air forces",
       tags: ["white"],
       createdOn: new Date(),
     },
     {
       category: "accessory",
-      clothingName: "Silver necklace",
+      name: "Silver necklace",
       tags: ["silver", "shiny"],
       createdOn: new Date(),
     },
   ]);
+
+
 
   // handle selecting clothing from "add clothing" button
   const handleClickClothes = (clothes) => {
@@ -170,6 +203,25 @@ export default function OutfitForm({date}) {
     setOpen(false);
   };
 
+  //  
+  useEffect(() => {
+    console.log("inuse effect")
+    if (outfitId) { 
+      console.log("outfit id not null")
+      for (const clothing of outfit) {
+        console.log(clothing)
+        handleClickClothes(clothing);
+      }   
+    }
+    
+  }, []);
+
+    
+  const getOutfit = (outfitId) =>{
+      //TODO using outfitId retrieve outfit
+      // var outfit = fetch(outfit)
+      
+  }  
   //when selecting add, this will get the clothes that populate the list
   //replace handleOpen on each onClick with this
   const handleTops = () => {
