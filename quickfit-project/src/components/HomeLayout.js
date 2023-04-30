@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 // Clerk authorization imports
 import { SignedIn } from "@clerk/clerk-react";
+import { useAuth } from "@clerk/nextjs";
 // MUI Component imports
 import { 
   Box, 
@@ -14,6 +15,10 @@ import {
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
+// DB Outfit functions
+import { 
+  getOutfitByDateWorn
+} from "@/modules/outfitFunctions";
 // Custom component imports
 import DateWeatherWidget from "@/components/DateWeatherWidget";
 import Header from "@/components/Header";
@@ -22,8 +27,13 @@ import ClothingCard from "@/components/ClothingCard";
 import NoFitChosenLayout from "@/components/NoFitChosenLayout";
 
 export default function UILayout({ date, setDate }) {
+  // --- Authorization ---------------------------------------------------
+  const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
+  const { getToken } = useAuth();
+
   const router = useRouter();
   const [outfit, setOutfit] = useState(null);
+  
 
   useEffect(() => {
     //TODO: Get request that gets the outfit that matches the date
@@ -33,6 +43,15 @@ export default function UILayout({ date, setDate }) {
     //   )
     //   .then((res) => res.json())
     //   .then((data) => setOutfit(data));
+
+    // Perform query to get the current day's outfit
+    async function processOutfit() {
+      const token = await getToken({ template: jwtTemplateName });
+      const outfitDetails = await getOutfitByDateWorn(token, date);
+      // console.log("Result: " + result);
+      // setOutfit(result);
+    }
+    processOutfit();
   }, [date]);
 
   const handlePreviousDayClick = () => {

@@ -37,12 +37,20 @@ export async function getOutfits(authToken, id="") {
 
 // ----------------------------------------------------------------
 // GET: Function get outfit based on input date worn (not created)
+// Reference for formatting dates to US format : 
+// https://stackoverflow.com/questions/2013255/how-to-get-year-month-day-from-a-date-object#:~:text=var%20dateObj%20%3D%20new%20Date%20%28%29%3B%20var%20month,set%20new%20date%20and%20give%20the%20above%20values
 // ----------------------------------------------------------------
 export async function getOutfitByDateWorn(authToken, date, id="") {
     // Get all outfits
     const allOutfits = await getOutfits(authToken, id);
+    console.log("All outfits: " + JSON.stringify(allOutfits));
     try { // From list of all outfits, get the one of the specified date
-        console.log(date);
+        const result = Object.values(allOutfits).filter( 
+            (outfit) => 
+                (new Date(outfit.dateWorn).toLocaleDateString("en-US") === new Date(date).toLocaleDateString("en-US")) 
+        );
+        console.log("Result: " + JSON.stringify(result));
+        return result;
     } catch (error) {
         console.log("Failed to get outfit by date. " + error);
     }
@@ -59,7 +67,7 @@ export async function addOutfit(authToken, outfit) {
     }
     // Send POST request
     try {
-        const result = await fetch(outfitUrl, {
+        const result = await fetch(outfitUrl+"/", {
             'method': 'POST',
             'headers': {
                 'Authorization': 'Bearer ' + authToken,

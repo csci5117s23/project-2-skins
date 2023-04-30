@@ -114,6 +114,7 @@ export default function ClothesForm( {clothingToEdit = null} ) {
         tags:     getTagNames(inputTags),
         // imageId: uploadImage(e),
       }; // Make POST request
+      console.log("postItem: " + JSON.stringify(postItem));
       result = await addClothes(token, postItem);
     } 
     // --- Call PUT function if we are editing a clothing item ---
