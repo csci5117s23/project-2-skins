@@ -152,9 +152,6 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
   useEffect(() => {
     // Perform query to get the current day's outfit
     async function processOutfit() {
-      // Get query ID for outfit to edit
-      const { outfitId } = router.query;
-      
       // Get auth token
       const token = await getToken({ template: jwtTemplateName });
 
@@ -204,25 +201,36 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
     const token = await getToken({ template: jwtTemplateName });
 
     // --- Call POST function if we are adding a clothing item ---
-    // Create an outfit from state variables
-    const postItem = {
-      topId:          getListIds(tops),               // Muliple tops allowed (zip up hoodie with t-shirt)                 
-      bottomId:       getListIds(bottoms),            // Multiple bottoms allowed (skirt with leggings)
-      shoesId:        getListIds(shoes)[0] || "",     // One pair of shoes only    
-      accessoriesId:  getListIds(accessories),        // Multiple accessories allowed (necklace and watch)
-      onePieceId:     getListIds(onePiece)[0] || "",  // Only one allowed 
-      dateWorn:       new Date(date),                 // Date of when user set to wear this outfit (current calendar date)
-    }; 
-    // Make POST request
-    console.log("PostItem: " + JSON.stringify(postItem));
-    const result = await addOutfit(token, postItem);
-    console.log("Result: " + result);
-
-    // TODO
+    console.log(outfitId);
+    if (outfitId === undefined || outfitId === null || outfitId === "") {
+      // Create an outfit from state variables
+      const postItem = {
+        topId:          getListIds(tops),               // Muliple tops allowed (zip up hoodie with t-shirt)                 
+        bottomId:       getListIds(bottoms),            // Multiple bottoms allowed (skirt with leggings)
+        shoesId:        getListIds(shoes)[0] || "",     // One pair of shoes only    
+        accessoriesId:  getListIds(accessories),        // Multiple accessories allowed (necklace and watch)
+        onePieceId:     getListIds(onePiece)[0] || "",  // Only one allowed 
+        dateWorn:       new Date(date),                 // Date of when user set to wear this outfit (current calendar date)
+      }; 
+      // Make POST request
+      const result = await addOutfit(token, postItem);
+    } 
     // --- Call PUT function if we are editing a clothing item ---
-
-    // TODO
-    // On submit go back
+    else {
+      // Create an outfit from state variables
+      const putItem = {
+        _id:            outfitId,
+        topId:          getListIds(tops),               // Muliple tops allowed (zip up hoodie with t-shirt)                 
+        bottomId:       getListIds(bottoms),            // Multiple bottoms allowed (skirt with leggings)
+        shoesId:        getListIds(shoes)[0] || "",     // One pair of shoes only    
+        accessoriesId:  getListIds(accessories),        // Multiple accessories allowed (necklace and watch)
+        onePieceId:     getListIds(onePiece)[0] || "",  // Only one allowed 
+        dateWorn:       new Date(date),                 // Date of when user set to wear this outfit (current calendar date)
+      };
+      // Make PUT request
+      const result = await editOutfit(token, putItem);
+      console.log(result); 
+    }
   }
 
   // ---------------------------------------------------------------------------
