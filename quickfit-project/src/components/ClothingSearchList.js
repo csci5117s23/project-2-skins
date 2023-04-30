@@ -78,7 +78,7 @@ function ClothingData(props) {
         setAccessories(filterClothesByCategory(clothes, "Accessories")); // Filter accessories
       });
       setLoading(false); // Once we get these things, we are no longer loading
-      setUpdated(false);
+      setUpdated(true);
   }
 
   // --------------------------------------------------------------------------
