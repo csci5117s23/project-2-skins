@@ -1,13 +1,11 @@
-import * as React from "react";
-import { redirect } from "next/navigation";
 // MUI Component imports
 import {
-  CssBaseline,
-  Typography,
   Box,
   Card,
   Chip,
+  CssBaseline,
   Grid,
+  Typography,
 } from "@mui/material";
 
 export default function ClothingCard(props) {

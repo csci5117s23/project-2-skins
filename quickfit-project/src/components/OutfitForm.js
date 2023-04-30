@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "@clerk/nextjs";
-import { useRouter } from "next/router";
-import { useAuth } from "@clerk/nextjs";
 // MUI Component imports
 import {
   AppBar,
@@ -15,7 +13,6 @@ import {
   CardContent,
   Typography,
   Dialog,
-  Dialog,
   Stack,
   IconButton,
   Divider,
@@ -26,16 +23,14 @@ import {
   DialogActions,
   CssBaseline,
   Paper,
-  Paper,
 } from "@mui/material";
-// MUI Icon imports
 // MUI Icon imports
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteForeverTwoToneIcon from "@mui/icons-material/DeleteForeverTwoTone";
 import AutorenewRoundedIcon from "@mui/icons-material/AutorenewRounded";
-import AutoFixHighTwoToneIcon from '@mui/icons-material/AutoFixHighTwoTone';
+import AutoFixHighTwoToneIcon from "@mui/icons-material/AutoFixHighTwoTone";
 // Custom Component imports
 import ClothingSearchList from "@/components/ClothingSearchList";
 import ClothingData from "@/components/ClothingData";
@@ -44,7 +39,7 @@ import ClothingList from "@/components/ClothingList";
 import SearchBar from "@/components/SearchBar";
 import WardrobeTabs from "./WardrobeTabs";
 // DB Clothing functions
-import { filterClothesByCategory } from "@/modules/clothesFunctions"
+import { filterClothesByCategory } from "@/modules/clothesFunctions";
 // DB Outfit functions
 import {
   getOutfits,
@@ -55,7 +50,7 @@ import {
   deleteOutfit,
 } from "@/modules/outfitFunctions";
 
-export default function OutfitForm( { date, outfitToEdit=null } ) {
+export default function OutfitForm({ date, outfitToEdit = null }) {
   // ---  React router --------------------------------------------
   const router = useRouter();
 
@@ -66,7 +61,7 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
   // properties for the post request to add outfit
   // if there is an outfit id do an update instead of post
   // --- Main form state hooks & functions --------------------------------------------------------------
-  const {outfitId} = router.query;
+  const { outfitId } = router.query;
   const [outfit, setOutfit] = useState(null);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState("");
@@ -149,7 +144,6 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
       }
     }
     setOpen(false);
-
   };
 
   // ------------------------------------------------------------
@@ -160,7 +154,7 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
     const token = await getToken({ template: jwtTemplateName });
 
     // --- Call DELETE function ---
-    const result = deleteClothes(token, clothingId);  
+    const result = deleteClothes(token, clothingId);
   }
 
   // --- Edit useEffect ---
@@ -175,19 +169,19 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
       const outfitIds = await getOutfits(token, outfitId);
       const outfitDetails = await getOutfitArrayFromIds(token, outfitIds);
       setOutfit(outfitDetails);
-    
+
       // Set lists based on query for outfit details
       setOnePiece(filterClothesByCategory(outfitDetails, "One Piece"));
       setTops(filterClothesByCategory(outfitDetails, "Top"));
       setBottoms(filterClothesByCategory(outfitDetails, "Bottom"));
       setShoes(filterClothesByCategory(outfitDetails, "Shoes"));
       setAccessories(filterClothesByCategory(outfitDetails, "Accessories"));
-      
+
       setLoading(false);
     }
     processOutfit();
   }, [date]); // category?
-  
+
   // --- Outfit functions ---
   // ---------------------------------------------------------
   // Function to add an outfit from front-end state variables
@@ -201,31 +195,31 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
     if (outfitId === undefined || outfitId === null || outfitId === "") {
       // Create an outfit from state variables
       const postItem = {
-        topId:          getListIds(tops),               // Muliple tops allowed (zip up hoodie with t-shirt)                 
-        bottomId:       getListIds(bottoms),            // Multiple bottoms allowed (skirt with leggings)
-        shoesId:        getListIds(shoes)[0] || "",     // One pair of shoes only    
-        accessoriesId:  getListIds(accessories),        // Multiple accessories allowed (necklace and watch)
-        onePieceId:     getListIds(onePiece)[0] || "",  // Only one allowed 
-        dateWorn:       new Date(date),                 // Date of when user set to wear this outfit (current calendar date)
-      }; 
+        topId: getListIds(tops), // Muliple tops allowed (zip up hoodie with t-shirt)
+        bottomId: getListIds(bottoms), // Multiple bottoms allowed (skirt with leggings)
+        shoesId: getListIds(shoes)[0] || "", // One pair of shoes only
+        accessoriesId: getListIds(accessories), // Multiple accessories allowed (necklace and watch)
+        onePieceId: getListIds(onePiece)[0] || "", // Only one allowed
+        dateWorn: new Date(date), // Date of when user set to wear this outfit (current calendar date)
+      };
       // Make POST request
       const result = await addOutfit(token, postItem);
-    } 
+    }
     // --- Call PUT function if we are editing a clothing item ---
     else {
       // Create an outfit from state variables
       const putItem = {
-        _id:            outfitId,
-        topId:          getListIds(tops),               // Muliple tops allowed (zip up hoodie with t-shirt)                 
-        bottomId:       getListIds(bottoms),            // Multiple bottoms allowed (skirt with leggings)
-        shoesId:        getListIds(shoes)[0] || "",     // One pair of shoes only    
-        accessoriesId:  getListIds(accessories),        // Multiple accessories allowed (necklace and watch)
-        onePieceId:     getListIds(onePiece)[0] || "",  // Only one allowed 
-        dateWorn:       new Date(date),                 // Date of when user set to wear this outfit (current calendar date)
+        _id: outfitId,
+        topId: getListIds(tops), // Muliple tops allowed (zip up hoodie with t-shirt)
+        bottomId: getListIds(bottoms), // Multiple bottoms allowed (skirt with leggings)
+        shoesId: getListIds(shoes)[0] || "", // One pair of shoes only
+        accessoriesId: getListIds(accessories), // Multiple accessories allowed (necklace and watch)
+        onePieceId: getListIds(onePiece)[0] || "", // Only one allowed
+        dateWorn: new Date(date), // Date of when user set to wear this outfit (current calendar date)
       };
       // Make PUT request
       const result = await editOutfit(token, putItem);
-      console.log(result); 
+      console.log(result);
     }
   }
 
@@ -234,19 +228,19 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
   // ---------------------------------------------------------------------------
   function getListIds(clothesList) {
     const clothingListIds = clothesList.map((item) => {
-      if (item._id) { return item._id; } 
+      if (item._id) {
+        return item._id;
+      }
     });
     return Array.from(clothingListIds);
   }
 
   if (loading) {
-    return <></>
-  }
-
-  else {
+    return <></>;
+  } else {
     return (
       <>
-        <CssBaseline/>
+        <CssBaseline />
         <Stack
           spacing={2}
           justifyContent={"center"}
@@ -254,7 +248,6 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
           mt={"4vw"}
           mb={"4vw"}
         >
-          
           {/* One Pieces */}
           <Card
             sx={{
@@ -275,8 +268,15 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
           <ClothingList clothes={onePiece} clickFunction={handleOpenDelete} />
           <Button
             variant="outlined"
-            sx={{ width: { xs: "60vw" }, height: { xs: "5vh" }, bgcolor:"#333333" }}
-            onClick={ () => { handleOpen(); setCategory("One Piece"); }}
+            sx={{
+              width: { xs: "60vw" },
+              height: { xs: "5vh" },
+              bgcolor: "#333333",
+            }}
+            onClick={() => {
+              handleOpen();
+              setCategory("One Piece");
+            }}
           >
             {onePiece.length > 0 ? (
               <>
@@ -308,9 +308,16 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
           </Card>
           <ClothingList clothes={tops} clickFunction={handleOpenDelete} />
           <Button
-            onClick={ () => { handleOpen(); setCategory("Top"); }}
+            onClick={() => {
+              handleOpen();
+              setCategory("Top");
+            }}
             variant="outlined"
-            sx={{ width: { xs: "60vw" }, height: { xs: "5vh" }, bgcolor:"#333333" }}
+            sx={{
+              width: { xs: "60vw" },
+              height: { xs: "5vh" },
+              bgcolor: "#333333",
+            }}
           >
             {tops.length > 0 ? (
               <>
@@ -343,8 +350,15 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
           <ClothingList clothes={bottoms} clickFunction={handleOpenDelete} />
           <Button
             variant="outlined"
-            sx={{ width: { xs: "60vw" }, height: { xs: "5vh" }, bgcolor:"#333333" }}
-            onClick={ () => { handleOpen(); setCategory("Bottom"); }}
+            sx={{
+              width: { xs: "60vw" },
+              height: { xs: "5vh" },
+              bgcolor: "#333333",
+            }}
+            onClick={() => {
+              handleOpen();
+              setCategory("Bottom");
+            }}
           >
             {bottoms.length > 0 ? (
               <>
@@ -377,8 +391,15 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
           <ClothingList clothes={shoes} clickFunction={handleOpenDelete} />
           <Button
             variant="outlined"
-            sx={{ width: { xs: "60vw" }, height: { xs: "5vh" }, bgcolor:"#333333" }}
-            onClick={ () => { handleOpen(); setCategory("Shoes"); }}
+            sx={{
+              width: { xs: "60vw" },
+              height: { xs: "5vh" },
+              bgcolor: "#333333",
+            }}
+            onClick={() => {
+              handleOpen();
+              setCategory("Shoes");
+            }}
           >
             {shoes.length > 0 ? (
               <>
@@ -408,11 +429,21 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
               </CardContent>
             </Stack>
           </Card>
-          <ClothingList clothes={accessories} clickFunction={handleOpenDelete} />
+          <ClothingList
+            clothes={accessories}
+            clickFunction={handleOpenDelete}
+          />
           <Button
             variant="outlined"
-            sx={{ width: { xs: "60vw" }, height: { xs: "100%" }, bgcolor:"#333333", }}
-            onClick={ () => { handleOpen(); setCategory("Accessories"); }}
+            sx={{
+              width: { xs: "60vw" },
+              height: { xs: "100%" },
+              bgcolor: "#333333",
+            }}
+            onClick={() => {
+              handleOpen();
+              setCategory("Accessories");
+            }}
           >
             {accessories.length > 0 ? (
               <>
@@ -427,9 +458,13 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
           </Button>
           <Button
             variant="contained"
-          
-            sx={{ width: {xs: "50vw", md: "70vw"}, borderRadius:"1.25em", bgcolor:"#c2c2c2", color:"#3C3F42" }}
-            onClick={ (event, value) => {
+            sx={{
+              width: { xs: "50vw", md: "70vw" },
+              borderRadius: "1.25em",
+              bgcolor: "#c2c2c2",
+              color: "#3C3F42",
+            }}
+            onClick={(event, value) => {
               onHandleSubmit(event);
               router.push("/");
             }}
@@ -465,7 +500,10 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
               mb={2}
             >
               {/* Use wardrobe tab component with different click function */}
-              <WardrobeTabs clickFunction={handleClickClothes} category={category} />
+              <WardrobeTabs
+                clickFunction={handleClickClothes}
+                category={category}
+              />
             </Stack>
           </Card>
         </Dialog>
@@ -480,7 +518,11 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
                 <Button onClick={handleCloseDelete} variant="contained">
                   Cancel
                 </Button>
-                <Button onClick={handleDelete} variant="contained" color="error">
+                <Button
+                  onClick={handleDelete}
+                  variant="contained"
+                  color="error"
+                >
                   Delete
                 </Button>
               </DialogActions>
