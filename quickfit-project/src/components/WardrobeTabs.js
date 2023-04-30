@@ -29,7 +29,7 @@ import {
   deleteClothes,
 } from "@/modules/clothesFunctions";
 
-export default function WardrobeTabs( { clickFunction, category } ) {
+export default function WardrobeTabs({ clickFunction, category }) {
   // Get initial tab based on which add button clicked in add/edit outfit form
   let initialTab;
   if (category === "One Piece") {
@@ -37,7 +37,7 @@ export default function WardrobeTabs( { clickFunction, category } ) {
   } else if (category === "Top") {
     initialTab = 2;
   } else if (category === "Bottom") {
-    initialTab = 3; 
+    initialTab = 3;
   } else if (category === "Shoes") {
     initialTab = 4;
   } else if (category === "Accessories") {
@@ -80,7 +80,12 @@ export default function WardrobeTabs( { clickFunction, category } ) {
         </Tabs>
       </Stack>
       <SearchBar setSearch={setSearch} color={"#FFD36E"} />
-      <TabPanel tabValue={tabValue} search={search} clickFunction={clickFunction} category={category}/>
+      <TabPanel
+        tabValue={tabValue}
+        search={search}
+        clickFunction={clickFunction}
+        category={category}
+      />
     </>
   );
 }
@@ -93,7 +98,7 @@ function TabPanel(props) {
   const [updated, setUpdated] = useState(true);
 
   // --- Search ----------------------------------------------------------
-  const { tabValue, search, clickFunction, category} = props;
+  const { tabValue, search, clickFunction, category } = props;
 
   // --- Clothing lists --------------------------------------------------
   const [clothes, setClothes] = useState([]); // List of all clothes from GET request
@@ -132,7 +137,7 @@ function TabPanel(props) {
     const clothes = await getClothes(token);
     // Get user clothes from codehooks database
     setClothes(clothes);
-     // Once we get clothes, we are no longer loading or updating
+    // Once we get clothes, we are no longer loading or updating
     setLoading(false);
     setUpdated(false);
   }
@@ -182,8 +187,6 @@ function TabPanel(props) {
     setShoes(filterClothesByCategory(clothes, "Shoes")); // Filter shoes
     setAccessories(filterClothesByCategory(clothes, "Accessories")); // Filter accessories
   }, [clothes]);
-
-
 
   // Load GET requests before showing any content
   if (loading) {
