@@ -86,8 +86,7 @@ export function filterClothesByTag(clothesList, tagText) {
         (item) => 
             item.tags.every( 
                 (tag) => 
-                    ((String(tag).toLowerCase()).includes(String(tagText).toLowerCase())
-                )
+                    ((String(tag).toLowerCase()).includes(String(tagText).toLowerCase()))
             )
     ); // Get rid of zero-length lists
     return results.filter( (item) => (item.tags.length > 0) );
@@ -97,9 +96,8 @@ export function filterClothesByTag(clothesList, tagText) {
 // Helper function to filter out by name OR tag for a parameter list of clothes
 // ------------------------------------------------------------------------------
 export function filterClothesByNameOrTag(clothesList, searchText) {
-    // const nameList = filterClothesByName(clothesList, searchText);
-    const nameList = [];
-    const tagsList = filterClothesByTag(clothesList, searchText);
+    const nameList = filterClothesByName(clothesList, String(searchText));
+    const tagsList = filterClothesByTag(clothesList, String(searchText));
     return Array.from(new Set(tagsList.concat(nameList)));
 }
 
