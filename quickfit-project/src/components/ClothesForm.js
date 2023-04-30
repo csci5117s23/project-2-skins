@@ -454,7 +454,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
                     }}
                   >
                     <Button variant="contained" 
-                      sx={{ width: "45%", backgroundColor:"#FF3A00", fontWeight:"bold" }}
+                      sx={{ width: "45%", backgroundColor:"#e31300", fontWeight:"bold" }}
                       onClick={ () => { 
                         handleDelete(editId)
                         setUpdated?setUpdated(true):null;

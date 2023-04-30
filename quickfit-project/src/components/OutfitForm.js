@@ -459,9 +459,8 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
           <Button
             variant="contained"
             sx={{
-              width: { xs: "50vw", md: "70vw" },
-              borderRadius: "1.25em",
-              bgcolor: "#c2c2c2",
+              width: { xs: "65vw", md: "65vw" },
+              bgcolor: "#d2d2d2",
               color: "#3C3F42",
             }}
             onClick={(event, value) => {

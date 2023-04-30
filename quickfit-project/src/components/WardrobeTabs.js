@@ -80,12 +80,17 @@ export default function WardrobeTabs({ clickFunction, category }) {
         </Tabs>
       </Stack>
       <SearchBar setSearch={setSearch} color={"#FFD36E"} />
+      <Box sx={{
+            maxHeight: "70vh",
+            overflow: 'auto',
+          }}>
       <TabPanel
         tabValue={tabValue}
         search={search}
         clickFunction={clickFunction}
         category={category}
       />
+      </Box>
     </>
   );
 }
