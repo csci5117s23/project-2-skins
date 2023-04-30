@@ -72,20 +72,27 @@ export function filterClothesByName(clothesList, nameText) {
     return Object.values(clothesList).filter( (item) => ((item.name.toLowerCase()).includes((nameText.toLowerCase()))));
 }
 
-// --------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------
 // Helper function to filter out by tag for a parameter list of clothes
-// --------------------------------------------------------------------------
+// Reference for filtering by nested array elements:
+// https://stackoverflow.com/questions/51650390/filter-nested-array-in-object-array-by-array-of-values
+// ----------------------------------------------------------------------------------------------------
 export function filterClothesByTag(clothesList, tagText) {
     return Object.values(clothesList).filter( 
-        (item) => ((item.tags).includes((tagText.toLowerCase())))
-    );
+        (item) => 
+            item.tags.every( 
+                (tag) => (tag.toLowerCase()).includes(tagText.toLowerCase())
+            )
+        );
 }
 
 // -----------------------------------------------------------------------------
 // Helper function to filter out by name OR tag for a parameter list of clothes
 // ------------------------------------------------------------------------------
-export function filterClothesByNameOrTag(clothesList, tagText) {
-    return Object.values(clothesList).filter( (item) => ((item.name.toLowerCase()).includes((nameText.toLowerCase()))));
+export function filterClothesByNameOrTag(clothesList, searchText) {
+    const nameList = filterClothesByName(clothesList, searchText);
+    const tagsList = filterClothesByTag(clothesList, searchText);
+    return Array.from(new Set(tagsList.concat(nameList)));
 }
 
 // --------------------------------------------------------------------------------------------------------

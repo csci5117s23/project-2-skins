@@ -91,7 +91,7 @@ function TabPanel(props) {
       // Display "All" tab
       if (tabValue === 0 || tabValue === null || tabValue === undefined) {
         setCategory("All");
-        setShownClothes(filterClothesByName(clothes, search));
+        setShownClothes(filterClothesByNameOrTag(clothes, search));
       } // Display all "One Piece" tab
       else if (tabValue === 1) {
         setCategory("One Piece");
