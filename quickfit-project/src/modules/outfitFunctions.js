@@ -64,25 +64,58 @@ export async function getOutfitByDateWorn(authToken, date, id="") {
 // GET: Function to fill an outfit array based on the Ids retrieved
 // ---------------------------------------------------------------------
 export async function getOutfitArrayFromIds(authToken, outfit) {
+    // Check for invalid inputs
     if (outfit === null || outfit === undefined) {
         console.log("No outfit provided.");
         return;
     }
-
+    // --- Get any potential clothing IDs --------------------
     const onePieceId = outfit?.onePieceId;
     const topIds = outfit?.topId;
     const bottomIds = outfit?.bottomId;
     const shoesId = outfit?.shoesId;
     const accessoriesId = outfit?.accessoriesId;
-    
 
-    // Get one piece item
-    const onePiece = await getClothes(authToken, outfit.onePieceId);
-    console.log(onePiece);
+    // Clothing details to query for
+    let onePiece = null;
+    let tops = null;
+    let bottoms = null;
+    let shoes = null;
+    let accessories = null;
 
-    // Get shoes
-    const shoes = await getClothes(authToken, outfit.shoesId);
-    console.log(shoes)
+    // --- Get one piece item --------------------------------------
+    if (onePieceId) {
+        onePiece = await getClothes(authToken, onePieceId);
+    } 
+    // --- Get top items -------------------------------------------
+    tops = await getClothingItemsFromIds(authToken, topIds);
+
+    // --- Get bottom items ----------------------------------------
+    bottoms = await getClothingItemsFromIds(authToken, bottomIds);
+
+    // --- Get shoes -----------------------------------------------
+    if (shoesId) {
+        shoes = await getClothes(authToken, shoesId);
+    }
+    // --- Get accessories -----------------------------------------
+    accessories = await getClothingItemsFromIds(authToken, accessoriesId);
+
+    // From these values, build an outfits list w/ clothing details
+    let list = tops.concat(bottoms);
+    console.log(typeof tops);
+}
+
+// Function to get a list of clothing items from a list of Ids
+export async function getClothingItemsFromIds(authToken, ids) {
+    if (ids) {
+        let clothingItems = [];
+        ids.map( async (id) => (
+            clothingItems.push(await getClothes(authToken, id))
+        ))
+        return clothingItems;
+    } else {
+        return null;
+    }
 }
 
 // ---------------------------------------------------------

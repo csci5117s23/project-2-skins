@@ -186,12 +186,12 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
     // --- Call POST function if we are adding a clothing item ---
     // Create an outfit from state variables
     const postItem = {
-      topId:          getListIds(tops),         // Muliple tops allowed (zip up hoodie with t-shirt)                 
-      bottomId:       getListIds(bottoms),      // Multiple bottoms allowed (skirt with leggings)
-      shoesId:        getListIds(shoes)[0],     // One pair of shoes only    
-      accessoriesId:  getListIds(accessories),  // Multiple accessories allowed (necklace and watch)
-      onePieceId:     getListIds(onePiece)[0],  // Only one allowed 
-      dateWorn:       new Date(date),           // Date of when user set to wear this outfit (current calendar date)
+      topId:          getListIds(tops),               // Muliple tops allowed (zip up hoodie with t-shirt)                 
+      bottomId:       getListIds(bottoms),            // Multiple bottoms allowed (skirt with leggings)
+      shoesId:        getListIds(shoes)[0] || "",     // One pair of shoes only    
+      accessoriesId:  getListIds(accessories),        // Multiple accessories allowed (necklace and watch)
+      onePieceId:     getListIds(onePiece)[0] || "",  // Only one allowed 
+      dateWorn:       new Date(date),                 // Date of when user set to wear this outfit (current calendar date)
     }; 
     // Make POST request
     console.log("PostItem: " + JSON.stringify(postItem));
