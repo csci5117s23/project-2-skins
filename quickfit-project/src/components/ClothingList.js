@@ -29,21 +29,20 @@ import {
 import ClothingCard from "@/components/ClothingCard";
 
 export default function ClothingList(props) {
-  const { clothes, clickFunction} = props;
+  const { clothes, clickFunction } = props;
 
   return (
     <Stack spacing={1.5} width="100vw" alignItems="center" justifyContent="center">
-      {clothes.map((cloth) => {
-              return (
-                <div
-                  onClick={() => {
-                    clickFunction?clickFunction(cloth):null;
-                  }}
-                >
-                  <ClothingCard clothes={cloth} />
-                </div>
-              );
-            })}
+      {clothes.map((clothing) => {
+        return (
+          <Box
+            key={clothing._id}
+            onClick={() => {clickFunction?clickFunction(clothing):null;}}
+          >
+            <ClothingCard clothes={clothing} />
+          </Box>
+        );
+      })}
     </Stack>
   );
 }

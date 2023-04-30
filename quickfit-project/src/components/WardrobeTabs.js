@@ -1,37 +1,30 @@
 import { React, useState, useEffect } from "react";
-import Head from "next/head"; // Next-js imports
-import Image from "next/image";
-import { Inter } from "next/font/google";
-import {
-  ClerkProvider,
-  SignUp,
-  SignIn,
-  SignedIn,
-  SignedOut,
-} from "@clerk/clerk-react"; // Clerk authorization imports
-
-import {
-  AppBar,
-  Box,
-  Typography,
-  Stack,
-  Grid,
-  TextField,
-  Tabs,
-  Tab,
+import { useAuth } from "@clerk/nextjs";
+// MUI Component imports
+import { 
+  Stack, 
+  Tabs, 
+  Tab, 
+  CircularProgress 
 } from "@mui/material";
 import SwipeableViews from "react-swipeable-views";
-import WardrobePanel from "./ClothingList";
+// Custom component imports
+import ClothingList from "./ClothingList";
 import SearchBar from "./SearchBar";
+// DB Clothes Function imports
+import {
+  getClothes,
+  getClothesByCategory,
+  filterClothesByCategory,
+  addClothes,
+  editClothes,
+  deleteClothes,
+} from "@/modules/clothesFunctions";
 
 export default function WardrobeTabs() {
-  const [value, setValue] = useState(0);
+  // --- Search bar state hooks -----------------------------------------
+  const [tabValue, setTabValue] = useState(0);
   const [search, setSearch] = useState("");
-
-  
-  // useEffect(() => {
-  //   console.log(search);
-  // }, [search]);
 
   return (
     <>
@@ -50,7 +43,7 @@ export default function WardrobeTabs() {
           variant="scrollable"
           allowScrollButtonsMobile
           onChange={(e, value) => {
-            setValue(value);
+            setTabValue(value);
           }}
           aria-label="basic tabs example"
 
@@ -63,171 +56,115 @@ export default function WardrobeTabs() {
         </Tabs>
       </Stack>
       <SearchBar setSearch={setSearch} color={"#FFD36E"} />
-      <TabPanel value={value} search={search} />
+      <TabPanel tabValue={tabValue} search={search} />
     </>
   );
 }
 
 function TabPanel(props) {
-  const { value, search } = props;
-  const [category, setCategory] = useState("");
-  const [clothes, setclothes] = useState({});
+  // --- Authorization ---------------------------------------------------
+  const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
+  const [loading, setLoading] = useState(true);
 
-  //remove these states after useEffect------------
-  const [OnePieces, setOnePieces] = useState([
-    {
-      category: "OnePiece",
-      clothingName: "Artizia black onepiece",
-      tags: ["black", "tight"],
-      createdOn: new Date(),
-    },
-    {
-      category: "OnePiece",
-      clothingName: "Floral short dress",
-      tags: ["floral", "flowy", "short dress", "short sleeve"],
-      createdOn: new Date(),
-    },
-    {
-      category: "OnePiece",
-      clothingName: "Blue Overalls",
-      tags: ["jean", "blue"],
-      createdOn: new Date(),
-    },
-  ]);
+  // --- Search ----------------------------------------------------------
+  const { tabValue, search } = props;
 
-  const [Tops, setTops] = useState([
-    {
-      category: "Top",
-      clothingName: "Black Nike T-Shirt",
-      tags: ["black"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Top",
-      clothingName: "Dark green Long sleeve",
-      tags: ["Green", "loose", "long sleeve"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Top",
-      clothingName: "White Button up",
-      tags: ["white", "Button up"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Top",
-      clothingName: "Red shein crop top",
-      tags: ["cropped", "red", "shein"],
-      createdOn: new Date(),
-    },
-  ]);
+  // --- Clothing lists --------------------------------------------------
+  const [category, setCategory] = useState("All"); // Current category tab
+  const [clothes, setClothes] = useState([]); // List of all clothes from GET request
+  const [onePieces, setOnePieces] = useState([]); // List of user's one piece items
+  const [tops, setTops] = useState([]); // List of user's one piece items
+  const [bottoms, setBottoms] = useState([]); // List of user's one piece items
+  const [shoes, setShoes] = useState([]); // List of user's one piece items
+  const [accessories, setAccessories] = useState([]); // List of user's one piece items
 
-  const [Bottoms, setBottoms] = useState([
-    {
-      category: "Bottom",
-      clothingName: "Gray Nike Sweatplants",
-      tags: ["loose", "gray"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Bottom",
-      clothingName: "Abrecombie Ripped Denim",
-      tags: ["mom jeans", "baggy", "ripped"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Bottom",
-      clothingName: "Black Mom Jeans",
-      tags: ["black jeans", "mom jeans"],
-      createdOn: new Date(),
-    },
-  ]);
-
-  const [Shoes, setShoes] = useState([
-    {
-      category: "Shoes",
-      clothingName: "White Air Forces",
-      tags: ["White"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Shoes",
-      clothingName: "Black high heels",
-      tags: ["heels", "black"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Shoes",
-      clothingName: "White Dr Martin Platforms",
-      tags: ["white", "boots", "platforms"],
-      createdOn: new Date(),
-    },
-  ]);
-
-  const [Accessories, setAccessories] = useState([
-    {
-      category: "Accessories",
-      clothingName: "Heart Necklace",
-      tags: ["Silver"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Accessories",
-      clothingName: "Fluffy Tan Scarf",
-      tags: ["furry", "tan", "warm"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Accessories",
-      clothingName: "Black Mittens",
-      tags: ["black", "warm"],
-      createdOn: new Date(),
-    },
-  ]);
-  //-------------------------------------------
+  // --------------------------------------------------------------------------------------
+  // Update rendered JSX when wardrobe tab changes OR if search results change
+  // --------------------------------------------------------------------------------------
   useEffect(() => {
-    if (value === 0) {
-      setCategory("OnePieces");
+    if (tabValue === 0 || tabValue === null || tabValue === undefined) {
+      setCategory("All");
     }
-    if (value === 1) {
+    else if (tabValue === 1) {
+      setCategory("One Piece");
+    }
+    else if (tabValue === 2) {
       setCategory("Tops");
     }
-    if (value === 2) {
+    else if (tabValue === 3) {
       setCategory("Bottoms");
     }
-    if (value === 3) {
+    else if (tabValue === 4) {
       setCategory("Shoes");
     }
-    if (value === 4) {
+    else if (tabValue === 5) {
       setCategory("Accessories");
     }
-    //TODO: Get request that gets the outfit that matches the search and category type
-    //do a fetch to get our outfit given the arguments
+    // Filter search results based on tab and user text input
+
+    // TODO: Get request that gets the outfit that matches the search and category type
+    // do a fetch to get our outfit given the arguments
     //   fetch(
     //   "our end point/something?category=" + category + "&search=" + search
     //   )
     //   .then((res) => res.json())
     //   .then((data) => setClothes(data));
-  }, [search, value]);
 
-  //TODO: uncomment this after useEffect implemented
-  // return <WardrobePanel clothes={clothes} />;
+    
+    
+  }, [search, tabValue]);
 
-  //TODO:remove these after implementing useEffect------------
-  if (value === 0) {
-    return <WardrobePanel clothes={OnePieces} />;
+  // Make get requests to populate clothing category lists
+  useEffect(() => {
+    async function processClothes() {
+      // Get auth key & user's clothing items
+      if (userId) { // Ensure user is logged in before sending GET requests
+        const token = await getToken({ template: jwtTemplateName }); // Get auth token
+        setClothes(await getClothes(token)); // Get user clothes from codehooks database
+        setOnePieces(filterClothesByCategory(clothes, "One Piece")); // Filter one piece items
+        setTops(filterClothesByCategory(clothes, "Top")); // Filter top items
+        setBottoms(filterClothesByCategory(clothes, "Bottom")); // Filter bottom items
+        setShoes(filterClothesByCategory(clothes, "Shoes")); // Filter shoes
+        setAccessories(filterClothesByCategory(clothes, "Accessories")); // Filter accessories
+        setLoading(false); // Once we get these things, we are no longer loading
+      }
+    } // Get all clothes lists
+    processClothes();
+  }, [isLoaded, tabValue]);
+
+  // Load GET requests before showing any content
+  if (loading) {
+    return ( // Notify users contents are loading
+      <> 
+        LOADING...
+        <CircularProgress />
+      </>
+    );
+  } else { // Page contents
+
+    // ------------------------------------------------------------------
+    // Clothing lists based on current tab
+    // ------------------------------------------------------------------
+    if (category === "All") { // All clothes
+      return <ClothingList clothes={clothes || []} />
+    }
+    else if (category === "One Piece") { // List of one piece items
+      return <ClothingList clothes={onePieces || []} />;
+    }
+    else if (category === "Tops") { // List of tops
+      return <ClothingList clothes={tops || []} />;
+    }
+    else if (category === "Bottoms") { // List of bottoms
+      return <ClothingList clothes={bottoms || []} />;
+    }
+    else if (category === "Shoes") { // List of shoes
+      return <ClothingList clothes={shoes} />;
+    }
+    else if (category === "Accessories") { // List of accessories
+      return <ClothingList clothes={accessories || []} />;
+    }
   }
-  if (value === 1) {
-    return <WardrobePanel clothes={Tops} />;
-  }
-  if (value === 2) {
-    return <WardrobePanel clothes={Bottoms} />;
-  }
-  if (value === 3) {
-    return <WardrobePanel clothes={Shoes} />;
-  }
-  if (value === 4) {
-    return <WardrobePanel clothes={Accessories} />;
-  }
-  //--------------------------------------
+  // ------------------------------------------------------------------
+  // ------------------------------------------------------------------
 }

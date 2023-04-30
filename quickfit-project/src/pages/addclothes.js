@@ -14,7 +14,9 @@ import {
      CardActionArea,
      CardMedia,
      CardContent,
-     Typography
+     Typography,
+     CssBaseline,
+     Container
 } from "@mui/material";
 import { styled } from '@mui/material/styles';
 
@@ -29,25 +31,26 @@ const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 export default function AddClothes() {
   return (
     <>
-        {/* 1. Header section */}
-        <section>
-            <Header/>
-        </section>
+      <CssBaseline/>
+      {/* 1. Header section */}
+      <section>
+        <Header/>
+      </section>
 
-        {/* 2. Sidebar section */}
-        <section>
-        
-        </section>
+      {/* 2. Sidebar section */}
+      <section>
+      
+      </section>
 
-        {/* 3. Content section */}
-        <section>
-            <ClothesForm/>
-        </section>
+      {/* 3. Content section */}
+      <section>
+        <ClothesForm/>
+      </section>
 
-        {/* 4. NavBar section */}
-        <section>
-            <BottomNavigationContainer/>
-        </section>
+      {/* 4. NavBar section */}
+      <section>
+        <BottomNavigationContainer/>
+      </section>
     </>
   )
 }
