@@ -145,7 +145,19 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
         }
     }
     setOpen(false);
+
   };
+
+  // ------------------------------------------------------------
+  // Function to call DELETE request to get rid of clothing item
+  // ------------------------------------------------------------
+  async function makeDeleteRequest(clothingId) {
+    // Get authorization token from JWT codehooks template
+    const token = await getToken({ template: jwtTemplateName });
+
+    // --- Call DELETE function ---
+    const result = deleteClothes(token, clothingId);  
+  }
 
   // --- Edit useEffect ---
   // Load edit page with current outfit's clothing articles
@@ -171,26 +183,6 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
     }
     processOutfit();
   }, [date]); // category?
-
-
-  const getOutfit = (outfitId) =>{
-      //TODO using outfitId retrieve outfit
-      // var outfit = fetch(outfit)
-      
-  }  
-  //when selecting add, this will get the clothes that populate the list
-  //replace handleOpen on each onClick with this
-  const handleTops = () => {
-    //fetch tops
-    // fetch()
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     setClothes(data)
-    //     setOpen(true);
-    //   });
-  };
-
-
   
   // --- Outfit functions ---
   // ---------------------------------------------------------
@@ -242,17 +234,6 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
     });
     return Array.from(clothingListIds);
   }
-
-  // // -----------------------------------------------------
-  // // Function to delete a clothing article from front-end
-  // // -----------------------------------------------------
-  // async function handleDelete(clothingId) {
-  //   // Get authorization token from JWT codehooks template
-  //   const token = await getToken({ template: jwtTemplateName });
-
-  //   // --- Call DELETE function ---
-  //   const result = deleteClothes(token, clothingId);    
-  // }
 
   if (loading) {
     return <></>
@@ -479,10 +460,8 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
               justifyContent="center"
               mb={2}
             >
-              {console.log(category)}
+              {/* Use wardrobe tab component with different click function */}
               <WardrobeTabs clickFunction={handleClickClothes} category={category} />
-              {/* <Paper>{category}</Paper> */}
-              {/* <ClothingSearchList categoryInput={category} clickFunction={handleClickClothes} /> */}
             </Stack>
           </Card>
         </Dialog>
