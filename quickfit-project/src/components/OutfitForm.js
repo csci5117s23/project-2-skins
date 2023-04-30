@@ -34,6 +34,7 @@ import AutoFixHighTwoToneIcon from '@mui/icons-material/AutoFixHighTwoTone';
 
 import { useRouter } from "next/router";
 import ClothingSearchList from "./ClothingSearchList";
+import ClothingData from "./ClothingData";
 
 export default function OutfitForm(props) {
   const {date} = props;
@@ -327,7 +328,7 @@ export default function OutfitForm(props) {
         <ClothingList clothes={accessories} clickFunction={handleOpenDelete} />
         <Button
           variant="outlined"
-          sx={{ width: { xs: "60vw" }, height: { xs: "5vh" } }}
+          sx={{ width: { xs: "60vw" }, height: { xs: "5vh" }, bgcolor:"#222222", }}
           onClick={ () => { handleOpen(); setCategory("Accessories"); }}
         >
           {accessories.length > 0 ? (
@@ -344,7 +345,7 @@ export default function OutfitForm(props) {
         <Button
           variant="contained"
         
-          sx={{ width: {xs: "50vw", md: "70vw"}, borderRadius:"1.25em", backgroundColor:"#c2c2c2", color:"#3C3F42" }}
+          sx={{ width: {xs: "50vw", md: "70vw"}, borderRadius:"1.25em", bgcolor:"#c2c2c2", color:"#3C3F42" }}
           onClick={() => {
             router.push("/");
           }}
@@ -352,7 +353,7 @@ export default function OutfitForm(props) {
           <Typography variant="h6">Submit outfit</Typography>
         </Button>
       </Stack>
-      {/* Clothing list popup, shows when "add [clothing]" button clicked */}/
+      {/* Clothing list popup, shows when "add [clothing]" button clicked */}
       <Dialog fullScreen open={open} onClose={handleClose}>
         <AppBar sx={{ position: "relative" }}>
           <Toolbar>
@@ -379,7 +380,8 @@ export default function OutfitForm(props) {
             justifyContent="center"
             mb={2}
           >
-            <ClothingSearchList category={category} />
+            {/* <ClothingSearchList category={category} /> */}
+            <ClothingData date={date}/>
           </Stack>
         </Card>
       </Dialog>

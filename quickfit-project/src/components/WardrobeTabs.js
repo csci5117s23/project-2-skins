@@ -1,21 +1,21 @@
 import { React, useState, useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
 // MUI Component imports
-import { 
-  Stack, 
-  Tabs, 
-  Tab, 
+import {
+  Stack,
+  Tabs,
+  Tab,
   CircularProgress,
   Skeleton,
   Card,
   Box,
   Dialog,
-  CssBaseline,
-  Tooltip
 } from "@mui/material";
 // Custom component imports
 import ClothingList from "./ClothingList";
 import SearchBar from "./SearchBar";
+import ClothesForm from "./ClothesForm";
+
 // DB Clothes Function imports
 import {
   getClothes,
@@ -28,7 +28,6 @@ import {
   editClothes,
   deleteClothes,
 } from "@/modules/clothesFunctions";
-import ClothesForm from "./ClothesForm";
 
 export default function WardrobeTabs() {
   // --- Search bar state hooks -----------------------------------------
@@ -37,7 +36,6 @@ export default function WardrobeTabs() {
 
   return (
     <>
-      <CssBaseline/>
       <Stack
         alignItems="center"
         justifyContent="center"
@@ -56,14 +54,13 @@ export default function WardrobeTabs() {
             setTabValue(value);
           }}
           aria-label="basic tabs example"
-
         >
-          <Tab label="All" sx={{p: "1px"}} />
-          <Tab label="One Piece" sx={{p: "1px"}} />
-          <Tab label="Tops" sx={{p: "1px"}}/>
-          <Tab label="Bottoms" sx={{p: "1px"}}/>
-          <Tab label="Shoes" sx={{p: "1px"}}/>
-          <Tab label="Accessories" sx={{p: "1px"}}/>
+          <Tab label="All" sx={{ p: "1px" }} />
+          <Tab label="One Piece" sx={{ p: "1px" }} />
+          <Tab label="Tops" sx={{ p: "1px" }} />
+          <Tab label="Bottoms" sx={{ p: "1px" }} />
+          <Tab label="Shoes" sx={{ p: "1px" }} />
+          <Tab label="Accessories" sx={{ p: "1px" }} />
         </Tabs>
       </Stack>
       <SearchBar setSearch={setSearch} color={"#FFD36E"} />
@@ -81,22 +78,6 @@ function TabPanel(props) {
   // --- Search ----------------------------------------------------------
   const { tabValue, search } = props;
 
-  // --- Edit form dialog ---------------------------------------------
-  // State of whether or not dialog is open
-  const [open, setOpen] = useState(false);
-
-  // Function to open up webcam dialog/popup
-  function handleClickOpen(e) { 
-    console.log(e);
-    setClickedClothing(e);
-    setOpen(true) 
-  };
-
-  // Function to close webcam dialog/popup
-  function handleCloseDialog() {
-    setOpen(false) 
-  };
-
   // --- Clothing lists --------------------------------------------------
   const [category, setCategory] = useState("All"); // Current category tab
   const [clothes, setClothes] = useState([]); // List of all clothes from GET request
@@ -106,98 +87,143 @@ function TabPanel(props) {
   const [shoes, setShoes] = useState([]); // List of user's one piece items
   const [accessories, setAccessories] = useState([]); // List of user's one piece items
   const [shownClothes, setShownClothes] = useState([]); // List of clothes that appear on screen
-  const [clickedClothing, setClickedClothing] = useState(null); // Clothing item clicked to edit
 
-  // --------------------------------------------------------------------------
-  // Update page render when wardrobe tab changes OR if search results change
-  // --------------------------------------------------------------------------
-  useEffect(() => {
-    // Filter search results based on tab and user text input (name & tags)
-    if (userId) { 
-      // Display "All" tab
-      if (tabValue === 0 || tabValue === null || tabValue === undefined) {
-        setCategory("All");
-        setShownClothes(filterClothesByNameOrTag(clothes, search));
-      } // Display all "One Piece" tab
-      else if (tabValue === 1) {
-        setCategory("One Piece");
-        setShownClothes(filterClothesByNameOrTag(onePieces, search));
-      } // Display "Tops" tab
-      else if (tabValue === 2) {
-        setCategory("Tops");
-        setShownClothes(filterClothesByNameOrTag(tops, search));
-      } // Display "Bottoms" tab
-      else if (tabValue === 3) {
-        setCategory("Bottoms");
-        setShownClothes(filterClothesByNameOrTag(bottoms, search));
-      } // Display "Shoes" tab
-      else if (tabValue === 4) {
-        setCategory("Shoes");
-        setShownClothes(filterClothesByNameOrTag(shoes, search));
-      } // Display "Accessories" tab
-      else if (tabValue === 5) {
-        setCategory("Accessories");
-        setShownClothes(filterClothesByNameOrTag(accessories, search));
-      }
-    }
-  }, [search, tabValue]);
+  // --- Dialog --------------------------------------------------
+
+  // State of whether or not dialog is open
+  const [open, setOpen] = useState(false);
+  const [updated, setUpdated] = useState(true);
+  const [selectedClothing, setSelectedClothing] = useState(null);
+
+  const handleClickOpen = (Clothing) => {
+    setSelectedClothing(Clothing);
+    setOpen(true);
+  };
+  const handleUpdate = (update) => {
+    setUpdated(update);
+    handleCloseDialog();
+  };
+  // Function to close dialog
+  const handleCloseDialog = () => {
+    setOpen(false);
+  };
 
   // --------------------------------------------------------------
-  // Make initial GET requests to populate clothing category lists
+  // Make GET requests to populate clothing category lists
   // --------------------------------------------------------------
-  useEffect(() => { 
-    async function processClothes() {
-      // Get auth key & user's clothing items
-      if (userId) { // Ensure user is logged in before sending GET requests
-        const token = await getToken({ template: jwtTemplateName }); // Get auth token
-        setClothes(await getClothes(token)); // Get user clothes from codehooks database
-        setShownClothes(await getClothes(token)); // Get clothes to show on screen based on current search
+  async function processClothes() {
+    // Get auth key & user's clothing items
+      const token = await getToken({ template: jwtTemplateName }); // Get auth token
+      getClothes(token).then((clothes) => {
+        // Get user clothes from codehooks database
+        setClothes(clothes);
         setOnePieces(filterClothesByCategory(clothes, "One Piece")); // Filter one piece items
         setTops(filterClothesByCategory(clothes, "Top")); // Filter top items
         setBottoms(filterClothesByCategory(clothes, "Bottom")); // Filter bottom items
         setShoes(filterClothesByCategory(clothes, "Shoes")); // Filter shoes
         setAccessories(filterClothesByCategory(clothes, "Accessories")); // Filter accessories
-        setLoading(false); // Once we get these things, we are no longer loading
+      });
+      setLoading(false); // Once we get these things, we are no longer loading
+      setUpdated(false);
+  }
+
+  // --------------------------------------------------------------------------
+  // Update page render when wardrobe tab changes OR if search results change
+  // --------------------------------------------------------------------------
+  const handleTabs = () => {
+    // Display "All" tab
+    if (tabValue === 0 || tabValue === null || tabValue === undefined) {
+      setCategory("All");
+      setShownClothes(filterClothesByNameOrTag(clothes, search));
+    } // Display all "One Piece" tab
+    else if (tabValue === 1) {
+      setCategory("One Piece");
+      setShownClothes(filterClothesByNameOrTag(onePieces, search));
+    } // Display "Tops" tab
+    else if (tabValue === 2) {
+      setCategory("Tops");
+      setShownClothes(filterClothesByNameOrTag(tops, search));
+    } // Display "Bottoms" tab
+    else if (tabValue === 3) {
+      setCategory("Bottoms");
+      setShownClothes(filterClothesByNameOrTag(bottoms, search));
+    } // Display "Shoes" tab
+    else if (tabValue === 4) {
+      setCategory("Shoes");
+      setShownClothes(filterClothesByNameOrTag(shoes, search));
+    } // Display "Accessories" tab
+    else if (tabValue === 5) {
+      setCategory("Accessories");
+      setShownClothes(filterClothesByNameOrTag(accessories, search));
+    }
+  };
+
+  useEffect(() => {
+    // Ensure user is logged in before sending GET requests
+    if (userId) {
+      if (updated) {
+        processClothes().then(() => {
+          handleTabs();
+        });
       }
-    } // Get all clothes lists
-    processClothes();
-  }, [isLoaded]);
+      // Filter search results based on tab and user text input (name & tags)
+      handleTabs();
+    }
+  }, [isLoaded, updated, search, tabValue]);
 
   // Load GET requests before showing any content
-  if (loading) {
-    return ( // Notify users contents are loading
-      <> 
-        <CssBaseline/>
-        <Stack spacing={1.5} width="100vw" alignItems="center" justifyContent="center">
-          <Card sx={{backgroundColor:"#EEE"}}>
-            <Stack direction="row" alignItems="center" m={1} spacing={1} justifyContent="space-around"width="70vw" height="13vh">
-              <Skeleton height="5vh" width="60vw"/>
+  if (loading || shownClothes?.length == 0) {
+    return (
+      // Notify users contents are loading
+      <>
+        <Stack
+          spacing={1.5}
+          width="100vw"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Card sx={{ backgroundColor: "#EEE" }}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              m={1}
+              spacing={1}
+              justifyContent="space-around"
+              width="80vw"
+              height="13vh"
+            >
+              <Stack>
+                <Skeleton height="5vh" width="50vw" />
+                <Stack direction="row" spacing={1}>
+                  <Skeleton height="3vh" width="10vw" />
+                  <Skeleton height="3vh" width="10vw" />
+                  <Skeleton height="3vh" width="10vw" />
+                  <Skeleton height="3vh" width="10vw" />
+                </Stack>
+              </Stack>
+              <Skeleton height="100%" width="100%" />
             </Stack>
           </Card>
         </Stack>
       </>
     );
-  } else { // Page contents
-    
+  } else {
+    // Page contents
+
     // Clothing lists based on current tab, search (names & tags)
     return (
       <>
-        <CssBaseline/>
-        {/* List of clothes based on the current state of clothes to show */}
-        <ClothingList 
-          clothes={shownClothes || []} 
-          clickFunction={ (event) => {handleClickOpen(event) } } 
+        <ClothingList
+          clothes={shownClothes || []}
+          clickFunction={handleClickOpen}
         />
-
-
-        {/* Popup that shows when a clothing list entry is clicked */}
-        <Dialog
-          open={open} 
-          onClose={handleCloseDialog}
-        >
-          <ClothesForm clothingToEdit={clickedClothing} />
+        <Dialog open={open} onClose={handleCloseDialog}>
+          <ClothesForm
+            clothingToEdit={selectedClothing}
+            setUpdated={handleUpdate}
+          />
         </Dialog>
       </>
-    )
+    );
   }
 }
