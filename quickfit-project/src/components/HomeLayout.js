@@ -15,34 +15,9 @@ import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutl
 // Load any necessary ENV variables
 const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
-export default function UILayout({date, setDate}) {
+export default function UILayout({ date, setDate }) {
   const router = useRouter();
-  const [outfit, setOutfit] = useState([
-    {
-      category: "Top",
-      clothingName: "Black Nike T-Shirt",
-      tags: ["black"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Bottom",
-      clothingName: "Dark green cargos",
-      tags: ["Green", "loose", "cargo"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Shoes",
-      clothingName: "White air forces",
-      tags: ["white"],
-      createdOn: new Date(),
-    },
-    {
-      category: "Accessory",
-      clothingName: "Silver necklace",
-      tags: ["silver", "shiny"],
-      createdOn: new Date(),
-    },
-  ]);
+  const [outfit, setOutfit] = useState([]);
 
   useEffect(() => {
     //TODO: Get request that gets the outfit that matches the date
@@ -65,7 +40,6 @@ export default function UILayout({date, setDate}) {
     d.setDate(d.getDate() + 1);
     setDate(d);
   };
-
 
   return (
     <>
@@ -106,7 +80,7 @@ export default function UILayout({date, setDate}) {
                   router.push({
                     //TODO:figure out how to get outfit id and then pass the value to query
                     pathname: "/choosefit",
-                    query: { outfitId: 'outfit id' },
+                    query: { outfitId: "outfit id" },
                   });
                 }}
               >
@@ -128,7 +102,10 @@ export default function UILayout({date, setDate}) {
               {outfit ? (
                 outfit.map((clothes) => {
                   return (
-                    <Box sx={{ m: 1, width: { xs: "100vw", md: "34vw" } }}>
+                    <Box
+                      key={clothes._id}
+                      sx={{ m: 1, width: { xs: "100vw", md: "34vw" } }}
+                    >
                       <ClothingCard clothes={clothes} />
                     </Box>
                   );
