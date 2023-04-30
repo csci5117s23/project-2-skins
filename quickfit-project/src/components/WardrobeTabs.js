@@ -8,7 +8,10 @@ import {
   CircularProgress,
   Skeleton,
   Card,
-  Box
+  Box,
+  Dialog,
+  CssBaseline,
+  Tooltip
 } from "@mui/material";
 // Custom component imports
 import ClothingList from "./ClothingList";
@@ -25,6 +28,7 @@ import {
   editClothes,
   deleteClothes,
 } from "@/modules/clothesFunctions";
+import ClothesForm from "./ClothesForm";
 
 export default function WardrobeTabs() {
   // --- Search bar state hooks -----------------------------------------
@@ -76,6 +80,22 @@ function TabPanel(props) {
   // --- Search ----------------------------------------------------------
   const { tabValue, search } = props;
 
+  // --- Edit form dialog ---------------------------------------------
+  // State of whether or not dialog is open
+  const [open, setOpen] = useState(false);
+
+  // Function to open up webcam dialog/popup
+  function handleClickOpen(e) { 
+    console.log(e);
+    setClickedClothing(e);
+    setOpen(true) 
+  };
+
+  // Function to close webcam dialog/popup
+  function handleCloseDialog() {
+    setOpen(false) 
+  };
+
   // --- Clothing lists --------------------------------------------------
   const [category, setCategory] = useState("All"); // Current category tab
   const [clothes, setClothes] = useState([]); // List of all clothes from GET request
@@ -85,6 +105,7 @@ function TabPanel(props) {
   const [shoes, setShoes] = useState([]); // List of user's one piece items
   const [accessories, setAccessories] = useState([]); // List of user's one piece items
   const [shownClothes, setShownClothes] = useState([]); // List of clothes that appear on screen
+  const [clickedClothing, setClickedClothing] = useState(null); // Clothing item clicked to edit
 
   // --------------------------------------------------------------------------
   // Update page render when wardrobe tab changes OR if search results change
@@ -145,6 +166,7 @@ function TabPanel(props) {
   if (loading) {
     return ( // Notify users contents are loading
       <> 
+        <CssBaseline/>
         <Stack spacing={1.5} width="100vw" alignItems="center" justifyContent="center">
           <Card sx={{backgroundColor:"#EEE"}}>
             <Stack direction="row" alignItems="center" m={1} spacing={1} justifyContent="space-around"width="70vw" height="13vh">
@@ -155,9 +177,26 @@ function TabPanel(props) {
       </>
     );
   } else { // Page contents
-
+    
     // Clothing lists based on current tab, search (names & tags)
-    return <ClothingList clothes={shownClothes || []} />
-  
-    }
+    return (
+      <>
+        <CssBaseline/>
+        {/* List of clothes based on the current state of clothes to show */}
+        <ClothingList 
+          clothes={shownClothes || []} 
+          clickFunction={ (event, value) => {handleClickOpen(event) } } 
+        />
+
+
+        {/* Popup that shows when a clothing list entry is clicked */}
+        <Dialog
+          open={open} 
+          onClose={handleCloseDialog}
+        >
+          <ClothesForm clothingToEdit={clickedClothing} />
+        </Dialog>
+      </>
+    )
+  }
 }
