@@ -101,8 +101,8 @@ export async function getOutfitArrayFromIds(authToken, outfit) {
     accessories = await getClothingItemsFromIds(authToken, accessoriesId);
 
     // From these values, build an outfits list w/ clothing details
-    let list = tops.concat(bottoms);
-    console.log(typeof tops);
+    let lst = Object.keys(tops);
+    console.log(lst);
 }
 
 // Function to get a list of clothing items from a list of Ids
