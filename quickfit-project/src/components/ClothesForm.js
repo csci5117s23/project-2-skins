@@ -288,6 +288,15 @@ export default function ClothesForm( {clothingToEdit = null} ) {
           }}>
 
           <Box height={"100vh"}>
+          <Box sx={{
+            m:  { xs: 0 },
+            px: { xs: 2, md: 5 },
+            pt: { xs: 2, md: 5 }, 
+            pb: { xs: 5 },
+            height: "100%",
+            minHeight: "95vh",
+            width: '100%',
+          }}>
         <Card>
         <Box
           sx={{
@@ -296,7 +305,7 @@ export default function ClothesForm( {clothingToEdit = null} ) {
             pt: { xs: 2, md: 5 }, 
             pb: { xs: 5 },
             height: "100%",
-            minHeight: "95vh",
+            minHeight: "75vh",
             width: '100%',
             bgcolor: "white",
           }}
@@ -470,6 +479,7 @@ export default function ClothesForm( {clothingToEdit = null} ) {
           </FormControl>
         </Box>
         </Card>
+          </Box>
           </Box>
         </Box>
       </>
