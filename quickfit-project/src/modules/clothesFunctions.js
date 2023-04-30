@@ -169,10 +169,10 @@ export async function editClothes(authToken, clothing) {
 // -----------------------------------------------------------------
 // DELETE: Function to remove a clothing article from user wardrobe
 // -----------------------------------------------------------------
-export async function deleteClothes(authToken, clothing) {
+export async function deleteClothes(authToken, clothingId) {
     // Send DELETE request
     try {
-        const result = await fetch(clothesUrl + "/" + clothing._id, {
+        const result = await fetch(clothesUrl + "/" + clothingId, {
             'method': 'DELETE',
             'headers': {
                 'Authorization': 'Bearer ' + authToken,

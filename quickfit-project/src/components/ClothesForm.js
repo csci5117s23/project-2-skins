@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 // MUI Icon imports
 import DriveFolderUploadRoundedIcon from "@mui/icons-material/DriveFolderUploadRounded";
+import CloseIcon from '@mui/icons-material/Close';
 
 // DB Clothes Function imports
 import {
@@ -131,6 +132,17 @@ export default function ClothesForm( {clothingToEdit = null} ) {
 
     // On submit also, refresh the form
     resetForm();
+  }
+
+  // -----------------------------------------------------
+  // Function to delete a clothing article from front-end
+  // -----------------------------------------------------
+  async function handleDelete(clothingId) {
+    // Get authorization token from JWT codehooks template
+    const token = await getToken({ template: jwtTemplateName });
+
+    // --- Call DELETE function ---
+    const result = deleteClothes(token, clothingId);    
   }
 
   // --- Tag functions ---
@@ -295,7 +307,9 @@ export default function ClothesForm( {clothingToEdit = null} ) {
                       ?
                       <span>Add clothes to your wardrobe</span> 
                       : 
-                      <span>Edit clothing item</span> 
+                      <>
+                        <span>Edit clothing item</span>
+                      </>
                   }
                 </Typography>
               </Paper>
@@ -392,24 +406,55 @@ export default function ClothesForm( {clothingToEdit = null} ) {
               {image && <img src={image} alt="captured-photo" />}
 
               {/* --- Submit --- */}
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  pt: 2,
-                }}
-              >
-                <Button
-                  variant="contained"
-                  sx={{ width: "45%" }}
-                  onClick={(event, value) => {
-                    addNewTags();
-                    onHandleSubmit(event);
-                  }}
-                >
-                  Submit
-                </Button>
-              </Box>
+              { (clothingToEdit !== null) 
+                ?
+                  // Edit form buttons
+                  <Stack direction="row"
+                    spacing={3}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      pt: 2,
+                    }}
+                  >
+                    <Button variant="contained" 
+                      sx={{ width: "45%" }}
+                      onClick={ () => { handleDelete(editId) } }
+                    >
+                      Delete
+                    </Button>
+                      
+                    <Button variant="contained"
+                      sx={{ width: "45%" }}
+                      onClick={(event, value) => {
+                        addNewTags();
+                        onHandleSubmit(event);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  </Stack>
+                :
+                  // Add form buttons
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      pt: 2,
+                    }}
+                  >
+                    <Button variant="contained"
+                      sx={{ width: "45%" }}
+                      onClick={(event, value) => {
+                        addNewTags();
+                        onHandleSubmit(event);
+                      }}
+                    >
+                      Submit
+                    </Button>
+                  </Box>
+              }
+
             </Stack>
           </FormControl>
         </Box>
