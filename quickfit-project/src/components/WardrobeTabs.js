@@ -51,11 +51,12 @@ export default function WardrobeTabs() {
           aria-label="basic tabs example"
 
         >
-          <Tab label="One Piece" sx={{padding: "1px"}} />
-          <Tab label="Tops" sx={{padding: "1px"}}/>
-          <Tab label="Bottoms" sx={{padding: "1px"}}/>
-          <Tab label="Shoes" sx={{padding: "1px"}}/>
-          <Tab label="Accessories" sx={{padding: "1px"}}/>
+          <Tab label="All" sx={{p: "1px"}} />
+          <Tab label="One Piece" sx={{p: "1px"}} />
+          <Tab label="Tops" sx={{p: "1px"}}/>
+          <Tab label="Bottoms" sx={{p: "1px"}}/>
+          <Tab label="Shoes" sx={{p: "1px"}}/>
+          <Tab label="Accessories" sx={{p: "1px"}}/>
         </Tabs>
       </Stack>
       <SearchBar setSearch={setSearch} color={"#FFD36E"} />
