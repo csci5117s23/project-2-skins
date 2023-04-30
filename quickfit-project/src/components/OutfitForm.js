@@ -188,12 +188,13 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
     const postItem = {
       topId:          getListIds(tops),         // Muliple tops allowed (zip up hoodie with t-shirt)                 
       bottomId:       getListIds(bottoms),      // Multiple bottoms allowed (skirt with leggings)
-      shoesId:        shoes._id || null,        // One pair of shoes only    
+      shoesId:        getListIds(shoes),        // One pair of shoes only    
       accessoriesId:  getListIds(accessories),  // Multiple accessories allowed (necklace and watch)
-      onePieceId:     onePiece._id || null,     // Only one allowed 
+      onePieceId:     getListIds(onePiece),     // Only one allowed 
       dateWorn:       date,                     // Date of when user set to wear this outfit (current calendar date)
-    }; // Make POST request
-    console.log("PostItem: " + postItem);
+    }; 
+    // Make POST request
+    console.log("PostItem: " + JSON.stringify(postItem));
     const result = await addOutfit(token, postItem);
     console.log("Result: " + result);
 
@@ -208,7 +209,7 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
   function getListIds(clothesList) {
     if (clothesList === null) {
       console.log("No list provided.");
-      return;
+      return [];
     }
     return clothesList.map( (item) => { return item._id } );
   }

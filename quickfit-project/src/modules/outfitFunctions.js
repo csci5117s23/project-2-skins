@@ -35,7 +35,6 @@ export async function getOutfits(authToken, id="") {
     }
 }
 
-
 // ----------------------------------------------------------------
 // GET: Function get outfit based on input date worn (not created)
 // ----------------------------------------------------------------
@@ -49,11 +48,15 @@ export async function getOutfitByDateWorn(authToken, date, id="") {
     }
 } 
 
-
 // ---------------------------------------------------------
 // POST: Function to add a user outfit
 // ---------------------------------------------------------
 export async function addOutfit(authToken, outfit) {
+    // If no date to wear/worn provided, don't add outfit.
+    if (outfit.dateWorn === null) {
+        console.log("Need to provide a date to wear.");
+        return;
+    }
     // Send POST request
     try {
         const result = await fetch(outfitUrl, {
@@ -64,12 +67,12 @@ export async function addOutfit(authToken, outfit) {
                 'x-api-key': apiKey,
             },
             'body': JSON.stringify({
-                topId:          outfit.topId || null,
-                bottomId:       outfit.bottomId || null,
-                shoesId:        outfit.shoesId || null,  
-                accessoriesId:  outfit.accessoriesId || null,
-                onePieceId:     outfit.onePieceId || null,
-                dateWorn:       outfit.dateWorn || null,
+                topId:          outfit.topId,
+                bottomId:       outfit.bottomId,
+                shoesId:        outfit.shoesId,  
+                accessoriesId:  outfit.accessoriesId,
+                onePieceId:     outfit.onePieceId,
+                dateWorn:       outfit.dateWorn,
             }),
         });
         // Return newly-made clothing entry
