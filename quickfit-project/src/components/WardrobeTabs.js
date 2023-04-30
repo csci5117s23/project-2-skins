@@ -94,27 +94,26 @@ function TabPanel(props) {
       if (tabValue === 0 || tabValue === null || tabValue === undefined) {
         setCategory("All");
         setShownClothes(filterClothesByNameOrTag(clothes, search));
-        console.log(filterClothesByNameOrTag(clothes, search));
       } // Display all "One Piece" tab
       else if (tabValue === 1) {
         setCategory("One Piece");
-        setShownClothes(filterClothesByName(onePieces, search));
+        setShownClothes(filterClothesByNameOrTag(onePieces, search));
       } // Display "Tops" tab
       else if (tabValue === 2) {
         setCategory("Tops");
-        setShownClothes(filterClothesByName(tops, search));
+        setShownClothes(filterClothesByNameOrTag(tops, search));
       } // Display "Bottoms" tab
       else if (tabValue === 3) {
         setCategory("Bottoms");
-        setShownClothes(filterClothesByName(bottoms, search));
+        setShownClothes(filterClothesByNameOrTag(bottoms, search));
       } // Display "Shoes" tab
       else if (tabValue === 4) {
         setCategory("Shoes");
-        setShownClothes(filterClothesByName(shoes, search));
+        setShownClothes(filterClothesByNameOrTag(shoes, search));
       } // Display "Accessories" tab
       else if (tabValue === 5) {
         setCategory("Accessories");
-        setShownClothes(filterClothesByName(accessories, search));
+        setShownClothes(filterClothesByNameOrTag(accessories, search));
       }
     }
   }, [search, tabValue]);

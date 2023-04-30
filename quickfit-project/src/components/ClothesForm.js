@@ -62,12 +62,12 @@ export default function ClothesForm( {clothingToEdit = null} ) {
 
   // If passed in clothing item is not null, (AKA we are editing, then use these values instead)
   const editId = clothingToEdit?._id;
+  const editCreatedOn = clothingToEdit?.createdOn;
   const editCategory = clothingToEdit?.category;
   const editColor = clothingToEdit?.color;
   const editName = clothingToEdit?.name;
   const editTags = clothingToEdit?.tags;
-  // const editImage = clothingToEdit.category;
-  // const editImageName = clothingToEdit.
+  const editImageId = clothingToEdit?.imageId;
 
   // --- Main form state hooks & functions ------------------------------------------------------------------------------------------------
   const [category, setCategory] = useState(editCategory || "");               // Clothing entry category
@@ -98,13 +98,10 @@ export default function ClothesForm( {clothingToEdit = null} ) {
   // Function to add a clothing article from front-end
   // --------------------------------------------------
   async function onHandleSubmit(e) {
-    
-    console.log("Clothing item on submit: ");
-    console.log(clothingItem);
-
     // Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
 
+    let result;
     // --- Call POST function if we are adding a clothing item ---
     if (clothingToEdit === null) { 
       // Create a clothing item from state variables
@@ -121,13 +118,15 @@ export default function ClothesForm( {clothingToEdit = null} ) {
     else { 
       // Create a clothing item from state variables
       const putItem = {
-        category: category,
-        name:     name,
-        color:    color,
-        tags:     getTagNames(inputTags),
-        // imageId: uploadImage(e),
+        _id:        editId,
+        createdOn:  editCreatedOn,
+        imageId:    editImageId,
+        category:   category,
+        name:       name,
+        color:      color,
+        tags:       getTagNames(inputTags),
       }; // Make PUT request
-      result = await editClothes(token, clothingItem);
+      result = await editClothes(token, putItem);
     }
 
     // On submit also, refresh the form

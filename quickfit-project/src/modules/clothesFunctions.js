@@ -150,7 +150,7 @@ export async function addClothes(authToken, clothing) {
 export async function editClothes(authToken, clothing) {
     // Send PUT request
     try {
-        const result = await fetch(clothesUrl + clothing._id, {
+        const result = await fetch(clothesUrl + "/" + clothing._id, {
             'method': 'PUT',
             'headers': {
                 'Authorization': 'Bearer ' + authToken,
@@ -172,7 +172,7 @@ export async function editClothes(authToken, clothing) {
 export async function deleteClothes(authToken, clothing) {
     // Send DELETE request
     try {
-        const result = await fetch(clothesUrl + clothing._id, {
+        const result = await fetch(clothesUrl + "/" + clothing._id, {
             'method': 'DELETE',
             'headers': {
                 'Authorization': 'Bearer ' + authToken,
