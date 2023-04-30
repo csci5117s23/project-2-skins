@@ -63,6 +63,7 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
   // --- Main form state hooks & functions --------------------------------------------------------------
   const {outfitId} = router.query;
   const [outfit, setOutfit] = useState(null);
+  const [deletingOutfit, setDeletingOutfit] = useState(false);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState("");
   const [onePiece, setOnePiece] = useState([]);
@@ -93,7 +94,7 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
 
   // Take the ClothingToDelete and remove it from the list
   // Removing an item from list found on https://semicolon.dev/tutorial/javascript/remove-matching-object-from-js-array
-  const handleDelete = async (e) => {
+  const handleDelete = async () => {
     if (clothingToDelete["category"] == "One Piece") {
       setOnePiece([]);
     } else if (clothingToDelete["category"] == "Top") {
@@ -106,6 +107,11 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
       setAccessories(removeItemFromList(accessories, clothingToDelete));
     }
     setOpenDelete(false);
+
+    // If it's the last item, remove the outfit completely.
+    if (outfit.length === 1) {
+      setDeletingOutfit(true);
+    }
   };
 
   // Helper function returns a list that has item removed from it
@@ -116,7 +122,6 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
     }
     return list;
   };
-
 
   // Handle selecting clothing from "add clothing" button
   const handleClickClothes = (clothes) => {
@@ -158,7 +163,6 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
     const token = await getToken({ template: jwtTemplateName });
 
     // --- Call POST function if we are adding a clothing item ---
-    console.log(outfitId);
     if (outfitId === undefined || outfitId === null || outfitId === "") {
       // Create an outfit from state variables
       const postItem = {
@@ -172,6 +176,10 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
       // Make POST request
       const result = await addOutfit(token, postItem);
     } 
+    else if (deletingOutfit === true) {
+      const result = await deleteOutfit(token, outfitId);
+      setDeletingOutfit(false);
+    }
     // --- Call PUT function if we are editing a clothing item ---
     else {
       // Create an outfit from state variables
@@ -186,7 +194,6 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
       };
       // Make PUT request
       const result = await editOutfit(token, putItem);
-      console.log(result); 
     }
   }
 
