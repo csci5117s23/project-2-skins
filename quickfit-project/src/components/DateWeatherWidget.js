@@ -18,8 +18,7 @@ import {
 } from "@mui/material";
 import CalenderCard from "./CalenderCard";
 
-export default function DateWeatherWidget(props) {
-  const { date, setDate } = props;
+export default function DateWeatherWidget({ date, setDate }) {
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -40,6 +39,7 @@ export default function DateWeatherWidget(props) {
           "&:hover": {
             backgroundColor: "#f2f2f2", 
           },
+          
         }}
       >
         <Stack
@@ -62,7 +62,7 @@ export default function DateWeatherWidget(props) {
             <></>
           )}
           <Stack width={"50vw"} direction="row" alignItems="center"
-          justifyContent="center">
+          justifyContent="center" >
             <DateCard date={date ? date : new Date()} />
           </Stack>
         </Stack>
@@ -77,7 +77,7 @@ export default function DateWeatherWidget(props) {
             date={date}
             setDate={setDate}
             handleClose={handleClose}
-          />
+          /> 
         </Box>
       </Modal>
     </>

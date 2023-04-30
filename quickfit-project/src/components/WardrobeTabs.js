@@ -43,18 +43,19 @@ export default function WardrobeTabs() {
       >
         <Tabs
           value={tabValue}
+          variant="scrollable"
+          allowScrollButtonsMobile
           onChange={(e, value) => {
             setTabValue(value);
           }}
           aria-label="basic tabs example"
-          variant="scrollable"
+
         >
-          <Tab label="All" />
-          <Tab label="One Piece" />
-          <Tab label="Tops" />
-          <Tab label="Bottoms" />
-          <Tab label="Shoes" />
-          <Tab label="Accessories" />
+          <Tab label="One Piece" sx={{padding: "1px"}} />
+          <Tab label="Tops" sx={{padding: "1px"}}/>
+          <Tab label="Bottoms" sx={{padding: "1px"}}/>
+          <Tab label="Shoes" sx={{padding: "1px"}}/>
+          <Tab label="Accessories" sx={{padding: "1px"}}/>
         </Tabs>
       </Stack>
       <SearchBar setSearch={setSearch} color={"#FFD36E"} />

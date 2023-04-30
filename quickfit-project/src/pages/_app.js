@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from '@clerk/nextjs';
 import { useRouter } from 'next/router';
 import SignInPage from "@/components/SignInPage";
@@ -27,9 +28,10 @@ const theme = createTheme({
 })
 
 export default function App({ Component, pageProps }) {
+  const [date, setDate] = useState(new Date());
   const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
-  
-  // Get URL pathname of browser
+
+  // Get the pathname
   const { pathname } = useRouter();
 
   return (
@@ -37,7 +39,7 @@ export default function App({ Component, pageProps }) {
       <ClerkProvider {...pageProps} publishableKey={clerkPubKey}>
         
         <SignedIn>
-          <Component {...pageProps} />
+          <Component {...pageProps} date={date} setDate={setDate} />
         </SignedIn>
 
         <SignedOut>

@@ -17,6 +17,8 @@ import {
   Grid,
 } from "@mui/material";
 
+// import ResizableChip from "./ResizableChip";
+
 export default function ClothingCard(props) {
   const { clothes } = props;
 
@@ -36,33 +38,34 @@ export default function ClothingCard(props) {
           }}
           justifyContent="space-between"
         >
-          <Grid item xs={6}>
+          <Grid item xs={6} justifyContent="flex-start"
+  alignItems="flex-start">
             <Box ml={1.5} mt={0.2}>
-              <Box sx={{ fontSize: { xs: 20, md: 30 } }}>
-                <Typography>{clothes["name"]}</Typography>
+              <Typography>
+                <Box sx={{ fontSize: { xs: 20, md: 30 } }}>
+                  {clothes["name"]}
+                </Box>
+              </Typography>
+              
+              <Box
+                sx={{
+                  transform: {xs:"scale(.8) translate(-15%)", md:"scale(1)"} ,
+                  width:{xs:"50vw", md:"100%"},
+                  display: "flex",
+                  flexWrap: "wrap",
+                }}
+              >
+                {clothes["tags"]?.map((tag) => {
+                  return (
+                    <Chip
+                      varient="outlined"
+                      label={tag}
+                      size="small"
+                      sx={{ mt: 0.25, mr: 0.25, backgroundColor: "#DDD" }}
+                    />
+                  );
+                })}
               </Box>
-              <Box sx={{ fontSize: { xs: 15, md: 25 } }}>
-                <Typography gutterBottom component="div" color="text.secondary">
-                  {clothes["category"]}
-                </Typography>
-              </Box>
-            </Box>
-            <Box sx={{ ml: 0.5, display: "flex", flexWrap: "wrap" }}>
-              {clothes["tags"]?.map((tag) => {
-                return (
-                  <Chip
-                    key={tag}
-                    variant="outlined"
-                    label={tag}
-                    size="small"
-                    sx={{
-                      mt: 0.25,
-                      mr: 0.25,
-                      backgroundColor: "#DDD",
-                    }}
-                  />
-                );
-              })}
             </Box>
           </Grid>
           <Grid item xs={6}>

@@ -66,7 +66,7 @@ export default function WeatherCard(props) {
           alt="Weather icon"
           src={iconurl}
         />
-        <Typography variant={"h6"} sx={{ color: "#696969" }}>
+        <Typography variant={"h6"} sx={{ color: "#555" }}>
           <Box sx={{fontSize: {xs:20, md:30}, fontWeight: "bold"}}>
           {data && Math.round(temp["min"])}° - {data && Math.round(temp["max"])}
           °</Box>
