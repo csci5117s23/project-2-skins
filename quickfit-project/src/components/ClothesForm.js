@@ -61,6 +61,7 @@ export default function ClothesForm( {clothingToEdit = null} ) {
   const [loading, setLoading] = useState(true);
 
   // If passed in clothing item is not null, (AKA we are editing, then use these values instead)
+  const editId = clothingToEdit?._id;
   const editCategory = clothingToEdit?.category;
   const editColor = clothingToEdit?.color;
   const editName = clothingToEdit?.name;
@@ -97,25 +98,35 @@ export default function ClothesForm( {clothingToEdit = null} ) {
   // Function to add a clothing article from front-end
   // --------------------------------------------------
   async function onHandleSubmit(e) {
-    // Create a clothing item from state variables to POST
-    const clothingItem = {
-      category: category,
-      name: name,
-      color: color,
-      tags: getTagNames(inputTags),
-      // imageId: uploadImage(e),
-    };
+    
     console.log("Clothing item on submit: ");
     console.log(clothingItem);
 
     // Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
 
-    // Call POST function if we are using the add form
-    let result;
-    if (clothingToEdit === null) { // POST if adding
-      result = await addClothes(token, clothingItem);
-    } else { // PUT if editing
+    // --- Call POST function if we are adding a clothing item ---
+    if (clothingToEdit === null) { 
+      // Create a clothing item from state variables
+      const postItem = {
+        category: category,
+        name:     name,
+        color:    color,
+        tags:     getTagNames(inputTags),
+        // imageId: uploadImage(e),
+      }; // Make POST request
+      result = await addClothes(token, postItem);
+    } 
+    // --- Call PUT function if we are editing a clothing item ---
+    else { 
+      // Create a clothing item from state variables
+      const putItem = {
+        category: category,
+        name:     name,
+        color:    color,
+        tags:     getTagNames(inputTags),
+        // imageId: uploadImage(e),
+      }; // Make PUT request
       result = await editClothes(token, clothingItem);
     }
 
