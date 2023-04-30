@@ -9,9 +9,26 @@ import {
   Chip,
   Grid,
 } from "@mui/material";
+import {
+  useCloudDownloadLatest
+} from "@/modules/imageFunctions"
 
 export default function ClothingCard(props) {
-  const { clothes } = props;
+  const { clothes } = props;  
+  const [image, setImage] = useState(<span>Loading...</span>);
+
+  async function downloadImage() {
+    const src = await useCloudDownloadLatest();
+    setImage(<Box src={src} component="img"
+      sx={{
+        backgroundColor: "#000000",
+        maxWidth: { xs: "15vh", md: "25vh"},
+        maxHeight: { xs: "100%" },
+      }}
+      width={500} height={500} />
+    );
+  }
+
 
   // Dont render if theres no clothes
   if (!clothes) {
@@ -68,7 +85,8 @@ export default function ClothingCard(props) {
           </Grid>
           <Grid item xs={6}>
             <Box display="flex" justifyContent="flex-end">
-              <Box
+              {/* {image} */}
+              {/* <Box
                 component="img"
                 sx={{
                   backgroundColor: "#000000",
@@ -77,7 +95,7 @@ export default function ClothingCard(props) {
                 }}
                 src="https://dtpmhvbsmffsz.cloudfront.net/posts/2015/08/12/55cba8312035ea03bf02284f/m_55cba8312035ea03bf022850.jpg"
                 alt="Clothing Image"
-              />
+              /> */}
             </Box>
           </Grid>
         </Grid>

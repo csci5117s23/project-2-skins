@@ -123,18 +123,21 @@ export async function useCloudDownloadLatest() {
             "x-api-key": CODEHOOKS_KEY,
         },
     });
-    const resData = await res.json();
-    let latestId = resData[resData.length - 1].id;
+   
+    console.log(res);
+    
+    // const resData = await res.json();
+    // let latestId = resData[resData.length - 1].id;
 
-    // 2. Build our download urls
-    const downloadUrl = `${downloadData.downloadUrl}/b2api/v2/b2_download_file_by_id?fileId=${latestId}`;
+    // // 2. Build our download urls
+    // const downloadUrl = `${downloadData.downloadUrl}/b2api/v2/b2_download_file_by_id?fileId=${latestId}`;
 
-    // 3. Fetch request for each download url
-    const response = await fetch(downloadUrl);
-    const blob = await response.blob();
-    const src = URL.createObjectURL(blob);
+    // // 3. Fetch request for each download url
+    // const response = await fetch(downloadUrl);
+    // const blob = await response.blob();
+    // const src = URL.createObjectURL(blob);
 
-    return src;
+    // return src;
 }
 
 export async function useCloudDownloads(downloadUrls) {
