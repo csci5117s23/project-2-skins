@@ -85,7 +85,7 @@ export function filterClothesByTag(clothesList, tagText) {
     const results = Object.values(clothesList).filter( 
         (item) => 
             item.tags.every( 
-                (tag) => 
+                (tag) =>
                     ((String(tag).toLowerCase()).includes(String(tagText).toLowerCase()))
             )
     ); // Get rid of zero-length lists
