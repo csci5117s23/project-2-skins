@@ -61,6 +61,10 @@ export async function getClothesByName(authToken, category, query="", id="") {
 // Helper function to filter out by category for a parameter list of clothes
 // --------------------------------------------------------------------------
 export function filterClothesByCategory(clothesList, category) {
+    if (clothesList === null || clothesList === undefined) {
+        console.log("Invalid input.");
+        return;
+    }
     return Object.values(clothesList).filter( (item) => (item.category === category));
 }
 
@@ -68,6 +72,10 @@ export function filterClothesByCategory(clothesList, category) {
 // Helper function to filter out by name for a parameter list of clothes
 // --------------------------------------------------------------------------
 export function filterClothesByName(clothesList, nameText) {
+    if (clothesList === null || clothesList === undefined) {
+        console.log("Invalid input.");
+        return;
+    }
     return Object.values(clothesList).filter( 
         (item) => 
             ((String(item.name).toLowerCase()).includes((String(nameText).toLowerCase()))
@@ -81,6 +89,10 @@ export function filterClothesByName(clothesList, nameText) {
 // https://stackoverflow.com/questions/51650390/filter-nested-array-in-object-array-by-array-of-values
 // ----------------------------------------------------------------------------------------------------
 export function filterClothesByTag(clothesList, tagText) {
+    if (clothesList === null || clothesList === undefined) {
+        console.log("Invalid input.");
+        return;
+    }
     const results = Object.values(clothesList).filter( 
         (item) => 
             item.tags.every( 
@@ -95,6 +107,10 @@ export function filterClothesByTag(clothesList, tagText) {
 // Helper function to filter out by name OR tag for a parameter list of clothes
 // ------------------------------------------------------------------------------
 export function filterClothesByNameOrTag(clothesList, searchText) {
+    if (clothesList === null || clothesList === undefined) {
+        console.log("Invalid input.");
+        return;
+    }
     const nameList = filterClothesByName(clothesList, String(searchText));
     const tagsList = filterClothesByTag(clothesList, String(searchText));
     return Array.from(new Set(tagsList.concat(nameList)));
