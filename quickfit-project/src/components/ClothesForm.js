@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
+import Image from "next/image";
 // MUI Component imports
 import {
   Box,
@@ -414,7 +415,7 @@ export default function ClothesForm( {clothingToEdit = null} ) {
               />
 
               {/* Show preview of image */}
-              {image && <img src={image} alt="captured-photo" />}
+              {image && <Box component="img" src={image} alt="captured-photo" />}
 
               {/* --- Submit --- */}
               { (clothingToEdit !== null) 
