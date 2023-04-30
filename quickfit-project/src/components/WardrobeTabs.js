@@ -67,7 +67,7 @@ export default function WardrobeTabs() {
   );
 }
 
-export function TabPanel(props) {
+function TabPanel(props) {
   // --- Authorization ---------------------------------------------------
   const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
   const { isLoaded, userId, sessionId, getToken } = useAuth();
@@ -139,7 +139,7 @@ export function TabPanel(props) {
       }
     } // Get all clothes lists
     processClothes();
-  }, [isLoaded, tabValue]);
+  }, [isLoaded]);
 
   // Load GET requests before showing any content
   if (loading) {
@@ -152,10 +152,14 @@ export function TabPanel(props) {
             </Stack>
           </Card>
         </Stack>
+        
+        
       </>
     );
   } else { // Page contents
+
     // Clothing lists based on current tab, search (names & tags)
     return <ClothingList clothes={shownClothes || []} />
-  }
+  
+    }
 }
