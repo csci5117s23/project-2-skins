@@ -74,34 +74,17 @@ export async function getOutfitArrayFromIds(authToken, outfit) {
     const bottomIds = outfit?.bottomId;
     const shoesId = outfit?.shoesId;
     const accessoriesId = outfit?.accessoriesId;
-
-    // Clothing details to query for
-    let onePiece = null;
-    let tops = null;
-    let bottoms = null;
-    let shoes = null;
-    let accessories = null;
-
-    // --- Get one piece item --------------------------------------
-    if (onePieceId) {
-        onePiece = getClothes(authToken, onePieceId);
-    } 
-    // --- Get top items -------------------------------------------
-    tops = getClothingItemsFromIds(authToken, topIds);
-
-    // --- Get bottom items ----------------------------------------
-    bottoms = getClothingItemsFromIds(authToken, bottomIds);
-
-    // --- Get shoes -----------------------------------------------
-    if (shoesId) {
-        shoes = getClothes(authToken, shoesId);
-    }
-    // --- Get accessories -----------------------------------------
-    accessories = getClothingItemsFromIds(authToken, accessoriesId);
-   
-    let list = ([].concat(tops, bottoms, accessories, [onePiece], [shoes]))
-    list = await Promise.all(list);     // Reference to do all promise: https://stackoverflow.com/questions/18526824/transform-array-of-promises-into-array-of-values-when-fulfilled
-    return list.flat(Infinity);         // https://stackoverflow.com/questions/69070429/how-to-make-nested-array-into-a-single-array-in-javascript
+    
+    // Get list of clothing IDs to retrieve from database
+    // Reference to flatten a nested array: https://stackoverflow.com/questions/69070429/how-to-make-nested-array-into-a-single-array-in-javascript
+    let idsToGet = [onePieceId, topIds, bottomIds, shoesId, accessoriesId].flat(Infinity);
+    idsToGet = idsToGet.filter( (id) => ( id !== "" ) );
+    
+    const clothes = idsToGet.map( async (id) => {
+        return await getClothes(authToken, id) 
+    })
+    // Reference for promise.all use: https://stackoverflow.com/questions/18526824/transform-array-of-promises-into-array-of-values-when-fulfilled
+    return await Promise.all(clothes);
 }
 
 // Function to get a list of clothing items from a list of Ids
