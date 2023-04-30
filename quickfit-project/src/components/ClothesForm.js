@@ -22,6 +22,8 @@ import {
 import DriveFolderUploadRoundedIcon from "@mui/icons-material/DriveFolderUploadRounded";
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import DeleteOutlineTwoToneIcon from '@mui/icons-material/DeleteOutlineTwoTone';
+import AutoFixHighTwoToneIcon from '@mui/icons-material/AutoFixHighTwoTone';
 // DB Clothes Function imports
 import {
   getClothes,
@@ -75,8 +77,6 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
     setOpenSuccessMessage(false);
   }
 
-
-
   // If passed in clothing item is not null, (AKA we are editing, then use these values instead)
   const editId = clothingToEdit?._id;
   const editCreatedOn = clothingToEdit?.createdOn;
@@ -129,6 +129,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
         tags:     getTagNames(inputTags),
         // imageId: uploadImage(e),
       }; // Make POST request
+      console.log("postItem: " + JSON.stringify(postItem));
       result = await addClothes(token, postItem);
     } 
     // --- Call PUT function if we are editing a clothing item ---
@@ -298,11 +299,10 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
             p: { xs: 2, sm: 3, md: 4, xl: 5 },
             // height: "100%",
             height: "90vh",
-            maxHeight: "90vh",
+            maxHeight: "87vh",
             overflow: 'auto',
             backgroundImage: "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)"
           }}>
-
           <Box height={"100vh"}>
           <Box sx={{
             m:  { xs: 0 },
@@ -321,7 +321,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
             pt: { xs: 2, md: 5 }, 
             pb: { xs: 5 },
             height: "100%",
-            minHeight: "75vh",
+            minHeight: "7vh",
             width: '100%',
           }}
         >
@@ -454,13 +454,14 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
                     }}
                   >
                     <Button variant="contained" 
-                      sx={{ width: "45%", backgroundColor:"#fc7b03", fontWeight:"bold" }}
+                      sx={{ width: "45%", backgroundColor:"#FF3A00", fontWeight:"bold" }}
                       onClick={ () => { 
                         handleDelete(editId)
                         setUpdated?setUpdated(true):null;
                       } }
                     >
                       Delete
+                      <DeleteOutlineTwoToneIcon fontSize="small"/>
                     </Button>
                       
                     <Button variant="contained"
@@ -472,6 +473,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
                       }}
                     >
                       Edit
+                      <AutoFixHighTwoToneIcon fontSize="small"/>
                     </Button>
                   </Stack>
                 :

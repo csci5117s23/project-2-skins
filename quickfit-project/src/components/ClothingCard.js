@@ -8,13 +8,10 @@ import {
   Card,
   Chip,
   Grid,
-  Tooltip,
-  Dialog,
 } from "@mui/material";
 
 export default function ClothingCard(props) {
   const { clothes } = props;
-
 
   // Dont render if theres no clothes
   if (!clothes) {
@@ -38,7 +35,7 @@ export default function ClothingCard(props) {
             <Grid item xs={6} justifyContent="flex-start" alignItems="flex-start">
               <Box ml={1.5} mt={0.2}>
                 <Box>
-                    <Typography sx={{ fontSize: { xs: 20, md: 32 } }} >{clothes["name"]}</Typography>
+                    <Typography sx={{ fontSize: { xs: 20, md: 28 } }} >{clothes["name"]}</Typography>
                 </Box>
                 <Box >
                   <Typography sx={{ fontSize: { xs: 15, md: 25 } }} gutterBottom component="div" color="text.secondary">

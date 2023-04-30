@@ -170,21 +170,21 @@ app.get("/get_all_images", async (req, res) => {
 // Authorization
 // Grabs the authorization token and parses it, stashing it on the request.
 // Professor Kluver code referenced from: https://github.com/csci5117s23/Tech-Stack-2-Kluver-Demo/blob/main/backend/index.js
-const userAuth = async (req, res, next) => {
-  try {
-    const { authorization } = req.headers;
-    if (authorization) {
-      const token = authorization.replace('Bearer ','');
-      // NOTE this doesn't validate, but we don't need it to. codehooks is doing that for us.
-      const token_parsed = jwtDecode(token);
-      req.user_token = token_parsed;
-    }
-    next();
-  } catch (error) {
-    next(error);
-  } 
-}
-app.use(userAuth)
+// const userAuth = async (req, res, next) => {
+//   try {
+//     const { authorization } = req.headers;
+//     if (authorization) {
+//       const token = authorization.replace('Bearer ','');
+//       // NOTE this doesn't validate, but we don't need it to. codehooks is doing that for us.
+//       const token_parsed = jwtDecode(token);
+//       req.user_token = token_parsed;
+//     }
+//     next();
+//   } catch (error) {
+//     next(error);
+//   } 
+// }
+// app.use(userAuth)
 
 
 
