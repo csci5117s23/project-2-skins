@@ -55,7 +55,7 @@ export default function ClothingCard(props) {
                 {clothes["tags"]?.map((tag) => {
                   return (
                     <Chip
-                      key={tag}
+                      key={tag + clothes._id}
                       varient="outlined"
                       label={tag}
                       size="small"
