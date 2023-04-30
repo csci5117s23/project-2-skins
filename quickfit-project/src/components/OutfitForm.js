@@ -50,11 +50,11 @@ export default function OutfitForm(props) {
   const router = useRouter();
 
   // State hooks for form elements
-  const [onePieceItem, setOnePieces] = useState(); // Outfit one piece
-  const [topsItem, setTops] = useState(""); // Outfit top 
-  const [bottomsItem, setBottoms] = useState(""); // Outfit bottom
-  const [shoesItem, setShoes] = useState(""); // Outfit shoes
-  const [accessoryItems, setAccessories] = useState(""); // Outfit accessories
+  const [onePieceItem, setOnePieces] = useState(null); // Outfit one piece
+  const [topsItem, setTops] = useState(null); // Outfit top 
+  const [bottomsItem, setBottoms] = useState(null); // Outfit bottom
+  const [shoesItem, setShoes] = useState(null); // Outfit shoes
+  const [accessoryItems, setAccessories] = useState(null); // Outfit accessories
 
   //properties for the post request to add outfit
   //if there is an outfit id do an update instead of post
@@ -176,15 +176,11 @@ export default function OutfitForm(props) {
         mb={"4vw"}
       >
          
-        {/* One Pieces */}
-        <Card
-          sx={{
-            backgroundImage:
-              "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
-          }}
+        {/* --- One Pieces --------------------------------------------------------- */}
+        <Card 
+          sx={{ backgroundImage: "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)"}}
         >
-          <Stack
-            alignItems={"center"}
+          <Stack alignItems={"center"} 
             sx={{ width: { xs: "90vw", md: "70vw" } }}
           >
             <CardContent>
@@ -192,14 +188,11 @@ export default function OutfitForm(props) {
             </CardContent>
           </Stack>
         </Card>
-        {/* List of clothing items, takes in list of clothes object and onClick function */}
-        <ClothingList clothes={onePiece} clickFunction={handleOpenDelete} />
-        <Button
-          variant="outlined"
+        <Button variant="outlined"
           sx={{ width: { xs: "60vw" }, height: { xs: "5vh" } }}
           onClick={handleOpen}
         >
-          {onePiece.length > 0 ? (
+          { (onePieceItem !== null) ? (
             <>
               Replace <AutorenewRoundedIcon />
             </>
@@ -211,12 +204,9 @@ export default function OutfitForm(props) {
           )}
         </Button>
 
-        {/* Tops */}
+        {/* --- Tops --------------------------------------------------------- */}
         <Card
-          sx={{
-            backgroundImage:
-              "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
-          }}
+          sx={{ backgroundImage: "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)" }}
         >
           <Stack
             alignItems={"center"}
@@ -227,7 +217,6 @@ export default function OutfitForm(props) {
             </CardContent>
           </Stack>
         </Card>
-        <ClothingList clothes={tops} clickFunction={handleOpenDelete} />
         <Button
           onClick={handleOpen}
           variant="outlined"
@@ -245,12 +234,9 @@ export default function OutfitForm(props) {
           )}
         </Button>
 
-        {/* Bottoms */}
+        {/* --- Bottoms --------------------------------------------------------- */}
         <Card
-          sx={{
-            backgroundImage:
-              "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
-          }}
+          sx={{ backgroundImage: "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)" }}
         >
           <Stack
             alignItems={"center"}
@@ -261,7 +247,6 @@ export default function OutfitForm(props) {
             </CardContent>
           </Stack>
         </Card>
-        <ClothingList clothes={bottoms} clickFunction={handleOpenDelete} />
         <Button
           onClick={handleOpen}
           variant="outlined"
@@ -279,12 +264,9 @@ export default function OutfitForm(props) {
           )}
         </Button>
 
-        {/* Shoes */}
+        {/* --- Shoes --------------------------------------------------------- */}
         <Card
-          sx={{
-            backgroundImage:
-              "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
-          }}
+          sx={{ backgroundImage: "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)" }}
         >
           <Stack
             alignItems={"center"}
@@ -315,9 +297,7 @@ export default function OutfitForm(props) {
 
         {/* Accessories */}
         <Card
-          sx={{
-            backgroundImage: "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
-          }}
+          sx={{ backgroundImage: "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)" }}
         >
           <Stack
             alignItems={"center"}
@@ -328,7 +308,6 @@ export default function OutfitForm(props) {
             </CardContent>
           </Stack>
         </Card>
-        <ClothingList clothes={accessories} clickFunction={handleOpenDelete} />
         <Button
           onClick={handleOpen}
           variant="outlined"
