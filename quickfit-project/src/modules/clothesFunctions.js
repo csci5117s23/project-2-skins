@@ -69,7 +69,11 @@ export function filterClothesByCategory(clothesList, category) {
 // Helper function to filter out by name for a parameter list of clothes
 // --------------------------------------------------------------------------
 export function filterClothesByName(clothesList, nameText) {
-    return Object.values(clothesList).filter( (item) => ((item.name.toLowerCase()).includes((nameText.toLowerCase()))));
+    return Object.values(clothesList).filter( 
+        (item) => 
+            ((String(item.name).toLowerCase()).includes((String(nameText).toLowerCase()))
+        )
+    );
 }
 
 // ----------------------------------------------------------------------------------------------------
@@ -78,19 +82,23 @@ export function filterClothesByName(clothesList, nameText) {
 // https://stackoverflow.com/questions/51650390/filter-nested-array-in-object-array-by-array-of-values
 // ----------------------------------------------------------------------------------------------------
 export function filterClothesByTag(clothesList, tagText) {
-    return Object.values(clothesList).filter( 
+    const results = Object.values(clothesList).filter( 
         (item) => 
             item.tags.every( 
-                (tag) => (tag.toLowerCase()).includes(tagText.toLowerCase())
+                (tag) => 
+                    ((String(tag).toLowerCase()).includes(String(tagText).toLowerCase())
+                )
             )
-        );
+    ); // Get rid of zero-length lists
+    return results.filter( (item) => (item.tags.length > 0) );
 }
 
 // -----------------------------------------------------------------------------
 // Helper function to filter out by name OR tag for a parameter list of clothes
 // ------------------------------------------------------------------------------
 export function filterClothesByNameOrTag(clothesList, searchText) {
-    const nameList = filterClothesByName(clothesList, searchText);
+    // const nameList = filterClothesByName(clothesList, searchText);
+    const nameList = [];
     const tagsList = filterClothesByTag(clothesList, searchText);
     return Array.from(new Set(tagsList.concat(nameList)));
 }
