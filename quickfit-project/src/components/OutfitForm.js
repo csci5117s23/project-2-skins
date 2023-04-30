@@ -58,7 +58,7 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
   const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
   const { getToken } = useAuth();
 
-  // properties for the post request to add outfit
+  // Properties for the post request to add outfit
   // if there is an outfit id do an update instead of post
   // --- Main form state hooks & functions --------------------------------------------------------------
   const {outfitId} = router.query;
@@ -91,23 +91,23 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
     setOpenDelete(false);
   };
 
-  // take the ClothingToDelete and remove it from the list
-  // removing an item from list found on https://semicolon.dev/tutorial/javascript/remove-matching-object-from-js-array
-  const handleDelete = () => {
-    if (clothingToDelete["category"] == "onepiece") {
+  // Take the ClothingToDelete and remove it from the list
+  // Removing an item from list found on https://semicolon.dev/tutorial/javascript/remove-matching-object-from-js-array
+  const handleDelete = async (e) => {
+    if (clothingToDelete["category"] == "One Piece") {
       setOnePiece([]);
-    } else if (clothingToDelete["category"] == "top") {
+    } else if (clothingToDelete["category"] == "Top") {
       setTops(removeItemFromList(tops, clothingToDelete));
-    } else if (clothingToDelete["category"] == "bottom") {
+    } else if (clothingToDelete["category"] == "Bottom") {
       setBottoms(removeItemFromList(bottoms, clothingToDelete));
-    } else if (clothingToDelete["category"] == "shoes") {
+    } else if (clothingToDelete["category"] == "Shoes") {
       setShoes([]);
-    } else if (clothingToDelete["category"] == "accessory") {
+    } else if (clothingToDelete["category"] == "Accessories") {
       setAccessories(removeItemFromList(accessories, clothingToDelete));
     }
     setOpenDelete(false);
-
   };
+
   // Helper function returns a list that has item removed from it
   const removeItemFromList = (list, item) => {
     const index = list.indexOf(item);
@@ -116,6 +116,7 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
     }
     return list;
   };
+
 
   // Handle selecting clothing from "add clothing" button
   const handleClickClothes = (clothes) => {
@@ -147,42 +148,6 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
     setOpen(false);
 
   };
-
-  // ------------------------------------------------------------
-  // Function to call DELETE request to get rid of clothing item
-  // ------------------------------------------------------------
-  async function makeDeleteRequest(clothingId) {
-    // Get authorization token from JWT codehooks template
-    const token = await getToken({ template: jwtTemplateName });
-
-    // --- Call DELETE function ---
-    const result = deleteClothes(token, clothingId);  
-  }
-
-  // --- Edit useEffect ---
-  // Load edit page with current outfit's clothing articles
-  useEffect(() => {
-    // Perform query to get the current day's outfit
-    async function processOutfit() {
-      // Get auth token
-      const token = await getToken({ template: jwtTemplateName });
-
-      // Get outfit details from query parameter
-      const outfitIds = await getOutfits(token, outfitId);
-      const outfitDetails = await getOutfitArrayFromIds(token, outfitIds);
-      setOutfit(outfitDetails);
-    
-      // Set lists based on query for outfit details
-      setOnePiece(filterClothesByCategory(outfitDetails, "One Piece"));
-      setTops(filterClothesByCategory(outfitDetails, "Top"));
-      setBottoms(filterClothesByCategory(outfitDetails, "Bottom"));
-      setShoes(filterClothesByCategory(outfitDetails, "Shoes"));
-      setAccessories(filterClothesByCategory(outfitDetails, "Accessories"));
-      
-      setLoading(false);
-    }
-    processOutfit();
-  }, [date]); // category?
   
   // --- Outfit functions ---
   // ---------------------------------------------------------
@@ -224,6 +189,33 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
       console.log(result); 
     }
   }
+
+
+  // --- Edit useEffect ---
+  // Load edit page with current outfit's clothing articles
+  useEffect(() => {
+    // Perform query to get the current day's outfit
+    async function processOutfit() {
+      // Get auth token
+      const token = await getToken({ template: jwtTemplateName });
+
+      // Get outfit details from query parameter
+      const outfitIds = await getOutfits(token, outfitId);
+      const outfitDetails = await getOutfitArrayFromIds(token, outfitIds);
+      setOutfit(outfitDetails);
+    
+      // Set lists based on query for outfit details
+      setOnePiece(filterClothesByCategory(outfitDetails, "One Piece"));
+      setTops(filterClothesByCategory(outfitDetails, "Top"));
+      setBottoms(filterClothesByCategory(outfitDetails, "Bottom"));
+      setShoes(filterClothesByCategory(outfitDetails, "Shoes"));
+      setAccessories(filterClothesByCategory(outfitDetails, "Accessories"));
+      
+      setLoading(false);
+    }
+    processOutfit();
+  }, [date]); // category?
+
 
   // ---------------------------------------------------------------------------
   // Function to convert a list of clothing objects to just a list of their IDs
@@ -424,13 +416,18 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
           <Button
             variant="contained"
           
-            sx={{ width: {xs: "50vw", md: "70vw"}, borderRadius:"1.25em", bgcolor:"#c2c2c2", color:"#3C3F42" }}
+            sx={{ width: {xs: "65vw", md: "70vw"}, borderRadius:"1.25em", bgcolor:"#c2c2c2", color:"#3C3F42" }}
             onClick={ (event, value) => {
               onHandleSubmit(event);
               router.push("/");
             }}
           >
-            <Typography variant="h6">Submit outfit</Typography>
+            <Typography variant="h6">
+              { (outfitId === undefined) // If we are adding an item, use "submit outfit" 
+                ? <>Submit outfit</>
+                : <>Confirm changes</>
+              }
+            </Typography>
           </Button>
         </Stack>
         {/* Clothing list popup, shows when "add [clothing]" button clicked */}
@@ -460,7 +457,7 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
               justifyContent="center"
               mb={2}
             >
-              {/* Use wardrobe tab component with different click function */}
+              {/* Use wardrobe tab component with different click function to add to current outfit */}
               <WardrobeTabs clickFunction={handleClickClothes} category={category} />
             </Stack>
           </Card>
@@ -476,7 +473,7 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
                 <Button onClick={handleCloseDelete} variant="contained">
                   Cancel
                 </Button>
-                <Button onClick={handleDelete} variant="contained" color="error">
+                <Button onClick={ (e) => handleDelete(e) } variant="contained" color="error">
                   Delete
                 </Button>
               </DialogActions>
