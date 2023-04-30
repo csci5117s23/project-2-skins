@@ -152,8 +152,6 @@ function TabPanel(props) {
             </Stack>
           </Card>
         </Stack>
-        
-        
       </>
     );
   } else { // Page contents
