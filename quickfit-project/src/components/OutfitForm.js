@@ -150,15 +150,16 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
     // Perform query to get the current day's outfit
     async function processOutfit() {
       const token = await getToken({ template: jwtTemplateName });
-      const outfitIds = await getOutfitByDateWorn(token, date);
+      const outfitIds = await getOutfits(token, date);
       const outfitDetails = await getOutfitArrayFromIds(token, outfitIds[0]);
       setOutfit(outfitDetails);
       setLoading(false);
     }
     processOutfit();
-  }, [date, category]);
+    console.log(outfit);
+  }, [date]); // category?
 
-    
+
   const getOutfit = (outfitId) =>{
       //TODO using outfitId retrieve outfit
       // var outfit = fetch(outfit)
