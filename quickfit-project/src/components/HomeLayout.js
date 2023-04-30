@@ -17,7 +17,8 @@ import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutl
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 // DB Outfit functions
 import { 
-  getOutfitByDateWorn
+  getOutfitByDateWorn,
+  getOutfitArrayFromIds
 } from "@/modules/outfitFunctions";
 // Custom component imports
 import DateWeatherWidget from "@/components/DateWeatherWidget";
@@ -34,6 +35,32 @@ export default function UILayout({ date, setDate }) {
   const router = useRouter();
   const [outfit, setOutfit] = useState(null);
   
+  // const [outfit, setOutfit] = useState([
+  //   {
+  //     category: "Top",
+  //     clothingName: "Black Nike T-Shirt",
+  //     tags: ["black"],
+  //     createdOn: new Date(),
+  //   },
+  //   {
+  //     category: "Bottom",
+  //     clothingName: "Dark green cargos",
+  //     tags: ["Green", "loose", "cargo"],
+  //     createdOn: new Date(),
+  //   },
+  //   {
+  //     category: "Shoes",
+  //     clothingName: "White air forces",
+  //     tags: ["white"],
+  //     createdOn: new Date(),
+  //   },
+  //   {
+  //     category: "Accessory",
+  //     clothingName: "Silver necklace",
+  //     tags: ["silver", "shiny"],
+  //     createdOn: new Date(),
+  //   },
+  // ]);
 
   useEffect(() => {
     //TODO: Get request that gets the outfit that matches the date
@@ -47,7 +74,8 @@ export default function UILayout({ date, setDate }) {
     // Perform query to get the current day's outfit
     async function processOutfit() {
       const token = await getToken({ template: jwtTemplateName });
-      const outfitDetails = await getOutfitByDateWorn(token, date);
+      const outfitIds = await getOutfitByDateWorn(token, date);
+      const outfitDetails = await getOutfitArrayFromIds(token, outfitIds[0]);
       // console.log("Result: " + result);
       // setOutfit(result);
     }

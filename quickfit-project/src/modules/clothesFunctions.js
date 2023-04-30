@@ -27,6 +27,10 @@ export async function getClothes(authToken, id="") {
                 'Authorization': 'Bearer ' + authToken,
             }
         })
+        // If an ID was provided no need to sort
+        if (id !== "") {
+            return await result.json();
+        }
         // Return JSON list of user clothes (sorted by category alphabetically)
         const results = await result.json();
         const sortedResults = results.sort(sortAlphabetically);

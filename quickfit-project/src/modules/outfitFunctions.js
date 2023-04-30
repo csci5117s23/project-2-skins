@@ -14,6 +14,10 @@ const backendBase = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 const outfitUrl = backendBase + "/outfit";
 const apiKey = process.env.CH_API_KEY_RW;
 
+import {
+    getClothes
+} from "./clothesFunctions"
+
 // ---------------------------------------------------------
 // GET: Function get all of a user's outfits
 // ---------------------------------------------------------
@@ -55,6 +59,31 @@ export async function getOutfitByDateWorn(authToken, date, id="") {
         console.log("Failed to get outfit by date. " + error);
     }
 } 
+
+// ---------------------------------------------------------------------
+// GET: Function to fill an outfit array based on the Ids retrieved
+// ---------------------------------------------------------------------
+export async function getOutfitArrayFromIds(authToken, outfit) {
+    if (outfit === null || outfit === undefined) {
+        console.log("No outfit provided.");
+        return;
+    }
+
+    const onePieceId = outfit?.onePieceId;
+    const topIds = outfit?.topId;
+    const bottomIds = outfit?.bottomId;
+    const shoesId = outfit?.shoesId;
+    const accessoriesId = outfit?.accessoriesId;
+    
+
+    // Get one piece item
+    const onePiece = await getClothes(authToken, outfit.onePieceId);
+    console.log(onePiece);
+
+    // Get shoes
+    const shoes = await getClothes(authToken, outfit.shoesId);
+    console.log(shoes)
+}
 
 // ---------------------------------------------------------
 // POST: Function to add a user outfit
