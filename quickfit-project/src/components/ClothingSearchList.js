@@ -31,7 +31,6 @@ import {
 
 export default function ClothingSearchList( {categoryInput, clickFunction} ) {
   // --- Search bar state hooks -----------------------------------------
-  const [tabValue, setTabValue] = useState(0);
   const [search, setSearch] = useState("");
 
   return (
@@ -60,25 +59,6 @@ function ClothingData(props) {
   const [shoes, setShoes] = useState([]); // List of user's one piece items
   const [accessories, setAccessories] = useState([]); // List of user's one piece items
   const [shownClothes, setShownClothes] = useState([]); // List of clothes that appear on screen
-
-  // --- Dialog --------------------------------------------------
-  // State of whether or not dialog is open
-  const [open, setOpen] = useState(false);
-  const [updated, setUpdated] = useState(true);
-  const [selectedClothing, setSelectedClothing] = useState(null);
-
-  const handleClickOpen = (Clothing) => {
-    setSelectedClothing(Clothing);
-    setOpen(true);
-  };
-  const handleUpdate = (update) => {
-    setUpdated(update);
-    handleCloseDialog();
-  };
-  // Function to close dialog
-  const handleCloseDialog = () => {
-    setOpen(false);
-  };
 
   // --------------------------------------------------------------
   // Make GET requests to populate clothing category lists
