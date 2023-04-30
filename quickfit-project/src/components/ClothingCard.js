@@ -58,7 +58,12 @@ export default function ClothingCard(props) {
               <Box ml={1.5} mt={0.2}>
                 <Box sx={{ fontSize: { xs: 20, md: 30 } }}>
                     <Typography>{clothes["name"]}</Typography>
-                </Box>      
+                </Box>
+                <Box sx={{ fontSize: { xs: 15, md: 25 } }}>
+                  <Typography gutterBottom component="div" color="text.secondary">
+                    {clothes["category"]}
+                  </Typography>
+                </Box>
                 <Box
                   sx={{
                     transform: {xs:"scale(.8) translate(-15%)", md:"scale(1)"} ,
