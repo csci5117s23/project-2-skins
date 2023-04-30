@@ -52,7 +52,7 @@ function ClothingData(props) {
 
   // --- Clothing lists --------------------------------------------------
   const [category, setCategory] = useState(categoryInput); // Current category tab
-  const [updated, setUpdated] = useState(false);
+  const [updated, setUpdated] = useState(true);
   const [clothes, setClothes] = useState([]); // List of all clothes from GET request
   const [onePieces, setOnePieces] = useState([]); // List of user's one piece items
   const [tops, setTops] = useState([]); // List of user's one piece items
@@ -78,7 +78,7 @@ function ClothingData(props) {
         setAccessories(filterClothesByCategory(clothes, "Accessories")); // Filter accessories
       });
       setLoading(false); // Once we get these things, we are no longer loading
-      setUpdated(true);
+      setUpdated(false);
   }
 
   // --------------------------------------------------------------------------

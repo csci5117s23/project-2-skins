@@ -10,7 +10,7 @@ import {
   SignedIn,
   SignedOut,
 } from "@clerk/clerk-react"; // Clerk authorization imports
-
+// MUI Component imports
 import {
   AppBar,
   Box,
@@ -20,21 +20,21 @@ import {
   CardActionArea,
   CardMedia,
   CardContent,
+  TextField,
   Typography,
   Stack,
   Grid,
   Tabs
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
-
+// Custom component imports
 import Header from "@/components/Header";
 import BottomNavigationContainer from "@/components/BottomNavigationContainer";
 import DateCard from "@/components/DateCard";
 import WeatherCard from "@/components/WeatherCard";
 import ClothingCard from "@/components/ClothingCard";
-import TextField from "@mui/material/TextField";
-import SearchBar from '../components/SearchBar.js';
-import WardrobeTabs from '../components/WardrobeTabs.js';
+import SearchBar from '@/components/SearchBar.js';
+import WardrobeTabs from '@/components/WardrobeTabs.js';
+import WardrobeDialog from "./WardrobeDialog.js";
 // Load any necessary ENV variables
 const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
@@ -50,7 +50,7 @@ export default function Wardrobe() {
 
       {/* 2. Content section */}
       <section>
-        <WardrobeTabs />
+        <WardrobeDialog/>
       </section>
 
       {/* 3. NavBar section */}

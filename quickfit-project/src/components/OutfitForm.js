@@ -479,9 +479,9 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
               justifyContent="center"
               mb={2}
             >
-              {/* <WardrobeTabs/> */}
-              <Paper>{category}</Paper>
-              <ClothingSearchList categoryInput={category} clickFunction={handleClickClothes} />
+              <WardrobeTabs clickFunction={handleClickClothes} />
+              {/* <Paper>{category}</Paper> */}
+              {/* <ClothingSearchList categoryInput={category} clickFunction={handleClickClothes} /> */}
             </Stack>
           </Card>
         </Dialog>

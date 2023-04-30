@@ -29,7 +29,7 @@ import {
   deleteClothes,
 } from "@/modules/clothesFunctions";
 
-export default function WardrobeTabs() {
+export default function WardrobeTabs( {clickFunction} ) {
   // --- Search bar state hooks -----------------------------------------
   const [tabValue, setTabValue] = useState(0);
   const [search, setSearch] = useState("");
@@ -64,7 +64,7 @@ export default function WardrobeTabs() {
         </Tabs>
       </Stack>
       <SearchBar setSearch={setSearch} color={"#FFD36E"} />
-      <TabPanel tabValue={tabValue} search={search} />
+      <TabPanel tabValue={tabValue} search={search} clickFunction={clickFunction}/>
     </>
   );
 }
@@ -74,9 +74,10 @@ function TabPanel(props) {
   const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   const [loading, setLoading] = useState(true);
+  const [updated, setUpdated] = useState(true);
 
   // --- Search ----------------------------------------------------------
-  const { tabValue, search } = props;
+  const { tabValue, search, clickFunction } = props;
 
   // --- Clothing lists --------------------------------------------------
   const [category, setCategory] = useState("All"); // Current category tab
@@ -87,26 +88,6 @@ function TabPanel(props) {
   const [shoes, setShoes] = useState([]); // List of user's one piece items
   const [accessories, setAccessories] = useState([]); // List of user's one piece items
   const [shownClothes, setShownClothes] = useState([]); // List of clothes that appear on screen
-
-  // --- Dialog --------------------------------------------------
-
-  // State of whether or not dialog is open
-  const [open, setOpen] = useState(false);
-  const [updated, setUpdated] = useState(true);
-  const [selectedClothing, setSelectedClothing] = useState(null);
-
-  const handleClickOpen = (Clothing) => {
-    setSelectedClothing(Clothing);
-    setOpen(true);
-  };
-  const handleUpdate = (update) => {
-    setUpdated(update);
-    handleCloseDialog();
-  };
-  // Function to close dialog
-  const handleCloseDialog = () => {
-    setOpen(false);
-  };
 
   // --------------------------------------------------------------
   // Make GET requests to populate clothing category lists
@@ -215,14 +196,8 @@ function TabPanel(props) {
       <>
         <ClothingList
           clothes={shownClothes || []}
-          clickFunction={handleClickOpen}
+          clickFunction={clickFunction}
         />
-        <Dialog open={open} onClose={handleCloseDialog}>
-          <ClothesForm
-            clothingToEdit={selectedClothing}
-            setUpdated={handleUpdate}
-          />
-        </Dialog>
       </>
     );
   }
