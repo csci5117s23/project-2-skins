@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-// import styles from '@/styles/Home.module.css'
-import Head from "next/head"; // Next-js imports
+// Next-js imports
+import Head from "next/head";
 import Image from "next/image";
-import { Inter } from "next/font/google";
+// Clerk authorization imports
 import {
   ClerkProvider,
   SignUp,
   SignIn,
   SignedIn,
   SignedOut,
-} from "@clerk/clerk-react"; // Clerk authorization imports
-
+} from "@clerk/clerk-react";
+// MUI Component imports
 import {
   AppBar,
   Box,
@@ -20,22 +20,22 @@ import {
   CardActionArea,
   CardMedia,
   CardContent,
+  Grid,
+  Tabs,
+  TextField,
   Typography,
   Stack,
-  Grid,
-  Tabs
+  CssBaseline,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
-
+// Custom component imports
 import Header from "@/components/Header";
 import BottomNavigationContainer from "@/components/BottomNavigationContainer";
 import DateCard from "@/components/DateCard";
 import WeatherCard from "@/components/WeatherCard";
 import ClothingCard from "@/components/ClothingCard";
-import TextField from "@mui/material/TextField";
-import SearchBar from '../components/SearchBar.js';
-import WardrobeTabs from '../components/WardrobeTabs.js';
-import OutfitForm from '../components/OutfitForm.js';
+import SearchBar from "@/components/SearchBar.js";
+import WardrobeTabs from "@/components/WardrobeTabs.js";
+import OutfitForm from "@/components/OutfitForm.js";
 // Load any necessary ENV variables
 const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
@@ -48,6 +48,7 @@ export default function ChooseFit({date}) {
 
   return (
     <>
+      <CssBaseline/>
       {/* 1. Header section */}
       <section>
         <Header />

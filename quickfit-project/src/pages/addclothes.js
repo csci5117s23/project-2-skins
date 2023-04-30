@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import styles from '@/styles/Home.module.css'
-import Head from 'next/head'                                                                // Next-js imports
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import { ClerkProvider, SignUp, SignIn, SignedIn, SignedOut } from "@clerk/clerk-react";   // Clerk authorization imports
-
+// MUI Component imports
 import {
      AppBar, 
      Box,
@@ -18,8 +13,7 @@ import {
      CssBaseline,
      Container
 } from "@mui/material";
-import { styled } from '@mui/material/styles';
-
+// Custom Component imports
 import Header from '@/components/Header'
 import BottomNavigationContainer from "@/components/BottomNavigationContainer";
 import ClothesForm from "@/components/ClothesForm";
@@ -27,7 +21,6 @@ import ClothesForm from "@/components/ClothesForm";
 // Load any necessary ENV variables
 const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
-  
 export default function AddClothes() {
   return (
     <>

@@ -2,19 +2,10 @@ import * as React from "react";
 import { redirect } from "next/navigation";
 // MUI Component imports
 import {
-  CardContent,
-  CardMedia,
+  CssBaseline,
   Typography,
   Box,
-  Stack,
   Card,
-  FormControl,
-  MenuItem,
-  InputLabel,
-  Select,
-  TextField,
-  Button,
-  Autocomplete,
   Chip,
   Grid,
   Tooltip,
@@ -41,16 +32,17 @@ export default function ClothingCard(props) {
 
   return (
     <>
+      <CssBaseline/>
       <Tooltip title="Edit clothing item">
         <Card 
           sx={{ display: "flex" }} 
-          onClick={handleClickOpen} 
+          // onClick={handleClickOpen} 
         >
           <Grid
             container
             sx={{
               width: { xs: "90vw", md: "70vw" },
-              height: { xs: "15vh", md: "25vh" },
+              height: { xs: "100%", md: "100%" },
             }}
             justifyContent="space-between"
           >
@@ -92,8 +84,8 @@ export default function ClothingCard(props) {
                   component="img"
                   sx={{
                     backgroundColor: "#000000",
-                    maxWidth: "100%",
-                    maxHeight: { xs: "15vh", md: "25vh" },
+                    maxWidth: { xs: "15vh", md: "25vh"},
+                    maxHeight: { xs: "100%" },
                   }}
                   src="https://dtpmhvbsmffsz.cloudfront.net/posts/2015/08/12/55cba8312035ea03bf02284f/m_55cba8312035ea03bf022850.jpg"
                   alt="Clothing Image"

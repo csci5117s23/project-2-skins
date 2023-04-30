@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+// MUI Component imports
 import {
   AppBar,
   Box,
@@ -17,7 +18,9 @@ import {
   Container,
   DialogContentText,
   DialogActions,
+  CssBaseline,
 } from "@mui/material";
+// Custom Component imports
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import CloseIcon from "@mui/icons-material/Close";
 import Dialog from "@mui/material/Dialog";
@@ -34,35 +37,6 @@ import { useRouter } from "next/router";
 export default function OutfitForm(props) {
   const {date} = props;
   const router = useRouter();
-
-  //TODO: delete this after implementing edit form
-  const outfit = [
-    {
-      category: "top",
-      name: "Black Nike T-Shirt",
-      tags: ["black"],
-      createdOn: new Date(),
-    },
-    {
-      category: "bottom",
-      name: "Dark green cargos",
-      tags: ["Green", "loose", "cargo"],
-      createdOn: new Date(),
-    },
-    {
-      category: "shoes",
-      name: "White air forces",
-      tags: ["white"],
-      createdOn: new Date(),
-    },
-    {
-      category: "accessory",
-      name: "Silver necklace",
-      tags: ["silver", "shiny"],
-      createdOn: new Date(),
-    },
-  ];
-
 
   //properties for the post request to add outfit
   //if there is an outfit id do an update instead of post
@@ -176,25 +150,25 @@ export default function OutfitForm(props) {
   // handle selecting clothing from "add clothing" button
   const handleClickClothes = (clothes) => {
     // actual category name might have different spelling once implemented. watch out for that
-    if (clothes["category"] == "onepiece") {
+    if (clothes["category"] == "One Piece") {
       if(onePiece.indexOf(clothes) < 0){
         setOnePiece([clothes]);
       }
-    } else if (clothes["category"] == "top") {
+    } else if (clothes["category"] == "Top") {
         if(tops.indexOf(clothes) < 0){
           const newTopsList = tops.concat(clothes);
           setTops(newTopsList);  
         }
-    } else if (clothes["category"] == "bottom") {
+    } else if (clothes["category"] == "Bottom") {
         if(bottoms.indexOf(clothes) < 0){
           const newBottomsList = bottoms.concat(clothes);
           setBottoms(newBottomsList);
         }
-    } else if (clothes["category"] == "shoes") {
+    } else if (clothes["category"] == "Shoes") {
         if(shoes.indexOf(clothes) < 0){
           setShoes([clothes]);
         }      
-    } else if (clothes["category"] == "accessory") {
+    } else if (clothes["category"] == "Accessories") {
         if(accessories.indexOf(clothes) < 0){
           const newAccessoriesList = accessories.concat(clothes);
           setAccessories(newAccessoriesList);
@@ -236,6 +210,7 @@ export default function OutfitForm(props) {
 
   return (
     <>
+      <CssBaseline/>
       <Stack
         spacing={2}
         justifyContent={"center"}
