@@ -38,15 +38,11 @@ export default function ClothingCard(props) {
           }}
           justifyContent="space-between"
         >
-          <Grid item xs={6} justifyContent="flex-start"
-  alignItems="flex-start">
+          <Grid item xs={6} justifyContent="flex-start" alignItems="flex-start">
             <Box ml={1.5} mt={0.2}>
-              <Typography>
-                <Box sx={{ fontSize: { xs: 20, md: 30 } }}>
-                  {clothes["name"]}
-                </Box>
-              </Typography>
-              
+              <Box sx={{ fontSize: { xs: 20, md: 30 } }}>
+                  <Typography>{clothes["name"]}</Typography>
+              </Box>      
               <Box
                 sx={{
                   transform: {xs:"scale(.8) translate(-15%)", md:"scale(1)"} ,
@@ -58,6 +54,7 @@ export default function ClothingCard(props) {
                 {clothes["tags"]?.map((tag) => {
                   return (
                     <Chip
+                      key={tag}
                       varient="outlined"
                       label={tag}
                       size="small"
