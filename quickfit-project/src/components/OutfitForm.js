@@ -33,33 +33,20 @@ import AutorenewRoundedIcon from "@mui/icons-material/AutorenewRounded";
 import AutoFixHighTwoToneIcon from '@mui/icons-material/AutoFixHighTwoTone';
 
 import { useRouter } from "next/router";
-import ClothingSearchList from "./ClothingSearchList";
 
 export default function OutfitForm(props) {
-  const { 
-    date,
-    clothes,
-    onePieces,
-    tops,
-    bottoms,
-    shoes,
-    accessories, 
-  } = props;
-
-  // Router for redirection
+  const {date} = props;
   const router = useRouter();
 
-  // State hooks for form elements
-  const [onePieceItem, setOnePieces] = useState(null); // Outfit one piece
-  const [topsItem, setTops] = useState(null); // Outfit top 
-  const [bottomsItem, setBottoms] = useState(null); // Outfit bottom
-  const [shoesItem, setShoes] = useState(null); // Outfit shoes
-  const [accessoryItems, setAccessories] = useState(null); // Outfit accessories
-  const [category, setCategory] = useState("All");
-
-  // properties for the post request to add outfit
-  // if there is an outfit id do an update instead of post
+  //properties for the post request to add outfit
+  //if there is an outfit id do an update instead of post
+  //TODO:uncomment line below
   const {outfitId} = router.query;
+  const [onePiece, setOnePiece] = useState([]);
+  const [tops, setTops] = useState([]);
+  const [bottoms, setBottoms] = useState([]);
+  const [shoes, setShoes] = useState([]);
+  const [accessories, setAccessories] = useState([]);
 
   // States to show clothing list when "add [clothing]" button clicked
   const [open, setOpen] = useState(false);
@@ -83,18 +70,19 @@ export default function OutfitForm(props) {
   // take the ClothingToDelete and remove it from the list
   // removing an item from list found on https://semicolon.dev/tutorial/javascript/remove-matching-object-from-js-array
   const handleDelete = () => {
-    if (clothingToDelete["category"] == "One Piece") {
+    if (clothingToDelete["category"] == "onepiece") {
       setOnePiece([]);
-    } else if (clothingToDelete["category"] == "Top") {
+    } else if (clothingToDelete["category"] == "top") {
       setTops(removeItemFromList(tops, clothingToDelete));
-    } else if (clothingToDelete["category"] == "Bottom") {
+    } else if (clothingToDelete["category"] == "bottom") {
       setBottoms(removeItemFromList(bottoms, clothingToDelete));
-    } else if (clothingToDelete["category"] == "Shoes") {
+    } else if (clothingToDelete["category"] == "shoes") {
       setShoes([]);
-    } else if (clothingToDelete["category"] == "Accessories") {
+    } else if (clothingToDelete["category"] == "accessory") {
       setAccessories(removeItemFromList(accessories, clothingToDelete));
     }
     setOpenDelete(false);
+
   };
   //helper function returns a list that has item removed from it
   const removeItemFromList = (list, item) => {
@@ -105,28 +93,83 @@ export default function OutfitForm(props) {
     return list;
   };
 
-  // Handle selecting clothing from "add clothing" button
+  //list of clothes from the get request
+  const [clothes, setClothes] = useState([
+    {
+      category: "onepiece",
+      name: "Artizia black onepiece",
+      tags: ["black", "tight"],
+      createdOn: new Date(),
+    },
+    {
+      category: "onepiece",
+      name: "Floral short dress",
+      tags: ["floral", "flowy", "short dress", "short sleeve"],
+      createdOn: new Date(),
+    },
+    {
+      category: "onepiece",
+      name: "Blue Overalls",
+      tags: ["jean", "blue"],
+      createdOn: new Date(),
+    },
+    {
+      category: "top",
+      name: "Black Nike T-Shirt",
+      tags: ["black"],
+      createdOn: new Date(),
+    },    
+    {
+      category: "top",
+      name: "White Nike T-Shirt",
+      tags: ["white"],
+      createdOn: new Date(),
+    },
+    {
+      category: "bottom",
+      name: "Dark green cargos",
+      tags: ["Green", "loose", "cargo"],
+      createdOn: new Date(),
+    },
+    {
+      category: "shoes",
+      name: "White air forces",
+      tags: ["white"],
+      createdOn: new Date(),
+    },
+    {
+      category: "accessory",
+      name: "Silver necklace",
+      tags: ["silver", "shiny"],
+      createdOn: new Date(),
+    },
+  ]);
+
+
+
+  // handle selecting clothing from "add clothing" button
   const handleClickClothes = (clothes) => {
-    if (clothes["category"] == "One Piece") { // One piece items
-      if (onePiece.indexOf(clothes) < 0){
+    // actual category name might have different spelling once implemented. watch out for that
+    if (clothes["category"] == "One Piece") {
+      if(onePiece.indexOf(clothes) < 0){
         setOnePiece([clothes]);
       }
-    } else if (clothes["category"] == "Top") { // Top items
-        if (tops.indexOf(clothes) < 0){
+    } else if (clothes["category"] == "Top") {
+        if(tops.indexOf(clothes) < 0){
           const newTopsList = tops.concat(clothes);
           setTops(newTopsList);  
         }
-    } else if (clothes["category"] == "Bottom") { // Bottom items
-        if (bottoms.indexOf(clothes) < 0){
+    } else if (clothes["category"] == "Bottom") {
+        if(bottoms.indexOf(clothes) < 0){
           const newBottomsList = bottoms.concat(clothes);
           setBottoms(newBottomsList);
         }
-    } else if (clothes["category"] == "Shoes") { // Shoe items
-        if (shoes.indexOf(clothes) < 0){
+    } else if (clothes["category"] == "Shoes") {
+        if(shoes.indexOf(clothes) < 0){
           setShoes([clothes]);
         }      
-    } else if (clothes["category"] == "Accessories") { // Accessory items
-        if (accessories.indexOf(clothes) < 0){
+    } else if (clothes["category"] == "Accessories") {
+        if(accessories.indexOf(clothes) < 0){
           const newAccessoriesList = accessories.concat(clothes);
           setAccessories(newAccessoriesList);
         }
@@ -134,6 +177,7 @@ export default function OutfitForm(props) {
     setOpen(false);
   };
 
+  //  
   useEffect(() => {
     console.log("inuse effect")
     if (outfitId) { 
@@ -175,11 +219,15 @@ export default function OutfitForm(props) {
         mb={"4vw"}
       >
          
-        {/* --- One Pieces --------------------------------------------------------- */}
-        <Card 
-          sx={{ backgroundImage: "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)"}}
+        {/* One Pieces */}
+        <Card
+          sx={{
+            backgroundImage:
+              "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
+          }}
         >
-          <Stack alignItems={"center"} 
+          <Stack
+            alignItems={"center"}
             sx={{ width: { xs: "90vw", md: "70vw" } }}
           >
             <CardContent>
@@ -187,11 +235,14 @@ export default function OutfitForm(props) {
             </CardContent>
           </Stack>
         </Card>
-        <Button variant="outlined"
+        {/* List of clothing items, takes in list of clothes object and onClick function */}
+        <ClothingList clothes={onePiece} clickFunction={handleOpenDelete} />
+        <Button
+          variant="outlined"
           sx={{ width: { xs: "60vw" }, height: { xs: "5vh" } }}
           onClick={handleOpen}
         >
-          { (onePieceItem !== null) ? (
+          {onePiece.length > 0 ? (
             <>
               Replace <AutorenewRoundedIcon />
             </>
@@ -203,9 +254,12 @@ export default function OutfitForm(props) {
           )}
         </Button>
 
-        {/* --- Tops --------------------------------------------------------- */}
+        {/* Tops */}
         <Card
-          sx={{ backgroundImage: "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)" }}
+          sx={{
+            backgroundImage:
+              "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
+          }}
         >
           <Stack
             alignItems={"center"}
@@ -216,6 +270,7 @@ export default function OutfitForm(props) {
             </CardContent>
           </Stack>
         </Card>
+        <ClothingList clothes={tops} clickFunction={handleOpenDelete} />
         <Button
           onClick={handleOpen}
           variant="outlined"
@@ -233,9 +288,12 @@ export default function OutfitForm(props) {
           )}
         </Button>
 
-        {/* --- Bottoms --------------------------------------------------------- */}
+        {/* Bottoms */}
         <Card
-          sx={{ backgroundImage: "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)" }}
+          sx={{
+            backgroundImage:
+              "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
+          }}
         >
           <Stack
             alignItems={"center"}
@@ -246,6 +304,7 @@ export default function OutfitForm(props) {
             </CardContent>
           </Stack>
         </Card>
+        <ClothingList clothes={bottoms} clickFunction={handleOpenDelete} />
         <Button
           onClick={handleOpen}
           variant="outlined"
@@ -263,9 +322,12 @@ export default function OutfitForm(props) {
           )}
         </Button>
 
-        {/* --- Shoes --------------------------------------------------------- */}
+        {/* Shoes */}
         <Card
-          sx={{ backgroundImage: "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)" }}
+          sx={{
+            backgroundImage:
+              "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
+          }}
         >
           <Stack
             alignItems={"center"}
@@ -294,9 +356,12 @@ export default function OutfitForm(props) {
           )}
         </Button>
 
-        {/* --- Accessories --------------------------------------------------------- */}
+        {/* Accessories */}
         <Card
-          sx={{ backgroundImage: "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)" }}
+          sx={{
+            backgroundImage:
+              "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
+          }}
         >
           <Stack
             alignItems={"center"}
@@ -307,9 +372,11 @@ export default function OutfitForm(props) {
             </CardContent>
           </Stack>
         </Card>
-        <Button variant="outlined"
-          sx={{ width: { xs: "60vw" }, height: { xs: "5vh" } }}
+        <ClothingList clothes={accessories} clickFunction={handleOpenDelete} />
+        <Button
           onClick={handleOpen}
+          variant="outlined"
+          sx={{ width: { xs: "60vw" }, height: { xs: "5vh" } }}
         >
           {accessories.length > 0 ? (
             <>
@@ -322,7 +389,9 @@ export default function OutfitForm(props) {
             </>
           )}
         </Button>
-        <Button variant="contained"
+        <Button
+          variant="contained"
+        
           sx={{ width: {xs: "50vw", md: "70vw"}, borderRadius:"1.25em", backgroundColor:"#c2c2c2", color:"#3C3F42" }}
           onClick={() => {
             router.push("/");
@@ -331,8 +400,6 @@ export default function OutfitForm(props) {
           <Typography variant="h6">Submit outfit</Typography>
         </Button>
       </Stack>
-
-
       {/* Clothing list popup, shows when "add [clothing]" button clicked */}/
       <Dialog fullScreen open={open} onClose={handleClose}>
         <AppBar sx={{ position: "relative" }}>
@@ -347,7 +414,8 @@ export default function OutfitForm(props) {
         </AppBar>
         <Card
           sx={{
-            bgcolor: "#333333",
+            backgroundImage:
+              "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
             height: "100vh",
             overflow: "auto",
           }}
@@ -359,11 +427,14 @@ export default function OutfitForm(props) {
             justifyContent="center"
             mb={2}
           >
-            <ClothingList category={"All"}/>
+            <SearchBar color={"#000000"} />
+            <ClothingList
+              clothes={clothes}
+              clickFunction={handleClickClothes}
+            />
           </Stack>
         </Card>
       </Dialog>
-
       {/* Delete clothing button popup, shows when clothing card is clicked */}
       <div>
         <Dialog open={openDelete} onClose={handleCloseDelete}>
