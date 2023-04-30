@@ -33,6 +33,7 @@ import AutorenewRoundedIcon from "@mui/icons-material/AutorenewRounded";
 import AutoFixHighTwoToneIcon from '@mui/icons-material/AutoFixHighTwoTone';
 
 import { useRouter } from "next/router";
+import ClothingSearchList from "./ClothingSearchList";
 
 export default function OutfitForm(props) {
   const {date} = props;
@@ -42,6 +43,7 @@ export default function OutfitForm(props) {
   //if there is an outfit id do an update instead of post
   //TODO:uncomment line below
   const {outfitId} = router.query;
+  const [category, setCategory] = useState("");
   const [onePiece, setOnePiece] = useState([]);
   const [tops, setTops] = useState([]);
   const [bottoms, setBottoms] = useState([]);
@@ -93,57 +95,7 @@ export default function OutfitForm(props) {
     return list;
   };
 
-  //list of clothes from the get request
-  const [clothes, setClothes] = useState([
-    {
-      category: "onepiece",
-      name: "Artizia black onepiece",
-      tags: ["black", "tight"],
-      createdOn: new Date(),
-    },
-    {
-      category: "onepiece",
-      name: "Floral short dress",
-      tags: ["floral", "flowy", "short dress", "short sleeve"],
-      createdOn: new Date(),
-    },
-    {
-      category: "onepiece",
-      name: "Blue Overalls",
-      tags: ["jean", "blue"],
-      createdOn: new Date(),
-    },
-    {
-      category: "top",
-      name: "Black Nike T-Shirt",
-      tags: ["black"],
-      createdOn: new Date(),
-    },    
-    {
-      category: "top",
-      name: "White Nike T-Shirt",
-      tags: ["white"],
-      createdOn: new Date(),
-    },
-    {
-      category: "bottom",
-      name: "Dark green cargos",
-      tags: ["Green", "loose", "cargo"],
-      createdOn: new Date(),
-    },
-    {
-      category: "shoes",
-      name: "White air forces",
-      tags: ["white"],
-      createdOn: new Date(),
-    },
-    {
-      category: "accessory",
-      name: "Silver necklace",
-      tags: ["silver", "shiny"],
-      createdOn: new Date(),
-    },
-  ]);
+
 
 
 
@@ -240,7 +192,7 @@ export default function OutfitForm(props) {
         <Button
           variant="outlined"
           sx={{ width: { xs: "60vw" }, height: { xs: "5vh" } }}
-          onClick={handleOpen}
+          onClick={ () => { handleOpen(); setCategory("One Piece"); }}
         >
           {onePiece.length > 0 ? (
             <>
@@ -272,7 +224,7 @@ export default function OutfitForm(props) {
         </Card>
         <ClothingList clothes={tops} clickFunction={handleOpenDelete} />
         <Button
-          onClick={handleOpen}
+          onClick={ () => { handleOpen(); setCategory("Top"); }}
           variant="outlined"
           sx={{ width: { xs: "60vw" }, height: { xs: "5vh" } }}
         >
@@ -306,9 +258,9 @@ export default function OutfitForm(props) {
         </Card>
         <ClothingList clothes={bottoms} clickFunction={handleOpenDelete} />
         <Button
-          onClick={handleOpen}
           variant="outlined"
           sx={{ width: { xs: "60vw" }, height: { xs: "5vh" } }}
+          onClick={ () => { handleOpen(); setCategory("Bottom"); }}
         >
           {bottoms.length > 0 ? (
             <>
@@ -340,9 +292,9 @@ export default function OutfitForm(props) {
         </Card>
         <ClothingList clothes={shoes} clickFunction={handleOpenDelete} />
         <Button
-          onClick={handleOpen}
           variant="outlined"
           sx={{ width: { xs: "60vw" }, height: { xs: "5vh" } }}
+          onClick={ () => { handleOpen(); setCategory("Shoes"); }}
         >
           {shoes.length > 0 ? (
             <>
@@ -374,9 +326,9 @@ export default function OutfitForm(props) {
         </Card>
         <ClothingList clothes={accessories} clickFunction={handleOpenDelete} />
         <Button
-          onClick={handleOpen}
           variant="outlined"
           sx={{ width: { xs: "60vw" }, height: { xs: "5vh" } }}
+          onClick={ () => { handleOpen(); setCategory("Accessories"); }}
         >
           {accessories.length > 0 ? (
             <>
@@ -427,11 +379,7 @@ export default function OutfitForm(props) {
             justifyContent="center"
             mb={2}
           >
-            <SearchBar color={"#000000"} />
-            <ClothingList
-              clothes={clothes}
-              clickFunction={handleClickClothes}
-            />
+            <ClothingSearchList category={category} />
           </Stack>
         </Card>
       </Dialog>

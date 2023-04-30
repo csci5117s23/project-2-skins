@@ -29,7 +29,7 @@ import {
   deleteClothes,
 } from "@/modules/clothesFunctions";
 
-export default function ClothingSearchList(props) {
+export default function ClothingSearchList( { category, addFunction } ) {
   // --- Authorization ---------------------------------------------------
   const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
   const { isLoaded, userId, sessionId, getToken } = useAuth();
@@ -55,7 +55,6 @@ export default function ClothingSearchList(props) {
   };
 
   // --- Clothing lists --------------------------------------------------
-  const [category, setCategory] = useState("All"); // Current category tab
   const [clothes, setClothes] = useState([]); // List of all clothes from GET request
   const [onePieces, setOnePieces] = useState([]); // List of user's one piece items
   const [tops, setTops] = useState([]); // List of user's one piece items
@@ -72,32 +71,26 @@ export default function ClothingSearchList(props) {
     // Filter search results based on tab and user text input (name & tags)
     if (userId) { 
       // Display "All" tab
-      if (tabValue === 0 || tabValue === null || tabValue === undefined) {
-        setCategory("All");
+      if (category === "All") {
         setShownClothes(filterClothesByNameOrTag(clothes, search));
       } // Display all "One Piece" tab
-      else if (tabValue === 1) {
-        setCategory("One Piece");
+      else if (category === "One Piece") {
         setShownClothes(filterClothesByNameOrTag(onePieces, search));
       } // Display "Tops" tab
-      else if (tabValue === 2) {
-        setCategory("Tops");
+      else if (category === "Top") {
         setShownClothes(filterClothesByNameOrTag(tops, search));
       } // Display "Bottoms" tab
-      else if (tabValue === 3) {
-        setCategory("Bottoms");
+      else if (category === "Bottom") {
         setShownClothes(filterClothesByNameOrTag(bottoms, search));
       } // Display "Shoes" tab
-      else if (tabValue === 4) {
-        setCategory("Shoes");
+      else if (category === "Shoes") {
         setShownClothes(filterClothesByNameOrTag(shoes, search));
       } // Display "Accessories" tab
-      else if (tabValue === 5) {
-        setCategory("Accessories");
+      else if (category === "Accessories") {
         setShownClothes(filterClothesByNameOrTag(accessories, search));
       }
     }
-  }, [search, tabValue]);
+  }, [search]);
 
   // --------------------------------------------------------------
   // Make initial GET requests to populate clothing category lists
@@ -140,12 +133,15 @@ export default function ClothingSearchList(props) {
     return (
       <>
         <CssBaseline/>
+        { console.log("Category: " + category) }
+
+        {/* Search bar */}
+        <SearchBar setSearch={setSearch} color={"#000000"} />
         {/* List of clothes based on the current state of clothes to show */}
         <ClothingList 
           clothes={shownClothes || []} 
-          clickFunction={ (event) => {handleClickOpen(event) } } 
+          clickFunction={addFunction} 
         />
-
       </>
     )
   }
