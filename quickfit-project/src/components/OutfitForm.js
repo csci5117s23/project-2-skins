@@ -33,20 +33,33 @@ import AutorenewRoundedIcon from "@mui/icons-material/AutorenewRounded";
 import AutoFixHighTwoToneIcon from '@mui/icons-material/AutoFixHighTwoTone';
 
 import { useRouter } from "next/router";
+import ClothingSearchList from "./ClothingSearchList";
 
 export default function OutfitForm(props) {
-  const {date} = props;
+  const { 
+    date,
+    clothes,
+    onePieces,
+    tops,
+    bottoms,
+    shoes,
+    accessories, 
+  } = props;
+
+  // Router for redirection
   const router = useRouter();
+
+  // State hooks for form elements
+  const [onePieceItem, setOnePieces] = useState(); // Outfit one piece
+  const [topsItem, setTops] = useState(""); // Outfit top 
+  const [bottomsItem, setBottoms] = useState(""); // Outfit bottom
+  const [shoesItem, setShoes] = useState(""); // Outfit shoes
+  const [accessoryItems, setAccessories] = useState(""); // Outfit accessories
 
   //properties for the post request to add outfit
   //if there is an outfit id do an update instead of post
   //TODO:uncomment line below
   const {outfitId} = router.query;
-  const [onePiece, setOnePiece] = useState([]);
-  const [tops, setTops] = useState([]);
-  const [bottoms, setBottoms] = useState([]);
-  const [shoes, setShoes] = useState([]);
-  const [accessories, setAccessories] = useState([]);
 
   // States to show clothing list when "add [clothing]" button clicked
   const [open, setOpen] = useState(false);
@@ -70,19 +83,18 @@ export default function OutfitForm(props) {
   // take the ClothingToDelete and remove it from the list
   // removing an item from list found on https://semicolon.dev/tutorial/javascript/remove-matching-object-from-js-array
   const handleDelete = () => {
-    if (clothingToDelete["category"] == "onepiece") {
+    if (clothingToDelete["category"] == "One Piece") {
       setOnePiece([]);
-    } else if (clothingToDelete["category"] == "top") {
+    } else if (clothingToDelete["category"] == "Top") {
       setTops(removeItemFromList(tops, clothingToDelete));
-    } else if (clothingToDelete["category"] == "bottom") {
+    } else if (clothingToDelete["category"] == "Bottom") {
       setBottoms(removeItemFromList(bottoms, clothingToDelete));
-    } else if (clothingToDelete["category"] == "shoes") {
+    } else if (clothingToDelete["category"] == "Shoes") {
       setShoes([]);
-    } else if (clothingToDelete["category"] == "accessory") {
+    } else if (clothingToDelete["category"] == "Accessories") {
       setAccessories(removeItemFromList(accessories, clothingToDelete));
     }
     setOpenDelete(false);
-
   };
   //helper function returns a list that has item removed from it
   const removeItemFromList = (list, item) => {
@@ -93,82 +105,27 @@ export default function OutfitForm(props) {
     return list;
   };
 
-  //list of clothes from the get request
-  const [clothes, setClothes] = useState([
-    {
-      category: "onepiece",
-      name: "Artizia black onepiece",
-      tags: ["black", "tight"],
-      createdOn: new Date(),
-    },
-    {
-      category: "onepiece",
-      name: "Floral short dress",
-      tags: ["floral", "flowy", "short dress", "short sleeve"],
-      createdOn: new Date(),
-    },
-    {
-      category: "onepiece",
-      name: "Blue Overalls",
-      tags: ["jean", "blue"],
-      createdOn: new Date(),
-    },
-    {
-      category: "top",
-      name: "Black Nike T-Shirt",
-      tags: ["black"],
-      createdOn: new Date(),
-    },    
-    {
-      category: "top",
-      name: "White Nike T-Shirt",
-      tags: ["white"],
-      createdOn: new Date(),
-    },
-    {
-      category: "bottom",
-      name: "Dark green cargos",
-      tags: ["Green", "loose", "cargo"],
-      createdOn: new Date(),
-    },
-    {
-      category: "shoes",
-      name: "White air forces",
-      tags: ["white"],
-      createdOn: new Date(),
-    },
-    {
-      category: "accessory",
-      name: "Silver necklace",
-      tags: ["silver", "shiny"],
-      createdOn: new Date(),
-    },
-  ]);
-
-
-
-  // handle selecting clothing from "add clothing" button
+  // Handle selecting clothing from "add clothing" button
   const handleClickClothes = (clothes) => {
-    // actual category name might have different spelling once implemented. watch out for that
-    if (clothes["category"] == "One Piece") {
+    if (clothes["category"] == "One Piece") { // One piece items
       if(onePiece.indexOf(clothes) < 0){
         setOnePiece([clothes]);
       }
-    } else if (clothes["category"] == "Top") {
+    } else if (clothes["category"] == "Top") { // Top items
         if(tops.indexOf(clothes) < 0){
           const newTopsList = tops.concat(clothes);
           setTops(newTopsList);  
         }
-    } else if (clothes["category"] == "Bottom") {
+    } else if (clothes["category"] == "Bottom") { // Bottom items
         if(bottoms.indexOf(clothes) < 0){
           const newBottomsList = bottoms.concat(clothes);
           setBottoms(newBottomsList);
         }
-    } else if (clothes["category"] == "Shoes") {
+    } else if (clothes["category"] == "Shoes") { // Shoe items
         if(shoes.indexOf(clothes) < 0){
           setShoes([clothes]);
         }      
-    } else if (clothes["category"] == "Accessories") {
+    } else if (clothes["category"] == "Accessories") { // Accessory items
         if(accessories.indexOf(clothes) < 0){
           const newAccessoriesList = accessories.concat(clothes);
           setAccessories(newAccessoriesList);
@@ -359,8 +316,7 @@ export default function OutfitForm(props) {
         {/* Accessories */}
         <Card
           sx={{
-            backgroundImage:
-              "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
+            backgroundImage: "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
           }}
         >
           <Stack
@@ -400,6 +356,8 @@ export default function OutfitForm(props) {
           <Typography variant="h6">Submit outfit</Typography>
         </Button>
       </Stack>
+
+
       {/* Clothing list popup, shows when "add [clothing]" button clicked */}/
       <Dialog fullScreen open={open} onClose={handleClose}>
         <AppBar sx={{ position: "relative" }}>
@@ -414,8 +372,7 @@ export default function OutfitForm(props) {
         </AppBar>
         <Card
           sx={{
-            backgroundImage:
-              "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
+            bgcolor: "#333333",
             height: "100vh",
             overflow: "auto",
           }}
@@ -427,11 +384,7 @@ export default function OutfitForm(props) {
             justifyContent="center"
             mb={2}
           >
-            <SearchBar color={"#000000"} />
-            <ClothingList
-              clothes={clothes}
-              clickFunction={handleClickClothes}
-            />
+            <ClothingList category={"All"}/>
           </Stack>
         </Card>
       </Dialog>

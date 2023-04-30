@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from "react";
-// import styles from '@/styles/Home.module.css'
-import { SignedIn } from "@clerk/clerk-react"; // Clerk authorization imports
-import AutoFixHighTwoToneIcon from "@mui/icons-material/AutoFixHighTwoTone";
-import { Grid, Button, Stack, Box, Typography, CssBaseline } from "@mui/material";
+import { useRouter } from "next/router";
+// Clerk authorization imports
+import { SignedIn } from "@clerk/clerk-react";
+// MUI Component imports
+import { 
+  Box, 
+  Button,
+  CssBaseline,
+  Grid, 
+  Stack, Typography, 
+} from "@mui/material";
+// MUI Icon imports
+import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
+import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
+import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
+// Custom component imports
 import DateWeatherWidget from "@/components/DateWeatherWidget";
 import Header from "@/components/Header";
 import BottomNavigationContainer from "@/components/BottomNavigationContainer";
 import ClothingCard from "@/components/ClothingCard";
-import NoFitChosenLayout from "./NoFitChosenLayout";
-import { useRouter } from "next/router";
-import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
-import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
-import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
-// Load any necessary ENV variables
-const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+import NoFitChosenLayout from "@/components/NoFitChosenLayout";
 
 export default function UILayout({ date, setDate }) {
   const router = useRouter();

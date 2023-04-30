@@ -36,6 +36,7 @@ import ClothingCard from "@/components/ClothingCard";
 import SearchBar from "@/components/SearchBar.js";
 import WardrobeTabs from "@/components/WardrobeTabs.js";
 import OutfitForm from "@/components/OutfitForm.js";
+import ClothingData from "@/components/ClothingData";
 // Load any necessary ENV variables
 const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
@@ -56,7 +57,7 @@ export default function ChooseFit({date}) {
 
       {/* 2. Content section */}
       <section>
-      <OutfitForm date={date}/>
+        <ClothingData date={date}/>
       </section>
 
       {/* 3. NavBar section */}

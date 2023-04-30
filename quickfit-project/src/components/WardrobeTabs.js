@@ -37,6 +37,7 @@ export default function WardrobeTabs() {
 
   return (
     <>
+      <CssBaseline/>
       <Stack
         alignItems="center"
         justifyContent="center"
@@ -185,7 +186,7 @@ function TabPanel(props) {
         {/* List of clothes based on the current state of clothes to show */}
         <ClothingList 
           clothes={shownClothes || []} 
-          clickFunction={ (event, value) => {handleClickOpen(event) } } 
+          clickFunction={ (event) => {handleClickOpen(event) } } 
         />
 
 
