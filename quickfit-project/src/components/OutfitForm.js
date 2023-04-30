@@ -38,6 +38,8 @@ import ClothingCard from "@/components/ClothingCard";
 import ClothingList from "@/components/ClothingList";
 import SearchBar from "@/components/SearchBar";
 import WardrobeTabs from "./WardrobeTabs";
+// DB Clothing functions
+import { filterClothesByCategory } from "@/modules/clothesFunctions"
 // DB Outfit functions
 import {
   getOutfits,
@@ -145,18 +147,32 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
     setOpen(false);
   };
 
-  //  
+  // --- Edit useEffect ---
+  // Load edit page with current outfit's clothing articles
   useEffect(() => {
     // Perform query to get the current day's outfit
     async function processOutfit() {
+      // Get query ID for outfit to edit
+      const { outfitId } = router.query;
+      
+      // Get auth token
       const token = await getToken({ template: jwtTemplateName });
-      const outfitIds = await getOutfits(token, date);
-      const outfitDetails = await getOutfitArrayFromIds(token, outfitIds[0]);
+
+      // Get outfit details from query parameter
+      const outfitIds = await getOutfits(token, outfitId);
+      const outfitDetails = await getOutfitArrayFromIds(token, outfitIds);
       setOutfit(outfitDetails);
+    
+      // Set lists based on query for outfit details
+      setOnePiece(filterClothesByCategory(outfitDetails, "One Piece"));
+      setTops(filterClothesByCategory(outfitDetails, "Top"));
+      setBottoms(filterClothesByCategory(outfitDetails, "Bottom"));
+      setShoes(filterClothesByCategory(outfitDetails, "Shoes"));
+      setAccessories(filterClothesByCategory(outfitDetails, "Accessories"));
+      
       setLoading(false);
     }
     processOutfit();
-    console.log(outfit);
   }, [date]); // category?
 
 
@@ -230,251 +246,256 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
   //   const result = deleteClothes(token, clothingId);    
   // }
 
+  if (loading) {
+    return <></>
+  }
 
-  return (
-    <>
-      <CssBaseline/>
-      <Stack
-        spacing={2}
-        justifyContent={"center"}
-        alignItems={"center"}
-        mt={"4vw"}
-        mb={"4vw"}
-      >
-         
-        {/* One Pieces */}
-        <Card
-          sx={{
-            backgroundImage:
-              "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
-          }}
+  else {
+    return (
+      <>
+        <CssBaseline/>
+        <Stack
+          spacing={2}
+          justifyContent={"center"}
+          alignItems={"center"}
+          mt={"4vw"}
+          mb={"4vw"}
         >
-          <Stack
-            alignItems={"center"}
-            sx={{ width: { xs: "90vw", md: "70vw" } }}
+          
+          {/* One Pieces */}
+          <Card
+            sx={{
+              backgroundImage:
+                "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
+            }}
           >
-            <CardContent>
-              <Typography variant="h5">One Piece</Typography>
-            </CardContent>
-          </Stack>
-        </Card>
-        {/* List of clothing items, takes in list of clothes object and onClick function */}
-        <ClothingList clothes={onePiece} clickFunction={handleOpenDelete} />
-        <Button
-          variant="outlined"
-          sx={{ width: { xs: "60vw" }, height: { xs: "5vh" }, bgcolor:"#333333" }}
-          onClick={ () => { handleOpen(); setCategory("One Piece"); }}
-        >
-          {onePiece.length > 0 ? (
-            <>
-              Replace <AutorenewRoundedIcon />
-            </>
-          ) : (
-            <>
-              Add One Piece
-              <AddIcon />
-            </>
-          )}
-        </Button>
+            <Stack
+              alignItems={"center"}
+              sx={{ width: { xs: "90vw", md: "70vw" } }}
+            >
+              <CardContent>
+                <Typography variant="h5">One Piece</Typography>
+              </CardContent>
+            </Stack>
+          </Card>
+          {/* List of clothing items, takes in list of clothes object and onClick function */}
+          <ClothingList clothes={onePiece} clickFunction={handleOpenDelete} />
+          <Button
+            variant="outlined"
+            sx={{ width: { xs: "60vw" }, height: { xs: "5vh" }, bgcolor:"#333333" }}
+            onClick={ () => { handleOpen(); setCategory("One Piece"); }}
+          >
+            {onePiece.length > 0 ? (
+              <>
+                Replace <AutorenewRoundedIcon />
+              </>
+            ) : (
+              <>
+                Add One Piece
+                <AddIcon />
+              </>
+            )}
+          </Button>
 
-        {/* Tops */}
-        <Card
-          sx={{
-            backgroundImage:
-              "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
-          }}
-        >
-          <Stack
-            alignItems={"center"}
-            sx={{ width: { xs: "90vw", md: "70vw" } }}
+          {/* Tops */}
+          <Card
+            sx={{
+              backgroundImage:
+                "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
+            }}
           >
-            <CardContent>
-              <Typography variant="h5">Tops</Typography>
-            </CardContent>
-          </Stack>
-        </Card>
-        <ClothingList clothes={tops} clickFunction={handleOpenDelete} />
-        <Button
-          onClick={ () => { handleOpen(); setCategory("Top"); }}
-          variant="outlined"
-          sx={{ width: { xs: "60vw" }, height: { xs: "5vh" }, bgcolor:"#333333" }}
-        >
-          {tops.length > 0 ? (
-            <>
-              Add Another Top
-              <AddIcon />
-            </>
-          ) : (
-            <>
-              Add Top <AddIcon />
-            </>
-          )}
-        </Button>
+            <Stack
+              alignItems={"center"}
+              sx={{ width: { xs: "90vw", md: "70vw" } }}
+            >
+              <CardContent>
+                <Typography variant="h5">Tops</Typography>
+              </CardContent>
+            </Stack>
+          </Card>
+          <ClothingList clothes={tops} clickFunction={handleOpenDelete} />
+          <Button
+            onClick={ () => { handleOpen(); setCategory("Top"); }}
+            variant="outlined"
+            sx={{ width: { xs: "60vw" }, height: { xs: "5vh" }, bgcolor:"#333333" }}
+          >
+            {tops.length > 0 ? (
+              <>
+                Add Another Top
+                <AddIcon />
+              </>
+            ) : (
+              <>
+                Add Top <AddIcon />
+              </>
+            )}
+          </Button>
 
-        {/* Bottoms */}
-        <Card
-          sx={{
-            backgroundImage:
-              "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
-          }}
-        >
-          <Stack
-            alignItems={"center"}
-            sx={{ width: { xs: "90vw", md: "70vw" } }}
+          {/* Bottoms */}
+          <Card
+            sx={{
+              backgroundImage:
+                "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
+            }}
           >
-            <CardContent>
-              <Typography variant="h5">Bottoms</Typography>
-            </CardContent>
-          </Stack>
-        </Card>
-        <ClothingList clothes={bottoms} clickFunction={handleOpenDelete} />
-        <Button
-          variant="outlined"
-          sx={{ width: { xs: "60vw" }, height: { xs: "5vh" }, bgcolor:"#333333" }}
-          onClick={ () => { handleOpen(); setCategory("Bottom"); }}
-        >
-          {bottoms.length > 0 ? (
-            <>
-              Add Another bottom
-              <AddIcon />
-            </>
-          ) : (
-            <>
-              Add bottom <AddIcon />
-            </>
-          )}
-        </Button>
+            <Stack
+              alignItems={"center"}
+              sx={{ width: { xs: "90vw", md: "70vw" } }}
+            >
+              <CardContent>
+                <Typography variant="h5">Bottoms</Typography>
+              </CardContent>
+            </Stack>
+          </Card>
+          <ClothingList clothes={bottoms} clickFunction={handleOpenDelete} />
+          <Button
+            variant="outlined"
+            sx={{ width: { xs: "60vw" }, height: { xs: "5vh" }, bgcolor:"#333333" }}
+            onClick={ () => { handleOpen(); setCategory("Bottom"); }}
+          >
+            {bottoms.length > 0 ? (
+              <>
+                Add Another bottom
+                <AddIcon />
+              </>
+            ) : (
+              <>
+                Add bottom <AddIcon />
+              </>
+            )}
+          </Button>
 
-        {/* Shoes */}
-        <Card
-          sx={{
-            backgroundImage:
-              "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
-          }}
-        >
-          <Stack
-            alignItems={"center"}
-            sx={{ width: { xs: "90vw", md: "70vw" } }}
+          {/* Shoes */}
+          <Card
+            sx={{
+              backgroundImage:
+                "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
+            }}
           >
-            <CardContent>
-              <Typography variant="h5">Shoes</Typography>
-            </CardContent>
-          </Stack>
-        </Card>
-        <ClothingList clothes={shoes} clickFunction={handleOpenDelete} />
-        <Button
-          variant="outlined"
-          sx={{ width: { xs: "60vw" }, height: { xs: "5vh" }, bgcolor:"#333333" }}
-          onClick={ () => { handleOpen(); setCategory("Shoes"); }}
-        >
-          {shoes.length > 0 ? (
-            <>
-              Replace <AutorenewRoundedIcon />
-            </>
-          ) : (
-            <>
-              Add Shoes
-              <AddIcon />
-            </>
-          )}
-        </Button>
+            <Stack
+              alignItems={"center"}
+              sx={{ width: { xs: "90vw", md: "70vw" } }}
+            >
+              <CardContent>
+                <Typography variant="h5">Shoes</Typography>
+              </CardContent>
+            </Stack>
+          </Card>
+          <ClothingList clothes={shoes} clickFunction={handleOpenDelete} />
+          <Button
+            variant="outlined"
+            sx={{ width: { xs: "60vw" }, height: { xs: "5vh" }, bgcolor:"#333333" }}
+            onClick={ () => { handleOpen(); setCategory("Shoes"); }}
+          >
+            {shoes.length > 0 ? (
+              <>
+                Replace <AutorenewRoundedIcon />
+              </>
+            ) : (
+              <>
+                Add Shoes
+                <AddIcon />
+              </>
+            )}
+          </Button>
 
-        {/* Accessories */}
-        <Card
-          sx={{
-            backgroundImage:
-              "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
-          }}
-        >
-          <Stack
-            alignItems={"center"}
-            sx={{ width: { xs: "90vw", md: "70vw" } }}
+          {/* Accessories */}
+          <Card
+            sx={{
+              backgroundImage:
+                "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
+            }}
           >
-            <CardContent>
-              <Typography variant="h5">Accessories</Typography>
-            </CardContent>
-          </Stack>
-        </Card>
-        <ClothingList clothes={accessories} clickFunction={handleOpenDelete} />
-        <Button
-          variant="outlined"
-          sx={{ width: { xs: "60vw" }, height: { xs: "5vh" }, bgcolor:"#333333", }}
-          onClick={ () => { handleOpen(); setCategory("Accessories"); }}
-        >
-          {accessories.length > 0 ? (
-            <>
-              Add Another Accessory
-              <AddIcon />
-            </>
-          ) : (
-            <>
-              Add Accessory <AddIcon />
-            </>
-          )}
-        </Button>
-        <Button
-          variant="contained"
-        
-          sx={{ width: {xs: "50vw", md: "70vw"}, borderRadius:"1.25em", bgcolor:"#c2c2c2", color:"#3C3F42" }}
-          onClick={ (event, value) => {
-            onHandleSubmit(event);
-            router.push("/");
-          }}
-        >
-          <Typography variant="h6">Submit outfit</Typography>
-        </Button>
-      </Stack>
-      {/* Clothing list popup, shows when "add [clothing]" button clicked */}
-      <Dialog fullScreen open={open} onClose={handleClose}>
-        <AppBar sx={{ position: "relative" }}>
-          <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={handleClose}>
-              <CloseIcon />
-            </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Choose a fit
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Card
-          sx={{
-            backgroundImage:
-              "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
-            height: "100vh",
-            overflow: "auto",
-          }}
-        >
-          <Stack
-            spacing={1.5}
-            width="100vw"
-            alignItems="center"
-            justifyContent="center"
-            mb={2}
+            <Stack
+              alignItems={"center"}
+              sx={{ width: { xs: "90vw", md: "70vw" } }}
+            >
+              <CardContent>
+                <Typography variant="h5">Accessories</Typography>
+              </CardContent>
+            </Stack>
+          </Card>
+          <ClothingList clothes={accessories} clickFunction={handleOpenDelete} />
+          <Button
+            variant="outlined"
+            sx={{ width: { xs: "60vw" }, height: { xs: "100%" }, bgcolor:"#333333", }}
+            onClick={ () => { handleOpen(); setCategory("Accessories"); }}
           >
-            {/* <WardrobeTabs/> */}
-            <Paper>{category}</Paper>
-            <ClothingSearchList categoryInput={category} clickFunction={handleClickClothes} />
-          </Stack>
-        </Card>
-      </Dialog>
-      {/* Delete clothing button popup, shows when clothing card is clicked */}
-      <div>
-        <Dialog open={openDelete} onClose={handleCloseDelete}>
-          <Stack alignItems="center" m={2} mb={0}>
-            <DialogContentText>
-              Are you sure you want to delete this clothing?
-            </DialogContentText>
-            <DialogActions>
-              <Button onClick={handleCloseDelete} variant="contained">
-                Cancel
-              </Button>
-              <Button onClick={handleDelete} variant="contained" color="error">
-                Delete
-              </Button>
-            </DialogActions>
-          </Stack>
+            {accessories.length > 0 ? (
+              <>
+                Add Another Accessory
+                <AddIcon />
+              </>
+            ) : (
+              <>
+                Add Accessory <AddIcon />
+              </>
+            )}
+          </Button>
+          <Button
+            variant="contained"
+          
+            sx={{ width: {xs: "50vw", md: "70vw"}, borderRadius:"1.25em", bgcolor:"#c2c2c2", color:"#3C3F42" }}
+            onClick={ (event, value) => {
+              onHandleSubmit(event);
+              router.push("/");
+            }}
+          >
+            <Typography variant="h6">Submit outfit</Typography>
+          </Button>
+        </Stack>
+        {/* Clothing list popup, shows when "add [clothing]" button clicked */}
+        <Dialog fullScreen open={open} onClose={handleClose}>
+          <AppBar sx={{ position: "relative" }}>
+            <Toolbar>
+              <IconButton edge="start" color="inherit" onClick={handleClose}>
+                <CloseIcon />
+              </IconButton>
+              <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                Choose a fit
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <Card
+            sx={{
+              backgroundImage:
+                "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
+              height: "100vh",
+              overflow: "auto",
+            }}
+          >
+            <Stack
+              spacing={1.5}
+              width="100vw"
+              alignItems="center"
+              justifyContent="center"
+              mb={2}
+            >
+              {/* <WardrobeTabs/> */}
+              <Paper>{category}</Paper>
+              <ClothingSearchList categoryInput={category} clickFunction={handleClickClothes} />
+            </Stack>
+          </Card>
         </Dialog>
-      </div>
-    </>
-  );
+        {/* Delete clothing button popup, shows when clothing card is clicked */}
+        <div>
+          <Dialog open={openDelete} onClose={handleCloseDelete}>
+            <Stack alignItems="center" m={2} mb={0}>
+              <DialogContentText>
+                Are you sure you want to delete this clothing?
+              </DialogContentText>
+              <DialogActions>
+                <Button onClick={handleCloseDelete} variant="contained">
+                  Cancel
+                </Button>
+                <Button onClick={handleDelete} variant="contained" color="error">
+                  Delete
+                </Button>
+              </DialogActions>
+            </Stack>
+          </Dialog>
+        </div>
+      </>
+    );
+  }
 }
