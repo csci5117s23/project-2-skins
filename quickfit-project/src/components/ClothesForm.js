@@ -15,11 +15,13 @@ import {
   CircularProgress,
   Tooltip,
   Card,
+  Alert,
+  Snackbar
 } from "@mui/material";
 // MUI Icon imports
 import DriveFolderUploadRoundedIcon from "@mui/icons-material/DriveFolderUploadRounded";
 import CloseIcon from '@mui/icons-material/Close';
-
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 // DB Clothes Function imports
 import {
   getClothes,
@@ -56,11 +58,24 @@ function InputHeader(props) {
 }
 
 // Clothes form
-export default function ClothesForm( {clothingToEdit = null} ) {
+export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
   // --- Authorization ---------------------------------------------------
   const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   const [loading, setLoading] = useState(true);
+
+  // --- Shows success message when submit is clicked --------------------
+  const [openSuccessMessage, setOpenSuccessMessage] = useState(false);
+
+  const handleSubmitForSuccessMessageClick = () => {
+    setOpenSuccessMessage(true);
+  }
+
+  const handleClosingSuccessMessage = ()  => {
+    setOpenSuccessMessage(false);
+  }
+
+
 
   // If passed in clothing item is not null, (AKA we are editing, then use these values instead)
   const editId = clothingToEdit?._id;
@@ -128,11 +143,12 @@ export default function ClothesForm( {clothingToEdit = null} ) {
         color:      color,
         tags:       getTagNames(inputTags),
       }; // Make PUT request
-      result = await editClothes(token, putItem);
+      editClothes(token, putItem).then(()=>{setUpdated?setUpdated(true):null;});
     }
 
     // On submit also, refresh the form
     resetForm();
+    
   }
 
   // -----------------------------------------------------
@@ -143,7 +159,7 @@ export default function ClothesForm( {clothingToEdit = null} ) {
     const token = await getToken({ template: jwtTemplateName });
 
     // --- Call DELETE function ---
-    const result = deleteClothes(token, clothingId);    
+    deleteClothes(token, clothingId).then(()=>{setUpdated?setUpdated(true):null;});   
   }
 
   // --- Tag functions ---
@@ -267,7 +283,7 @@ export default function ClothesForm( {clothingToEdit = null} ) {
   if (loading) {
     return (
       <>
-        <Stack justifyContent="center" alignItems="center" height="100vh">
+        <Stack justifyContent="center" alignItems="center" height="80vh">
           <CircularProgress />
         </Stack>
       </>
@@ -341,6 +357,7 @@ export default function ClothesForm( {clothingToEdit = null} ) {
               {/* Category */}
               <InputHeader > Enter clothing details </InputHeader>
               <TextField
+                
                 select
                 label="Category*"
                 value={category}
@@ -437,17 +454,21 @@ export default function ClothesForm( {clothingToEdit = null} ) {
                     }}
                   >
                     <Button variant="contained" 
-                      sx={{ width: "45%" }}
-                      onClick={ () => { handleDelete(editId) } }
+                      sx={{ width: "45%", backgroundColor:"#fc7b03", fontWeight:"bold" }}
+                      onClick={ () => { 
+                        handleDelete(editId)
+                        setUpdated?setUpdated(true):null;
+                      } }
                     >
                       Delete
                     </Button>
                       
                     <Button variant="contained"
-                      sx={{ width: "45%" }}
+                      sx={{ width: "45%", fontWeight:"bold" }}
                       onClick={(event, value) => {
                         addNewTags();
                         onHandleSubmit(event);
+                        setUpdated?setUpdated(true):null;
                       }}
                     >
                       Edit
@@ -467,6 +488,7 @@ export default function ClothesForm( {clothingToEdit = null} ) {
                       onClick={(event, value) => {
                         addNewTags();
                         onHandleSubmit(event);
+                        handleSubmitForSuccessMessageClick();
                       }}
                     >
                       Submit
@@ -481,6 +503,12 @@ export default function ClothesForm( {clothingToEdit = null} ) {
           </Box>
           </Box>
         </Box>
+        <Snackbar open={openSuccessMessage} autoHideDuration={2000} onClose={handleClosingSuccessMessage}>
+          <Alert onClose={handleClosingSuccessMessage} severity="success" sx={{ width: '100%' }}>
+            Outfit added to wardrobe!
+          </Alert>
+        </Snackbar>
+       
       </>
     );
   }

@@ -11,19 +11,10 @@ import {
   Tooltip,
   Dialog,
 } from "@mui/material";
-import ClothesForm from "./ClothesForm";
 
 export default function ClothingCard(props) {
   const { clothes } = props;
 
-  // State of whether or not dialog is open
-  const [open, setOpen] = React.useState(false);
-
-  // Function to open up webcam dialog/popup
-  const handleClickOpen = () => { setOpen(true) };
-
-  // Function to close webcam dialog/popup
-  const handleCloseDialog = () => { setOpen(false) };
 
   // Dont render if theres no clothes
   if (!clothes) {
@@ -33,26 +24,24 @@ export default function ClothingCard(props) {
   return (
     <>
       <CssBaseline/>
-      <Tooltip title="Edit clothing item">
         <Card 
           sx={{ display: "flex" }} 
-          // onClick={handleClickOpen} 
         >
           <Grid
             container
             sx={{
-              width: { xs: "90vw", md: "70vw" },
+              width: { xs: "100%", md: "70vw" },
               height: { xs: "100%", md: "100%" },
             }}
             justifyContent="space-between"
           >
             <Grid item xs={6} justifyContent="flex-start" alignItems="flex-start">
               <Box ml={1.5} mt={0.2}>
-                <Box sx={{ fontSize: { xs: 20, md: 30 } }}>
-                    <Typography>{clothes["name"]}</Typography>
+                <Box>
+                    <Typography sx={{ fontSize: { xs: 20, md: 32 } }} >{clothes["name"]}</Typography>
                 </Box>
-                <Box sx={{ fontSize: { xs: 15, md: 25 } }}>
-                  <Typography gutterBottom component="div" color="text.secondary">
+                <Box >
+                  <Typography sx={{ fontSize: { xs: 15, md: 25 } }} gutterBottom component="div" color="text.secondary">
                     {clothes["category"]}
                   </Typography>
                 </Box>
@@ -94,14 +83,6 @@ export default function ClothingCard(props) {
             </Grid>
           </Grid>
         </Card>
-      </Tooltip>
-
-      <Dialog
-        open={open} 
-        onClose={handleCloseDialog}
-      >
-       <ClothesForm clothingToEdit={clothes} />
-      </Dialog>
 
     </>
   );

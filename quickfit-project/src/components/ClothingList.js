@@ -32,17 +32,23 @@ export default function ClothingList(props) {
   const { clothes, clickFunction } = props;
 
   return (
-    <Stack spacing={1.5} width="100vw" alignItems="center" justifyContent="center">
+    
+    <Box
+    alignItems="center"
+    justifyContent="center"
+    sx={{ display: "flex", flexWrap: "wrap", width:"100vw" }}
+    >
       {clothes.map((clothing) => {
         return (
           <Box
             key={clothing._id}
             onClick={() => {clickFunction?clickFunction(clothing):null;}}
+            sx={{cursor: "pointer", m: 1, width: { xs: "100vw", md: "34vw" } }}
           >
             <ClothingCard clothes={clothing} />
           </Box>
         );
       })}
-    </Stack>
+    </Box>
   );
 }

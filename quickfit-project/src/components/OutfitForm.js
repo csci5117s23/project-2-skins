@@ -30,18 +30,18 @@ import ClothingList from "@/components/ClothingList";
 import SearchBar from "@/components/SearchBar";
 import DeleteForeverTwoToneIcon from "@mui/icons-material/DeleteForeverTwoTone";
 import AutorenewRoundedIcon from "@mui/icons-material/AutorenewRounded";
-import AutoFixHighTwoToneIcon from '@mui/icons-material/AutoFixHighTwoTone';
+import AutoFixHighTwoToneIcon from "@mui/icons-material/AutoFixHighTwoTone";
 
 import { useRouter } from "next/router";
 
 export default function OutfitForm(props) {
-  const {date} = props;
+  const { date } = props;
   const router = useRouter();
 
   //properties for the post request to add outfit
   //if there is an outfit id do an update instead of post
   //TODO:uncomment line below
-  const {outfitId} = router.query;
+  const { outfitId } = router.query;
   const [onePiece, setOnePiece] = useState([]);
   const [tops, setTops] = useState([]);
   const [bottoms, setBottoms] = useState([]);
@@ -70,19 +70,18 @@ export default function OutfitForm(props) {
   // take the ClothingToDelete and remove it from the list
   // removing an item from list found on https://semicolon.dev/tutorial/javascript/remove-matching-object-from-js-array
   const handleDelete = () => {
-    if (clothingToDelete["category"] == "onepiece") {
+    if (clothingToDelete["category"] == "One Piece") {
       setOnePiece([]);
-    } else if (clothingToDelete["category"] == "top") {
+    } else if (clothingToDelete["category"] == "Top") {
       setTops(removeItemFromList(tops, clothingToDelete));
-    } else if (clothingToDelete["category"] == "bottom") {
+    } else if (clothingToDelete["category"] == "Bottom") {
       setBottoms(removeItemFromList(bottoms, clothingToDelete));
-    } else if (clothingToDelete["category"] == "shoes") {
+    } else if (clothingToDelete["category"] == "Shoes") {
       setShoes([]);
-    } else if (clothingToDelete["category"] == "accessory") {
+    } else if (clothingToDelete["category"] == "Accessory") {
       setAccessories(removeItemFromList(accessories, clothingToDelete));
     }
     setOpenDelete(false);
-
   };
   //helper function returns a list that has item removed from it
   const removeItemFromList = (list, item) => {
@@ -96,106 +95,107 @@ export default function OutfitForm(props) {
   //list of clothes from the get request
   const [clothes, setClothes] = useState([
     {
-      category: "onepiece",
+      category: "One Piece",
       name: "Artizia black onepiece",
       tags: ["black", "tight"],
       createdOn: new Date(),
     },
     {
-      category: "onepiece",
+      category: "One Piece",
       name: "Floral short dress",
       tags: ["floral", "flowy", "short dress", "short sleeve"],
       createdOn: new Date(),
     },
     {
-      category: "onepiece",
+      category: "One Piece",
       name: "Blue Overalls",
       tags: ["jean", "blue"],
       createdOn: new Date(),
     },
     {
-      category: "top",
+      category: "Top",
       name: "Black Nike T-Shirt",
       tags: ["black"],
       createdOn: new Date(),
-    },    
+    },
     {
-      category: "top",
+      category: "Top",
+      name: "long sleeve blouse",
+      tags: ["white"],
+      createdOn: new Date(),
+    },
+    {
+      category: "Top",
       name: "White Nike T-Shirt",
       tags: ["white"],
       createdOn: new Date(),
     },
     {
-      category: "bottom",
+      category: "Bottom",
       name: "Dark green cargos",
       tags: ["Green", "loose", "cargo"],
       createdOn: new Date(),
     },
     {
-      category: "shoes",
+      category: "Shoes",
       name: "White air forces",
       tags: ["white"],
       createdOn: new Date(),
     },
     {
-      category: "accessory",
+      category: "Accessory",
       name: "Silver necklace",
       tags: ["silver", "shiny"],
       createdOn: new Date(),
     },
   ]);
 
-
-
   // handle selecting clothing from "add clothing" button
   const handleClickClothes = (clothes) => {
     // actual category name might have different spelling once implemented. watch out for that
     if (clothes["category"] == "One Piece") {
-      if(onePiece.indexOf(clothes) < 0){
+      if (onePiece.indexOf(clothes) < 0) {
         setOnePiece([clothes]);
       }
     } else if (clothes["category"] == "Top") {
-        if(tops.indexOf(clothes) < 0){
-          const newTopsList = tops.concat(clothes);
-          setTops(newTopsList);  
-        }
+      if (tops.indexOf(clothes) < 0) {
+        const newTopsList = tops.concat(clothes);
+        setTops(newTopsList);
+      }
     } else if (clothes["category"] == "Bottom") {
-        if(bottoms.indexOf(clothes) < 0){
-          const newBottomsList = bottoms.concat(clothes);
-          setBottoms(newBottomsList);
-        }
+      if (bottoms.indexOf(clothes) < 0) {
+        const newBottomsList = bottoms.concat(clothes);
+        setBottoms(newBottomsList);
+      }
     } else if (clothes["category"] == "Shoes") {
-        if(shoes.indexOf(clothes) < 0){
-          setShoes([clothes]);
-        }      
+      if (shoes.indexOf(clothes) < 0) {
+        setShoes([clothes]);
+      }
     } else if (clothes["category"] == "Accessories") {
-        if(accessories.indexOf(clothes) < 0){
-          const newAccessoriesList = accessories.concat(clothes);
-          setAccessories(newAccessoriesList);
-        }
+      if (accessories.indexOf(clothes) < 0) {
+        const newAccessoriesList = accessories.concat(clothes);
+        setAccessories(newAccessoriesList);
+      }
     }
     setOpen(false);
   };
 
-  //  
+  //
   useEffect(() => {
-    console.log("inuse effect")
-    if (outfitId) { 
-      console.log("outfit id not null")
+    console.log("inuse effect");
+    if (outfitId) {
+      console.log("outfit id not null");
       for (const clothing of outfit) {
-        console.log(clothing)
+        console.log(clothing);
         handleClickClothes(clothing);
-      }   
+      }
     }
-    
   }, []);
 
-    
-  const getOutfit = (outfitId) =>{
-      //TODO using outfitId retrieve outfit
-      // var outfit = fetch(outfit)
-      
-  }  
+  const getOutfit = (outfitId) => {
+    //TODO using outfitId retrieve outfit
+    // var outfit = fetch(outfit)
+  };
   //when selecting add, this will get the clothes that populate the list
   //replace handleOpen on each onClick with this
   const handleTops = () => {
@@ -210,7 +210,7 @@ export default function OutfitForm(props) {
 
   return (
     <>
-      <CssBaseline/>
+      <CssBaseline />
       <Stack
         spacing={2}
         justifyContent={"center"}
@@ -218,7 +218,6 @@ export default function OutfitForm(props) {
         mt={"4vw"}
         mb={"4vw"}
       >
-         
         {/* One Pieces */}
         <Card
           sx={{
@@ -391,8 +390,11 @@ export default function OutfitForm(props) {
         </Button>
         <Button
           variant="contained"
-        
-          sx={{ width: {xs: "50vw", md: "70vw"}, borderRadius:"1.25em", backgroundColor:"#c2c2c2", color:"#3C3F42" }}
+          sx={{
+            width: { xs: "50vw", md: "70vw" },
+            backgroundColor: "#c2c2c2",
+            color: "#3C3F42",
+          }}
           onClick={() => {
             router.push("/");
           }}

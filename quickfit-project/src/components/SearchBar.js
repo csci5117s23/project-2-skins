@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
 // MUI Component imports
-import {
-  Stack,
-  TextField,
-} from "@mui/material";
+import { Stack, TextField } from "@mui/material";
 
 export default function SearchBar(props) {
   const { setSearch, color } = props;
@@ -22,7 +19,11 @@ export default function SearchBar(props) {
           input: { color: color },
           label: { color: color },
           width: { md: "35vw" },
+          "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+            borderColor: color
+          },
           "& .MuiOutlinedInput-root": {
+            borderColor: color,
             "& fieldset": {
               borderColor: color,
             },
