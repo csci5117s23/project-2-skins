@@ -252,12 +252,13 @@ export default function ClothesForm() {
             backgroundImage: "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)"
           }}>
 
+          <Box height={"100vh"}>
         <Card>
         <Box
           sx={{
             m: { xs: 0, sm: 1, md: 3, xl: 5 },
             p: { xs: 2, sm: 3, md: 4, xl: 5 },
-            minHeight: "90vh",
+            minHeight: "70vh",
           }}
         >
           {/* Clothing form */}
@@ -391,6 +392,7 @@ export default function ClothesForm() {
           </FormControl>
         </Box>
         </Card>
+          </Box>
         </Box>
       </>
     );
