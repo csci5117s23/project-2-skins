@@ -54,22 +54,30 @@ function InputHeader(props) {
 }
 
 // Clothes form
-export default function ClothesForm() {
+export default function ClothesForm( {clothingToEdit = null} ) {
   // --- Authorization ---------------------------------------------------
   const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   const [loading, setLoading] = useState(true);
 
-  // --- Main form state hooks & functions -------------------------------
-  const [category, setCategory] = useState(""); // Clothing entry category
-  const [color, setColor] = useState(""); // Clothing entry color
-  const [name, setName] = useState(""); // Clothing entry name
-  const [userTags, setUserTags] = useState([]); // Clothing tags previously made by user (store here)
-  const [inputTags, setInputTags] = useState([]); // Clothing tags to apply to this entry
-  const [image, setImage] = useState(null); // Image URL to take/preview on front end
-  const [imageFile, setImageFile] = useState(null); // Image file to upload to cloud storage
+  // If passed in clothing item is not null, (AKA we are editing, then use these values instead)
+  const editCategory = clothingToEdit?.category;
+  const editColor = clothingToEdit?.color;
+  const editName = clothingToEdit?.name;
+  const editTags = clothingToEdit?.tags;
+  // const editImage = clothingToEdit.category;
+  // const editImageName = clothingToEdit.
+
+  // --- Main form state hooks & functions ------------------------------------------------------------------------------------------------
+  const [category, setCategory] = useState(editCategory || "");               // Clothing entry category
+  const [color, setColor] = useState(editColor || "");                        // Clothing entry color
+  const [name, setName] = useState(editName || "");                           // Clothing entry name
+  const [userTags, setUserTags] = useState([]);                               // Clothing tags previously made by user (store here)
+  const [inputTags, setInputTags] = useState(editTags || []);                 // Clothing tags to apply to this entry
+  const [image, setImage] = useState(null);                                   // Image URL to take/preview on front end
+  const [imageFile, setImageFile] = useState(null);                           // Image file to upload to cloud storage
   const [fileUploadText, setFileUploadText] = useState("Choose an image..."); // Image file name/text
-  const [uploaded, setUploaded] = useState(false); // Status of whether or not an image was uploaded to cloud
+  const [uploaded, setUploaded] = useState(false);                            // Status of whether or not an image was uploaded to cloud
 
   // -----------------------------------------------------------------
   // Function to reset clothes form inputs after form submission
@@ -95,7 +103,7 @@ export default function ClothesForm() {
       name: name,
       color: color,
       tags: getTagNames(inputTags),
-      imageId: uploadImage(e),
+      // imageId: uploadImage(e),
     };
     console.log("Clothing item on submit: ");
     console.log(clothingItem);
@@ -103,8 +111,13 @@ export default function ClothesForm() {
     // Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
 
-    // Call POST function
-    const result = await addClothes(token, clothingItem);
+    // Call POST function if we are using the add form
+    let result;
+    if (clothingToEdit === null) { // POST if adding
+      result = await addClothes(token, clothingItem);
+    } else { // PUT if editing
+      result = await editClothes(token, clothingItem);
+    }
 
     // On submit also, refresh the form
     resetForm();
@@ -153,8 +166,8 @@ export default function ClothesForm() {
   // -------------------------------------------------------------------
   // Function to convert a list of tags to just a list of tag names
   // -------------------------------------------------------------------
-  function getTagNames(tagList) {
-    const inputTagNames = inputTags.map((tag) => {
+  function getTagNames(tagNamesToGet) {
+    const inputTagNames = tagNamesToGet.map((tag) => {
       if (tag.name) {
         return tag.name;
       } else if (typeof tag === "string" || tag instanceof String) {
@@ -242,10 +255,13 @@ export default function ClothesForm() {
         {/* Clothes form container */}
         <Box
           sx={{
-            m: { xs: 0, sm: 1, md: 3, xl: 5 },
-            p: { xs: 2, sm: 3, md: 4, xl: 5 },
+            m:  { xs: 0 },
+            px: { xs: 2, md: 5 },
+            pt: { xs: 2, md: 5 }, 
+            pb: { xs: 5 },
             height: "100%",
-            minHeight: "90vh",
+            minHeight: "95vh",
+            width: '100%',
             bgcolor: "white",
           }}
         >
@@ -265,7 +281,12 @@ export default function ClothesForm() {
                 }}
               >
                 <Typography variant="h7" sx={{ fontWeight: "bold" }}>
-                  Add clothes to your wardrobe
+                  { (clothingToEdit === null) 
+                      ?
+                      <span>Add clothes to your wardrobe</span> 
+                      : 
+                      <span>Edit clothing item</span> 
+                  }
                 </Typography>
               </Paper>
             </FormLabel>

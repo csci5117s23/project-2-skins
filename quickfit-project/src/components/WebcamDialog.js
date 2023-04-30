@@ -28,6 +28,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function WebcamDialog( { image, setImage, setFileUploadText } ) {
+  // State of whether or not dialog is open
   const [open, setOpen] = React.useState(false);
 
   // Function to open up webcam dialog/popup

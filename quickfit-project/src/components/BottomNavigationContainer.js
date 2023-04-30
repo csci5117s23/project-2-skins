@@ -19,7 +19,7 @@ export default function BottomNavigationContainer() {
   const value = router.pathname.slice(1);
 
   return (
-    <Box sx={{ pb: 10 }}>
+    <Box sx={{ pb: 7 }}>
       <CssBaseline />
       <Paper
         sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
