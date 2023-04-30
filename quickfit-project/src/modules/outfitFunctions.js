@@ -64,10 +64,12 @@ export async function addOutfit(authToken, outfit) {
                 'x-api-key': apiKey,
             },
             'body': JSON.stringify({
-                topId:      outfit._id || null,
-                bottomId:   outfit.bottom.name || null,
-                shoesId:    clothing.color || null,  
-                tags:     clothing.tags || null,
+                topId:          outfit.topId || null,
+                bottomId:       outfit.bottomId || null,
+                shoesId:        outfit.shoesId || null,  
+                accessoriesId:  outfit.accessoriesId || null,
+                onePieceId:     outfit.onePieceId || null,
+                dateWorn:       outfit.dateWorn || null,
             }),
         });
         // Return newly-made clothing entry
@@ -83,16 +85,14 @@ export async function addOutfit(authToken, outfit) {
 export async function editOutfit(authToken, outfit) {
     // Send PUT request
     try {
-        const result = await fetch(outfitUrl + outfit._id, {
+        const result = await fetch(outfitUrl + "/" + outfit._id, {
             'method': 'PUT',
             'headers': {
                 'Authorization': 'Bearer ' + authToken,
                 'Content-Type': 'application/json',
                 'x-api-key': apiKey,
             },
-            'body': JSON.stringify({
-                outfit
-            })
+            'body': JSON.stringify(outfit)
         });
         // Return newly-made clothing entry
         return await result.json();
@@ -104,10 +104,10 @@ export async function editOutfit(authToken, outfit) {
 // -----------------------------------------------------------------
 // DELETE: Function to remove am user outfit
 // -----------------------------------------------------------------
-export async function deleteOutfit(authToken, outfit) {
+export async function deleteOutfit(authToken, outfitId) {
     // Send DELETE request
     try {
-        const result = await fetch(outfitUrl + clothing._id, {
+        const result = await fetch(outfitUrl + "/" + outfitId, {
             'method': 'DELETE',
             'headers': {
                 'Authorization': 'Bearer ' + authToken,
