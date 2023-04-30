@@ -47,13 +47,12 @@ export async function getOutfits(authToken, id="") {
 export async function getOutfitByDateWorn(authToken, date, id="") {
     // Get all outfits
     const allOutfits = await getOutfits(authToken, id);
-    console.log("All outfits: " + JSON.stringify(allOutfits));
+    // console.log("All outfits: " + JSON.stringify(allOutfits));
     try { // From list of all outfits, get the one of the specified date
         const result = Object.values(allOutfits).filter( 
             (outfit) => 
                 (new Date(outfit.dateWorn).toLocaleDateString("en-US") === new Date(date).toLocaleDateString("en-US")) 
         );
-        console.log("Result: " + JSON.stringify(result));
         return result;
     } catch (error) {
         console.log("Failed to get outfit by date. " + error);
@@ -85,29 +84,29 @@ export async function getOutfitArrayFromIds(authToken, outfit) {
 
     // --- Get one piece item --------------------------------------
     if (onePieceId) {
-        onePiece = await getClothes(authToken, onePieceId);
+        onePiece = getClothes(authToken, onePieceId);
     } 
     // --- Get top items -------------------------------------------
-    tops = await getClothingItemsFromIds(authToken, topIds);
+    tops = getClothingItemsFromIds(authToken, topIds);
 
     // --- Get bottom items ----------------------------------------
-    bottoms = await getClothingItemsFromIds(authToken, bottomIds);
+    bottoms = getClothingItemsFromIds(authToken, bottomIds);
 
     // --- Get shoes -----------------------------------------------
     if (shoesId) {
-        shoes = await getClothes(authToken, shoesId);
+        shoes = getClothes(authToken, shoesId);
     }
     // --- Get accessories -----------------------------------------
-    accessories = await getClothingItemsFromIds(authToken, accessoriesId);
-
-    // From these values, build an outfits list w/ clothing details
-    let lst = Object.keys(tops);
-    console.log(lst);
+    accessories = getClothingItemsFromIds(authToken, accessoriesId);
+   
+    let list = ([].concat(tops, bottoms, accessories, [onePiece], [shoes]))
+    list = await Promise.all(list);     // Reference to do all promise: https://stackoverflow.com/questions/18526824/transform-array-of-promises-into-array-of-values-when-fulfilled
+    return list.flat(Infinity);         // https://stackoverflow.com/questions/69070429/how-to-make-nested-array-into-a-single-array-in-javascript
 }
 
 // Function to get a list of clothing items from a list of Ids
 export async function getClothingItemsFromIds(authToken, ids) {
-    if (ids) {
+    if (ids !== null) {
         let clothingItems = [];
         ids.map( async (id) => (
             clothingItems.push(await getClothes(authToken, id))
