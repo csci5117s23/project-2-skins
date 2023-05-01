@@ -1,4 +1,4 @@
-import {useState}  from "react";
+import {useEffect, useState}  from "react";
 import { useAuth } from "@clerk/nextjs";
 // MUI Imports
 import {
@@ -41,14 +41,15 @@ export default function AddTagComboBox( { reset, userTags, setInputTags, getTags
     const result = await deleteTag(token, tag)
   }
 
-  // ------------------------------------------------------------------
-  // Refresh userTags on each page render
-  // ------------------------------------------------------------------
+  // Re-render tags when reset changes
+  useEffect( () => {
+    
+  }, [reset])
 
   return (
     
     <Autocomplete
-      key={reset}
+      key={!reset}
       multiple
       freeSolo
       id="checkboxes-tags"
