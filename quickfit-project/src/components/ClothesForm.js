@@ -41,6 +41,7 @@ import {
 import AddTagComboBox from "./AddTagComboBox";
 import WebcamDialog from "./WebcamDialog";
 import PhotoUpload from "./PhotoUpload";
+import { UploadFile } from "@mui/icons-material";
 
 // Header text styling for each form input
 function InputHeader(props) {
@@ -113,8 +114,14 @@ export default function ClothesForm( {clothingToEdit = null} ) {
     const token = await getToken({ template: jwtTemplateName });
     
     // Upload image first, then get the most recent image slotted in images table
-    await uploadScreenshot(e, token);
-    let imageUrl = await useCloudDownloadLatest(token);
+    let imageUrl = null;
+    if (imageFile) {
+      await handleImageUpload(e, token);
+      imageUrl = await useCloudDownloadLatest(token);
+    } else if (image) {
+      await uploadScreenshot(token);
+      imageUrl = await useCloudDownloadLatest(token);
+    }
 
     // console.log(JSON.stringify(await getClothes(token)));
 
@@ -242,7 +249,7 @@ export default function ClothesForm( {clothingToEdit = null} ) {
         });
         // Upload resized image to bucket
         await useCloudUpload(token, resized);
-        setReset(false);
+        setReset(!reset);
     } catch (error) {
         console.log("Error while resizing image:", error);
     }
@@ -256,8 +263,7 @@ export default function ClothesForm( {clothingToEdit = null} ) {
   async function uploadScreenshot(token) {
     if (image) {
         //convert the base64 image to a blob: https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
-        console.log(image);
-        const byteCharacters = atob(image.split(",")[1]);
+        const byteCharacters = atob(String(image).split(",")[1]);
         const byteNumbers = new Array(byteCharacters.length);
         for (let i = 0; i < byteCharacters.length; i++)
             byteNumbers[i] = byteCharacters.charCodeAt(i);
@@ -285,7 +291,7 @@ export default function ClothesForm( {clothingToEdit = null} ) {
       }
     }
     processTags();
-  }, [isLoaded, inputTags]);
+  }, [isLoaded, inputTags, reset]);
 
   // Load GET requests before showing any content
   if (loading) {

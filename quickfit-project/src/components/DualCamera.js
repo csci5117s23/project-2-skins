@@ -38,6 +38,7 @@ export default function DualCamera( { handleCloseDialog, image, setImage, setFil
 
     // Capture image function
     const capture = useCallback(() => {
+        console.log(webcamRef.current);
         const imageSrc = webcamRef.current.getScreenshot();
         setImage(imageSrc);
     }, [webcamRef]);
