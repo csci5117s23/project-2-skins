@@ -1,33 +1,6 @@
-/*
- * CLOUD STORAGE TABLE OF CONTENTS
- *
- * Things the front-end can do: uplaod, download, delete
- * Things the front-end can't do: authorize accounts, get upload urls, get download urls
- *
- * 1.1. Authorize the account
- *  - This is done by making a request to the B2 API
- *  - We must pass in our application key and application id encoded in Base64
- *
- * 1.2. Get the upload URL
- *  - This is done by making a request to the B2 API
- *  - We must pass in our authorization token and the bucket id
- *
- * Chapter 2. The front-end
- *
- * 2.1. Upload the file
- *  - This is done by making a request to the upload URL
- *  - B2 needs some information about our file to process the upload
- *  - Information needed: file name, file size, file type, file checksum
- *  - Returns an ID that we can use for download
- *
- * 2.2. Download the file
- *  - This is done by making a request to the download URL
- *  - We can use the file ID we got to download it
- */
-
 // Code from Upper-Five tech share on codehooks image uploads:
 // https://github.com/jasonwoitalla/csci5117-upper-five-tech-share/blob/main/src/hooks/useCloudStorage.js
-
+// https://github.com/jasonwoitalla/csci5117-upper-five-tech-share/blob/main/src/pages/gallery.js
 
 import Hex from "crypto-js/enc-hex";
 import SHA1 from "crypto-js/sha1";
@@ -125,7 +98,7 @@ export async function useCloudDownloadLatest() {
     });
    
     console.log(res);
-    
+
     // const resData = await res.json();
     // let latestId = resData[resData.length - 1].id;
 
@@ -152,3 +125,46 @@ export async function useCloudDownloads(downloadUrls) {
 
     return urls;
 }
+
+
+export async function uploadScreenshot(image) {
+    if (image) {
+        //convert the base64 image to a blob: https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+        console.log(image);
+        const byteCharacters = atob(image.split(",")[1]);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++)
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        const byteArray = new Uint8Array(byteNumbers);
+        const blobImage = new Blob([byteArray], { type: "image/jpeg" });
+        blobImage && (await useCloudUpload(blobImage));
+    }
+}
+
+async function handleImageUpload(e, imageFile) {
+    e.preventDefault();
+    try {
+        // Resize image 
+        const resized = await new Promise((resolve) => {
+            Resizer.imageFileResizer(
+                imageFile,
+                600,
+                600,
+                "JPEG",
+                100,
+                0,
+                (uri) => {resolve(uri)},
+                "file",
+                200,
+                200
+            );
+        });
+        // Upload resized image to bucket
+        await useCloudUpload(resized);
+        setRefresh(!refresh);
+    } catch (error) {
+        console.log("Error while resizing image:", error);
+    }
+    console.log("Finishing upload");
+    // document.getElementById("imageField").value = "";
+  }
