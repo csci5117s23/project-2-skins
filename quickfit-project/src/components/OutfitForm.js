@@ -23,6 +23,7 @@ import {
   DialogActions,
   CssBaseline,
   Paper,
+  Grid,
 } from "@mui/material";
 // MUI Icon imports
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
@@ -243,31 +244,54 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
   } else {
     return (
       <>
-        <CssBaseline />    
+        <CssBaseline />
         <Card
-            sx={{
-              backgroundColor:"#ffd83d",
-              width:"100vw",
-              // backgroundImage:
-              //   "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
-            }}
-          >
-            <Stack
-            direction="row"
-                justifyContent="center"
-                alignItems="center"
-                mb={1}
-              sx={{
-           height:{xs:"7vh", md:"11vh"},
-            width:"95vw",
-            
+          sx={{
+            backgroundColor: "#ffd83d",
+            width: "100vw",
+            // backgroundImage:
+            //   "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
           }}
-            >
-              <Box sx={{width: "50vw", height:{xs:"6vh", md:"8vh", transform:"scale(.9) translate(-10%, -15%)"}}}><WeatherCard date={date} /></Box>
-                
-                <Box sx={{fontWeight: "Bold", width: "50vw", ml: {xs:"4vw", md:"2vw"}}}>{formatDateWeekday(date)}</Box>
-            </Stack>
-          </Card>
+        >
+          <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Grid item xs={6}>
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: {
+                    xs: "6vh",
+                    md: "8vh",
+                    transform: "scale(.9)",
+                  },
+                }}
+              >
+                <WeatherCard date={date} />
+              </Box>
+            </Grid>
+            <Grid item xs={6}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize:{xs:"", md:"3vh"},
+                  fontWeight: "Bold",
+                  width: "100%",
+                }}
+              >
+                {formatDateWeekday(date)}
+              </Box>
+            </Grid>
+          </Grid>
+        </Card>
         <Stack
           spacing={2}
           justifyContent={"center"}
@@ -275,8 +299,6 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
           mt={"4vw"}
           mb={"4vw"}
         >
-      
-
           {/* One Pieces */}
           <Card
             sx={{
@@ -287,7 +309,10 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
             <Stack
               alignItems={"center"}
               justifyContent={"center"}
-              sx={{ width: { xs: "90vw", md: "70vw" }, height:{xs:"5.5vh", md:"8vh"} }}
+              sx={{
+                width: { xs: "90vw", md: "70vw" },
+                height: { xs: "5.5vh", md: "8vh" },
+              }}
             >
               <CardContent>
                 <Typography variant="h5">One Piece</Typography>
@@ -330,9 +355,12 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
             <Stack
               alignItems={"center"}
               justifyContent={"center"}
-              sx={{ width: { xs: "90vw", md: "70vw" }, height:{xs:"5.5vh", md:"8vh"}}}
+              sx={{
+                width: { xs: "90vw", md: "70vw" },
+                height: { xs: "5.5vh", md: "8vh" },
+              }}
             >
-              <CardContent >
+              <CardContent>
                 <Typography variant="h5">Tops</Typography>
               </CardContent>
             </Stack>
@@ -372,7 +400,10 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
             <Stack
               alignItems={"center"}
               justifyContent={"center"}
-              sx={{ width: { xs: "90vw", md: "70vw" } ,height:{xs:"5.5vh", md:"8vh"}}}
+              sx={{
+                width: { xs: "90vw", md: "70vw" },
+                height: { xs: "5.5vh", md: "8vh" },
+              }}
             >
               <CardContent>
                 <Typography variant="h5">Bottoms</Typography>
@@ -414,7 +445,10 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
             <Stack
               alignItems={"center"}
               justifyContent={"center"}
-              sx={{ width: { xs: "90vw", md: "70vw" }, height:{xs:"5.5vh", md:"8vh"}}}
+              sx={{
+                width: { xs: "90vw", md: "70vw" },
+                height: { xs: "5.5vh", md: "8vh" },
+              }}
             >
               <CardContent>
                 <Typography variant="h5">Shoes</Typography>
@@ -456,7 +490,10 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
             <Stack
               alignItems={"center"}
               justifyContent={"center"}
-              sx={{ width: { xs: "90vw", md: "70vw" },height:{xs:"5.5vh", md:"8vh"} }}
+              sx={{
+                width: { xs: "90vw", md: "70vw" },
+                height: { xs: "5.5vh", md: "8vh" },
+              }}
             >
               <CardContent>
                 <Typography variant="h5">Accessories</Typography>
