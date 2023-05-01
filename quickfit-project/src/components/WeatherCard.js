@@ -14,10 +14,14 @@ export default function WeatherCard(props) {
     if (getDays(date) < 0 || getDays(date) > 29) {
       return;
     } else {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(getWeather);
-      } else {
-        console.log("Geolocation is not supported by this browser.");
+      if(!data){
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(getWeather);
+        } else {
+          console.log("Geolocation is not supported by this browser.");
+        }
+      }else{
+        setDisplay();
       }
     }
   }, [date]);
@@ -32,13 +36,20 @@ export default function WeatherCard(props) {
         API_KEY
     )
       .then((res) => res.json())
-      .then((data) => setAll(data["list"][date ? getDays(date) : 0]));
+      .then((data) => setAll(data["list"]));
   }
 
   const setAll = (info) => {
+    const days = date ? getDays(date) : 0;
     setData(info);
-    setForecast(info["weather"][0]);
-    setTemp(info["temp"]);
+    setForecast(info[days]["weather"][0]);
+    setTemp(info[days]["temp"]);
+  };
+
+  const setDisplay = () => {
+    const days = date ? getDays(date) : 0;
+    setForecast(data[days]["weather"][0]);
+    setTemp(data[days]["temp"]);
   };
 
   var iconurl = data

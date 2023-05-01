@@ -468,7 +468,7 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
               router.push("/");
             }}
           >
-            <Typography variant="h6">Submit outfit</Typography>
+            <Typography variant="h6">Submit outfit </Typography>
           </Button>
         </Stack>
         {/* Clothing list popup, shows when "add [clothing]" button clicked */}
