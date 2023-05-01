@@ -31,12 +31,13 @@ import {
 import Header from "@/components/Header";
 import BottomNavigationContainer from "@/components/BottomNavigationContainer";
 import DateCard from "@/components/DateCard";
-import WeatherCard from "@/components/WeatherCard";
+
 import ClothingCard from "@/components/ClothingCard";
 import SearchBar from "@/components/SearchBar.js";
 import WardrobeTabs from "@/components/WardrobeTabs.js";
 import OutfitForm from "@/components/OutfitForm.js";
 import ClothingData from "@/components/ClothingData";
+
 // Load any necessary ENV variables
 const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 

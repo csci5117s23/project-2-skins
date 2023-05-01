@@ -43,7 +43,7 @@ ServerDay.propTypes = {
 };
 
 export default function CalenderCard(props) {
-  const [highlightedDays, setHighlightedDays] = React.useState([1, 2, 15]);
+  const [highlightedDays, setHighlightedDays] = React.useState([]);
   const { date, setDate, handleClose } = props;
 
   const fetchHighlightedDays = (date) => {

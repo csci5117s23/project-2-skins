@@ -30,16 +30,19 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteForeverTwoToneIcon from "@mui/icons-material/DeleteForeverTwoTone";
 import AutorenewRoundedIcon from "@mui/icons-material/AutorenewRounded";
-import AutoFixHighTwoToneIcon from '@mui/icons-material/AutoFixHighTwoTone';
+import AutoFixHighTwoToneIcon from "@mui/icons-material/AutoFixHighTwoTone";
 // Custom Component imports
 import ClothingSearchList from "@/components/ClothingSearchList";
 import ClothingData from "@/components/ClothingData";
 import ClothingCard from "@/components/ClothingCard";
 import ClothingList from "@/components/ClothingList";
+import WeatherCard from "@/components/WeatherCard";
 import SearchBar from "@/components/SearchBar";
 import WardrobeTabs from "./WardrobeTabs";
+import { formatDateWeekday } from "@/modules/dateFunctions";
+
 // DB Clothing functions
-import { filterClothesByCategory } from "@/modules/clothesFunctions"
+import { filterClothesByCategory } from "@/modules/clothesFunctions";
 // DB Outfit functions
 import {
   getOutfits,
@@ -50,7 +53,7 @@ import {
   deleteOutfit,
 } from "@/modules/outfitFunctions";
 
-export default function OutfitForm( { date, outfitToEdit=null } ) {
+export default function OutfitForm({ date, outfitToEdit = null }) {
   // ---  React router --------------------------------------------
   const router = useRouter();
 
@@ -61,7 +64,7 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
   // Properties for the post request to add outfit
   // if there is an outfit id do an update instead of post
   // --- Main form state hooks & functions --------------------------------------------------------------
-  const {outfitId} = router.query;
+  const { outfitId } = router.query;
   const [outfit, setOutfit] = useState(null);
   const [deletingOutfit, setDeletingOutfit] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -127,31 +130,30 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
   const handleClickClothes = (clothes) => {
     // Update different clothing lists for later submit
     if (clothes["category"] == "One Piece") {
-      if(onePiece.indexOf(clothes) < 0){
+      if (onePiece.indexOf(clothes) < 0) {
         setOnePiece([clothes]);
       }
     } else if (clothes["category"] == "Top") {
-        if(tops.indexOf(clothes) < 0){
-          const newTopsList = tops.concat(clothes);
-          setTops(newTopsList);  
-        }
+      if (tops.indexOf(clothes) < 0) {
+        const newTopsList = tops.concat(clothes);
+        setTops(newTopsList);
+      }
     } else if (clothes["category"] == "Bottom") {
-        if(bottoms.indexOf(clothes) < 0){
-          const newBottomsList = bottoms.concat(clothes);
-          setBottoms(newBottomsList);
-        }
+      if (bottoms.indexOf(clothes) < 0) {
+        const newBottomsList = bottoms.concat(clothes);
+        setBottoms(newBottomsList);
+      }
     } else if (clothes["category"] == "Shoes") {
-        if(shoes.indexOf(clothes) < 0){
-          setShoes([clothes]);
-        }      
+      if (shoes.indexOf(clothes) < 0) {
+        setShoes([clothes]);
+      }
     } else if (clothes["category"] == "Accessories") {
-        if(accessories.indexOf(clothes) < 0){
-          const newAccessoriesList = accessories.concat(clothes);
-          setAccessories(newAccessoriesList);
-        }
+      if (accessories.indexOf(clothes) < 0) {
+        const newAccessoriesList = accessories.concat(clothes);
+        setAccessories(newAccessoriesList);
+      }
     }
     setOpen(false);
-
   };
   
   // --- Outfit functions ---
@@ -210,38 +212,61 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
       const outfitIds = await getOutfits(token, outfitId);
       const outfitDetails = await getOutfitArrayFromIds(token, outfitIds);
       setOutfit(outfitDetails);
-    
+
       // Set lists based on query for outfit details
       setOnePiece(filterClothesByCategory(outfitDetails, "One Piece"));
       setTops(filterClothesByCategory(outfitDetails, "Top"));
       setBottoms(filterClothesByCategory(outfitDetails, "Bottom"));
       setShoes(filterClothesByCategory(outfitDetails, "Shoes"));
       setAccessories(filterClothesByCategory(outfitDetails, "Accessories"));
-      
+
       setLoading(false);
     }
     processOutfit();
   }, [date]); // category?
-
 
   // ---------------------------------------------------------------------------
   // Function to convert a list of clothing objects to just a list of their IDs
   // ---------------------------------------------------------------------------
   function getListIds(clothesList) {
     const clothingListIds = clothesList.map((item) => {
-      if (item._id) { return item._id; } 
+      if (item._id) {
+        return item._id;
+      }
     });
     return Array.from(clothingListIds);
   }
 
   if (loading) {
-    return <></>
-  }
-
-  else {
+    return <></>;
+  } else {
     return (
       <>
-        <CssBaseline/>
+        <CssBaseline />    
+        <Card
+            sx={{
+              backgroundColor:"#ffd83d",
+              width:"100vw",
+              // backgroundImage:
+              //   "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
+            }}
+          >
+            <Stack
+            direction="row"
+                justifyContent="center"
+                alignItems="center"
+                mb={1}
+              sx={{
+           height:{xs:"7vh", md:"11vh"},
+            width:"95vw",
+            
+          }}
+            >
+              <Box sx={{width: "50vw", height:{xs:"6vh", md:"8vh", transform:"scale(.9) translate(-10%, -15%)"}}}><WeatherCard date={date} /></Box>
+                
+                <Box sx={{fontWeight: "Bold", width: "50vw", ml: {xs:"4vw", md:"2vw"}}}>{formatDateWeekday(date)}</Box>
+            </Stack>
+          </Card>
         <Stack
           spacing={2}
           justifyContent={"center"}
@@ -249,7 +274,8 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
           mt={"4vw"}
           mb={"4vw"}
         >
-          
+      
+
           {/* One Pieces */}
           <Card
             sx={{
@@ -259,7 +285,8 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
           >
             <Stack
               alignItems={"center"}
-              sx={{ width: { xs: "90vw", md: "70vw" } }}
+              justifyContent={"center"}
+              sx={{ width: { xs: "90vw", md: "70vw" }, height:{xs:"5.5vh", md:"8vh"} }}
             >
               <CardContent>
                 <Typography variant="h5">One Piece</Typography>
@@ -270,8 +297,15 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
           <ClothingList clothes={onePiece} clickFunction={handleOpenDelete} />
           <Button
             variant="outlined"
-            sx={{ width: { xs: "60vw" }, height: { xs: "5vh" }, bgcolor:"#333333" }}
-            onClick={ () => { handleOpen(); setCategory("One Piece"); }}
+            sx={{
+              width: { xs: "60vw" },
+              height: { xs: "5vh" },
+              bgcolor: "#333333",
+            }}
+            onClick={() => {
+              handleOpen();
+              setCategory("One Piece");
+            }}
           >
             {onePiece.length > 0 ? (
               <>
@@ -294,18 +328,26 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
           >
             <Stack
               alignItems={"center"}
-              sx={{ width: { xs: "90vw", md: "70vw" } }}
+              justifyContent={"center"}
+              sx={{ width: { xs: "90vw", md: "70vw" }, height:{xs:"5.5vh", md:"8vh"}}}
             >
-              <CardContent>
+              <CardContent >
                 <Typography variant="h5">Tops</Typography>
               </CardContent>
             </Stack>
           </Card>
           <ClothingList clothes={tops} clickFunction={handleOpenDelete} />
           <Button
-            onClick={ () => { handleOpen(); setCategory("Top"); }}
+            onClick={() => {
+              handleOpen();
+              setCategory("Top");
+            }}
             variant="outlined"
-            sx={{ width: { xs: "60vw" }, height: { xs: "5vh" }, bgcolor:"#333333" }}
+            sx={{
+              width: { xs: "60vw" },
+              height: { xs: "5vh" },
+              bgcolor: "#333333",
+            }}
           >
             {tops.length > 0 ? (
               <>
@@ -328,7 +370,8 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
           >
             <Stack
               alignItems={"center"}
-              sx={{ width: { xs: "90vw", md: "70vw" } }}
+              justifyContent={"center"}
+              sx={{ width: { xs: "90vw", md: "70vw" } ,height:{xs:"5.5vh", md:"8vh"}}}
             >
               <CardContent>
                 <Typography variant="h5">Bottoms</Typography>
@@ -338,8 +381,15 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
           <ClothingList clothes={bottoms} clickFunction={handleOpenDelete} />
           <Button
             variant="outlined"
-            sx={{ width: { xs: "60vw" }, height: { xs: "5vh" }, bgcolor:"#333333" }}
-            onClick={ () => { handleOpen(); setCategory("Bottom"); }}
+            sx={{
+              width: { xs: "60vw" },
+              height: { xs: "5vh" },
+              bgcolor: "#333333",
+            }}
+            onClick={() => {
+              handleOpen();
+              setCategory("Bottom");
+            }}
           >
             {bottoms.length > 0 ? (
               <>
@@ -362,7 +412,8 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
           >
             <Stack
               alignItems={"center"}
-              sx={{ width: { xs: "90vw", md: "70vw" } }}
+              justifyContent={"center"}
+              sx={{ width: { xs: "90vw", md: "70vw" }, height:{xs:"5.5vh", md:"8vh"}}}
             >
               <CardContent>
                 <Typography variant="h5">Shoes</Typography>
@@ -372,8 +423,15 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
           <ClothingList clothes={shoes} clickFunction={handleOpenDelete} />
           <Button
             variant="outlined"
-            sx={{ width: { xs: "60vw" }, height: { xs: "5vh" }, bgcolor:"#333333" }}
-            onClick={ () => { handleOpen(); setCategory("Shoes"); }}
+            sx={{
+              width: { xs: "60vw" },
+              height: { xs: "5vh" },
+              bgcolor: "#333333",
+            }}
+            onClick={() => {
+              handleOpen();
+              setCategory("Shoes");
+            }}
           >
             {shoes.length > 0 ? (
               <>
@@ -396,18 +454,29 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
           >
             <Stack
               alignItems={"center"}
-              sx={{ width: { xs: "90vw", md: "70vw" } }}
+              justifyContent={"center"}
+              sx={{ width: { xs: "90vw", md: "70vw" },height:{xs:"5.5vh", md:"8vh"} }}
             >
               <CardContent>
                 <Typography variant="h5">Accessories</Typography>
               </CardContent>
             </Stack>
           </Card>
-          <ClothingList clothes={accessories} clickFunction={handleOpenDelete} />
+          <ClothingList
+            clothes={accessories}
+            clickFunction={handleOpenDelete}
+          />
           <Button
             variant="outlined"
-            sx={{ width: { xs: "60vw" }, height: { xs: "100%" }, bgcolor:"#333333", }}
-            onClick={ () => { handleOpen(); setCategory("Accessories"); }}
+            sx={{
+              width: { xs: "60vw" },
+              height: { xs: "100%" },
+              bgcolor: "#333333",
+            }}
+            onClick={() => {
+              handleOpen();
+              setCategory("Accessories");
+            }}
           >
             {accessories.length > 0 ? (
               <>
@@ -422,9 +491,12 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
           </Button>
           <Button
             variant="contained"
-          
-            sx={{ width: {xs: "65vw", md: "70vw"}, borderRadius:"1.25em", bgcolor:"#c2c2c2", color:"#3C3F42" }}
-            onClick={ (event, value) => {
+            sx={{
+              width: { xs: "65vw", md: "65vw" },
+              bgcolor: "#d2d2d2",
+              color: "#3C3F42",
+            }}
+            onClick={(event, value) => {
               onHandleSubmit(event);
               router.push("/");
             }}
@@ -464,8 +536,11 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
               justifyContent="center"
               mb={2}
             >
-              {/* Use wardrobe tab component with different click function to add to current outfit */}
-              <WardrobeTabs clickFunction={handleClickClothes} category={category} />
+              {/* Use wardrobe tab component with different click function */}
+              <WardrobeTabs
+                clickFunction={handleClickClothes}
+                category={category}
+              />
             </Stack>
           </Card>
         </Dialog>
@@ -480,7 +555,11 @@ export default function OutfitForm( { date, outfitToEdit=null } ) {
                 <Button onClick={handleCloseDelete} variant="contained">
                   Cancel
                 </Button>
-                <Button onClick={ (e) => handleDelete(e) } variant="contained" color="error">
+                <Button
+                  onClick={handleDelete}
+                  variant="contained"
+                  color="error"
+                >
                   Delete
                 </Button>
               </DialogActions>

@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { useSwipeable } from "react-swipeable";
 // Clerk authorization imports
 import { SignedIn } from "@clerk/clerk-react";
 import { useAuth } from "@clerk/nextjs";
 // MUI Component imports
-import { 
-  Box, 
+import {
+  Box,
   Button,
   CssBaseline,
-  Grid, 
-  Stack, Typography, 
+  Grid,
+  Stack,
+  Typography,
 } from "@mui/material";
 // MUI Icon imports
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 // DB Outfit functions
-import { 
+import {
   getOutfitByDateWorn,
-  getOutfitArrayFromIds
+  getOutfitArrayFromIds,
 } from "@/modules/outfitFunctions";
 // Custom component imports
 import DateWeatherWidget from "@/components/DateWeatherWidget";
@@ -33,36 +35,9 @@ export default function UILayout({ date, setDate }) {
   const { getToken } = useAuth();
 
   const router = useRouter();
-  const [outfit, setOutfit] = useState(null);         // List of all clothing entries w/ their details
+  const [outfit, setOutfit] = useState(null); // List of all clothing entries w/ their details
   const [outfitCoho, setOutfitCoho] = useState(null); // just need a way to store the outfit ID since not stored in 'outfit'
-  const [loading, setLoading] = useState(true);       // Load GET requests before rendering content
-  
-  // const [outfit, setOutfit] = useState([
-  //   {
-  //     category: "Top",
-  //     clothingName: "Black Nike T-Shirt",
-  //     tags: ["black"],
-  //     createdOn: new Date(),
-  //   },
-  //   {
-  //     category: "Bottom",
-  //     clothingName: "Dark green cargos",
-  //     tags: ["Green", "loose", "cargo"],
-  //     createdOn: new Date(),
-  //   },
-  //   {
-  //     category: "Shoes",
-  //     clothingName: "White air forces",
-  //     tags: ["white"],
-  //     createdOn: new Date(),
-  //   },
-  //   {
-  //     category: "Accessory",
-  //     clothingName: "Silver necklace",
-  //     tags: ["silver", "shiny"],
-  //     createdOn: new Date(),
-  //   },
-  // ]);
+  const [loading, setLoading] = useState(true); // Load GET requests before rendering content
 
   useEffect(() => {
     // Perform query to get the current day's outfit
@@ -89,14 +64,19 @@ export default function UILayout({ date, setDate }) {
     setDate(d);
   };
 
+  const handlers = useSwipeable({
+    onSwipedLeft: () => handleNextDayClick(),
+    onSwipedRight: () => handlePreviousDayClick(),
+  });
+
   // Load GET requests before showing content
   if (loading) {
-    return <></>
-  } 
-  else { // Show page contents when done loading
+    return <></>;
+  } else {
+    // Show page contents when done loading
     return (
       <>
-        <CssBaseline/>
+        <CssBaseline />
         {/* 1. Header section */}
         <section>
           <Header />
@@ -105,76 +85,77 @@ export default function UILayout({ date, setDate }) {
         {/* 2. Content section */}
         <section>
           <SignedIn>
-            <Stack
-              width="100vw"
-              spacing={2}
-              alignItems="center"
-              justifyContent="center"
-            >
-              <DateWeatherWidget date={date} setDate={setDate} />
-
+            <div {...handlers}>
               <Stack
-                direction="row"
+                width="100vw"
                 spacing={2}
-                justifyContent="space-between"
-                sx={{ width: { xs: "90%", md: "70%" } }}
-              >
-                <Button variant="contained" onClick={handlePreviousDayClick}>
-                  <ArrowBackIosNewOutlinedIcon />
-                </Button>
-
-                {outfit ? (
-                  <Button
-                    variant="contained"
-                    size="large"
-                    sx={{
-                      "&:hover": {
-                        backgroundColor: "#f2f2f2",
-                      },
-                    }}
-                    onClick={() => {
-                      router.push({
-                        //TODO:figure out how to get outfit id and then pass the value to query
-                        pathname: "/choosefit",
-                        query: { outfitId: outfitCoho._id }, // not including this since codehooks queries are really stupid
-                      });
-                    }}
-                  >
-                    <Box mr="1vw" sx={{ fontWeight: "bold", color: "#555" }}>
-                      Edit Outfit{" "}
-                    </Box>
-                    <EditTwoToneIcon sx={{ color: "#555" }} />
-                  </Button>
-                ) : null}
-
-                <Button variant="contained" onClick={handleNextDayClick}>
-                  <ArrowForwardIosOutlinedIcon />
-                </Button>
-              </Stack>
-
-              <Box
                 alignItems="center"
                 justifyContent="center"
-                sx={{ display: "flex", flexWrap: "wrap", width: "82vw" }}
               >
-                {outfit ? (
-                  outfit.map((clothes) => {
-                    return (
-                      <Box
-                        key={clothes._id}
-                        sx={{ m: 1, width: { xs: "100vw", md: "34vw" } }}
-                      >
-                        <ClothingCard clothes={clothes} />
-                      </Box>
-                    );
-                  })
-                ) : (
-                  <NoFitChosenLayout />
-                )}
-              </Box>
+                <DateWeatherWidget date={date} setDate={setDate} />
 
-              <BottomNavigationContainer />
-            </Stack>
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  justifyContent="space-between"
+                  sx={{ width: { xs: "90%", md: "70%" } }}
+                >
+                  <Button variant="contained" onClick={handlePreviousDayClick}>
+                    <ArrowBackIosNewOutlinedIcon />
+                  </Button>
+
+                  {outfit ? (
+                    <Button
+                      variant="contained"
+                      size="large"
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "#f2f2f2",
+                        },
+                      }}
+                      onClick={() => {
+                        router.push({
+                          pathname: "/choosefit",
+                          query: { outfitId: outfitCoho._id }, // not including this since codehooks queries are really stupid
+                        });
+                      }}
+                    >
+                      <Box mr="1vw" sx={{ fontWeight: "bold", color: "#555" }}>
+                        Edit Outfit{" "}
+                      </Box>
+                      <EditTwoToneIcon sx={{ color: "#555" }} />
+                    </Button>
+                  ) : null}
+
+                  <Button variant="contained" onClick={handleNextDayClick}>
+                    <ArrowForwardIosOutlinedIcon />
+                  </Button>
+                </Stack>
+
+                <Box
+                  alignItems="center"
+                  justifyContent="center"
+                  sx={{ display: "flex", flexWrap: "wrap", width: "82vw", }}
+                >
+                  {outfit ? (
+                    outfit.map((clothes) => {
+                      return (
+                        <Box
+                          key={clothes._id}
+                          sx={{ m: 1, width: { xs: "100vw", md: "34vw" } }}
+                        >
+                          <ClothingCard clothes={clothes} />
+                        </Box>
+                      );
+                    })
+                  ) : (
+                    <NoFitChosenLayout />
+                  )}
+                </Box>
+
+                <BottomNavigationContainer />
+              </Stack>
+            </div>
           </SignedIn>
         </section>
       </>
