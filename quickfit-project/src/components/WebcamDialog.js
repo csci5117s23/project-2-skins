@@ -1,19 +1,14 @@
-import * as React from "react";
+import { useState, forwardRef } from "react";
 // MUI Component Imports
 import {
   AppBar,
   Button,
   Dialog,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
   IconButton,
   Slide,
   Toolbar,
   Tooltip,
   Typography,
-  Box,
   CssBaseline,
 } from "@mui/material";
 // MUI Icons imports
@@ -23,13 +18,13 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import DualCamera from "./DualCamera";
 
 
-const Transition = React.forwardRef(function Transition(props, ref) {
+const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function WebcamDialog( { image, setImage, setFileUploadText } ) {
   // State of whether or not dialog is open
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   // Function to open up webcam dialog/popup
   const handleClickOpen = () => {
