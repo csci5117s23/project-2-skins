@@ -151,7 +151,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
       const putItem = {
         _id:        editId,
         createdOn:  editCreatedOn,
-        imageUrl:   await imageUrl || "",
+        imageUrl:   await imageUrl || editImageUrl || "",
         category:   category,
         name:       name,
         color:      color,
