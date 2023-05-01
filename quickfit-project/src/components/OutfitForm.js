@@ -180,6 +180,7 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
       // Make POST request
       const result = await addOutfit(token, postItem);
     } 
+    // --- Call DELETE function if last elem to delete ---
     else if (deletingOutfit === true) {
       const result = await deleteOutfit(token, outfitId);
       setDeletingOutfit(false);

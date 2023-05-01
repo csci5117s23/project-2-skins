@@ -21,6 +21,7 @@ import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutl
 import {
   getOutfitByDateWorn,
   getOutfitArrayFromIds,
+  deleteOutfit,
 } from "@/modules/outfitFunctions";
 // Custom component imports
 import DateWeatherWidget from "@/components/DateWeatherWidget";
@@ -45,13 +46,15 @@ export default function UILayout({ date, setDate }) {
       const token = await getToken({ template: jwtTemplateName });
       const outfitIds = await getOutfitByDateWorn(token, date);
       const outfitDetails = await getOutfitArrayFromIds(token, outfitIds[0]);
-      console.log(outfitDetails);
+      if (outfitDetails !== undefined && outfitDetails.length === 0) {
+        await deleteOutfit(token, outfitIds[0]._id);
+      }
       setOutfit(await outfitDetails);
       setOutfitCoho(await outfitIds[0]);
       setLoading(false);
     }
     processOutfit();
-  }, [date]);
+  }, [date, outfit]);
 
   const handlePreviousDayClick = () => {
     var d = new Date(date);
