@@ -65,6 +65,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
   const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   const [loading, setLoading] = useState(true);
+  const [reset, setReset] = useState(false);
 
   // --- Shows success message when submit is clicked --------------------
   const [openSuccessMessage, setOpenSuccessMessage] = useState(false);
@@ -108,6 +109,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
     setImage(null);
     setImageFile(null);
     setFileUploadText("Choose an image...");
+    setReset(!reset);
   }
 
   // --- Clothes functions ---
@@ -397,6 +399,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
               {/* --- Tags --- */}
               <InputHeader> Tags </InputHeader>
               <AddTagComboBox
+                reset={reset}
                 userTags={userTags}
                 setInputTags={setInputTags}
                 getTags={getTags}
