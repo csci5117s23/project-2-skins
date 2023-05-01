@@ -71,7 +71,7 @@ export default function ClothingCard(props) {
                     maxWidth: { xs: "15vh", md: "25vh"},
                     maxHeight: { xs: "100%" },
                   }}
-                  src="https://dtpmhvbsmffsz.cloudfront.net/posts/2015/08/12/55cba8312035ea03bf02284f/m_55cba8312035ea03bf022850.jpg"
+                  src={clothes.imageUrl}
                   alt="Clothing Image"
                 />
               </Box>
