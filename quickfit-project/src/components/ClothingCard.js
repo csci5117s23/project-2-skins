@@ -64,17 +64,19 @@ export default function ClothingCard(props) {
             </Grid>
             <Grid item xs={6}>
               <Box display="flex" justifyContent="flex-end">
-                <Box
-                  component="img"
-                  sx={{
-                    backgroundColor: "#000000",
-                    maxWidth: { xs: "15vh", md: "25vh"},
-                    maxHeight: { xs: "100%" },
-                  }}
-                  src={clothes.imageUrl}
-                  alt="Clothing Image"
-                />
-              </Box>
+                { (clothes.imageUrl !== "" || clothes.imageUrl !== undefined) &&
+                  <Box
+                    component="img"
+                    sx={{
+                      backgroundColor: "#000000",
+                      maxWidth: { xs: "15vh", md: "25vh"},
+                      maxHeight: { xs: "100%" },
+                    }}
+                    src={clothes.imageUrl}
+                    alt="Clothing Image"
+                  /> 
+                }
+                </Box>
             </Grid>
           </Grid>
         </Card>
