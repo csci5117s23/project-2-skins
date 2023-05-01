@@ -1,4 +1,5 @@
 import { React, useState, useEffect } from "react";
+import { useSwipeable } from "react-swipeable";
 import { useAuth } from "@clerk/nextjs";
 // MUI Component imports
 import {
@@ -50,6 +51,24 @@ export default function WardrobeTabs({ clickFunction, category }) {
   const [tabValue, setTabValue] = useState(initialTab);
   const [search, setSearch] = useState("");
 
+  // chnage tab value on swipe
+  const handlers = useSwipeable({
+    onSwipedLeft: () => handleNextTabSwipe(),
+    onSwipedRight: () => handlePreviousTabSwipe(),
+  });
+
+  const handleNextTabSwipe = ()=>{
+    if(tabValue < 4) {
+      setTabValue(tabValue+1);
+    }
+  }
+
+  const handlePreviousTabSwipe = ()=>{
+    if(tabValue > 0) {
+      setTabValue(tabValue-1);
+    }
+  }
+
   return (
     <>
       <Stack
@@ -80,17 +99,21 @@ export default function WardrobeTabs({ clickFunction, category }) {
         </Tabs>
       </Stack>
       <SearchBar setSearch={setSearch} color={"#FFD36E"} />
-      <Box sx={{
+      <div {...handlers}>
+        <Box
+          sx={{
             maxHeight: "70vh",
-            overflow: 'auto',
-          }}>
-      <TabPanel
-        tabValue={tabValue}
-        search={search}
-        clickFunction={clickFunction}
-        category={category}
-      />
-      </Box>
+            overflow: "auto",
+          }}
+        >
+          <TabPanel
+            tabValue={tabValue}
+            search={search}
+            clickFunction={clickFunction}
+            category={category}
+          />
+        </Box>
+      </div>
     </>
   );
 }

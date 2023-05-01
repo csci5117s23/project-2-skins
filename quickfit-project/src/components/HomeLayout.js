@@ -39,33 +39,6 @@ export default function UILayout({ date, setDate }) {
   const [outfitCoho, setOutfitCoho] = useState(null); // just need a way to store the outfit ID since not stored in 'outfit'
   const [loading, setLoading] = useState(true); // Load GET requests before rendering content
 
-  // const [outfit, setOutfit] = useState([
-  //   {
-  //     category: "Top",
-  //     clothingName: "Black Nike T-Shirt",
-  //     tags: ["black"],
-  //     createdOn: new Date(),
-  //   },
-  //   {
-  //     category: "Bottom",
-  //     clothingName: "Dark green cargos",
-  //     tags: ["Green", "loose", "cargo"],
-  //     createdOn: new Date(),
-  //   },
-  //   {
-  //     category: "Shoes",
-  //     clothingName: "White air forces",
-  //     tags: ["white"],
-  //     createdOn: new Date(),
-  //   },
-  //   {
-  //     category: "Accessory",
-  //     clothingName: "Silver necklace",
-  //     tags: ["silver", "shiny"],
-  //     createdOn: new Date(),
-  //   },
-  // ]);
-
   useEffect(() => {
     // Perform query to get the current day's outfit
     async function processOutfit() {
@@ -162,7 +135,7 @@ export default function UILayout({ date, setDate }) {
                 <Box
                   alignItems="center"
                   justifyContent="center"
-                  sx={{ display: "flex", flexWrap: "wrap", width: "82vw" }}
+                  sx={{ display: "flex", flexWrap: "wrap", width: "82vw", }}
                 >
                   {outfit ? (
                     outfit.map((clothes) => {
