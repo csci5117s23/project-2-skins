@@ -98,7 +98,7 @@ export default function OutfitAdd({ clickFunction, category }) {
           <Tab label="Accessories" sx={{ p: "1px" }} />
         </Tabs>
       </Stack>
-      <SearchBar setSearch={setSearch} color={"#FFD36E"} />
+      <SearchBar setSearch={setSearch} color={"#949494"} />
       <div {...handlers}>
         <Box
           sx={{
