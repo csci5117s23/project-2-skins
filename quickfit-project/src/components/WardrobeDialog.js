@@ -33,8 +33,8 @@ import DateCard from "@/components/DateCard";
 import WeatherCard from "@/components/WeatherCard";
 import ClothingCard from "@/components/ClothingCard";
 import TextField from "@mui/material/TextField";
-import SearchBar from '../components/SearchBar.js';
-import WardrobeTabs from '../components/WardrobeTabs.js';
+import SearchBar from './SearchBar.js';
+import WardrobeTabs from './WardrobeTabs.js';
 import ClothesForm from "@/components/ClothesForm.js";
 
 export default function WardrobeDialog() {

@@ -259,14 +259,8 @@ function TabPanel(props) {
       <>
         <ClothingList
           clothes={shownClothes || []}
-          clickFunction={handleClickOpen}
+          clickFunction={clickFunction}
         />
-        <Dialog open={open} onClose={handleCloseDialog}>
-          <ClothesForm
-            clothingToEdit={selectedClothing}
-            setUpdated={handleUpdate}
-          />
-        </Dialog>
       </>
     );
   }
