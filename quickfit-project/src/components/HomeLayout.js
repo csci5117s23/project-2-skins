@@ -43,8 +43,8 @@ export default function UILayout({ date, setDate }) {
     // Perform query to get the current day's outfit
     async function processOutfit() {
       const token = await getToken({ template: jwtTemplateName });
-      const outfitIds = await getOutfitByDateWorn(token, date);
-      const outfitDetails = await getOutfitArrayFromIds(token, outfitIds[0]);
+      const outfitIds = await getOutfitByDateWorn( token, date);
+      const outfitDetails = await getOutfitArrayFromIds( token, outfitIds[0]);
       console.log(outfitDetails);
       setOutfit(await outfitDetails);
       setOutfitCoho(await outfitIds[0]);

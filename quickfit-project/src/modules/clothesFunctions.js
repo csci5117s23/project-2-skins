@@ -25,6 +25,7 @@ export async function getClothes(authToken, id="") {
             'method': 'GET',
             'headers': {
                 'Authorization': 'Bearer ' + authToken,
+                "x-api-key": apiKey,
             }
         })
         // If an ID was provided no need to sort
@@ -48,7 +49,7 @@ export async function getClothesByCategory(authToken, category, id="") {
     // Make request to get all clothes
     const allClothes = await getClothes(authToken, id);
     // From list of all clothes, get the ones of the specified category
-    return filterClothesByCategory(allClothes, category);
+    return filterClothesByCategory(allClothes, category) || [];
 }
 
 // --------------------------------------------------------------------
@@ -69,7 +70,7 @@ export function filterClothesByCategory(clothesList, category) {
         console.log("Invalid input.");
         return;
     }
-    return Object.values(clothesList).filter( (item) => (item !== undefined && item.category === category));
+    return Object.values(clothesList).filter( (item) => (item !== undefined && item.category === category)) || [];
 }
 
 // --------------------------------------------------------------------------

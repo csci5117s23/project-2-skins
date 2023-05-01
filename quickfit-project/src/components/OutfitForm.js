@@ -180,52 +180,23 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
       // Make POST request
       const result = await addOutfit(token, postItem);
     } 
-    else if (deletingOutfit === true) {
-      const result = await deleteOutfit(token, outfitId);
-      setDeletingOutfit(false);
-    }
     // --- Call PUT function if we are editing a clothing item ---
     else {
       // Create an outfit from state variables
       const putItem = {
         _id:            outfitId,
-        topId:          getListIds(tops),               // Muliple tops allowed (zip up hoodie with t-shirt)                 
-        bottomId:       getListIds(bottoms),            // Multiple bottoms allowed (skirt with leggings)
+        topId:          getListIds(tops) || [],         // Muliple tops allowed (zip up hoodie with t-shirt)                 
+        bottomId:       getListIds(bottoms) || [],      // Multiple bottoms allowed (skirt with leggings)
         shoesId:        getListIds(shoes)[0] || "",     // One pair of shoes only    
-        accessoriesId:  getListIds(accessories),        // Multiple accessories allowed (necklace and watch)
+        accessoriesId:  getListIds(accessories) || [],  // Multiple accessories allowed (necklace and watch)
         onePieceId:     getListIds(onePiece)[0] || "",  // Only one allowed 
         dateWorn:       new Date(date),                 // Date of when user set to wear this outfit (current calendar date)
       };
       // Make PUT request
+      console.log(JSON.stringify(putItem));
       const result = await editOutfit(token, putItem);
     }
   }
-
-
-  // --- Edit useEffect ---
-  // Load edit page with current outfit's clothing articles
-  useEffect(() => {
-    // Perform query to get the current day's outfit
-    async function processOutfit() {
-      // Get auth token
-      const token = await getToken({ template: jwtTemplateName });
-
-      // Get outfit details from query parameter
-      const outfitIds = await getOutfits(token, outfitId);
-      const outfitDetails = await getOutfitArrayFromIds(token, outfitIds);
-      setOutfit(outfitDetails);
-
-      // Set lists based on query for outfit details
-      setOnePiece(filterClothesByCategory(outfitDetails, "One Piece"));
-      setTops(filterClothesByCategory(outfitDetails, "Top"));
-      setBottoms(filterClothesByCategory(outfitDetails, "Bottom"));
-      setShoes(filterClothesByCategory(outfitDetails, "Shoes"));
-      setAccessories(filterClothesByCategory(outfitDetails, "Accessories"));
-
-      setLoading(false);
-    }
-    processOutfit();
-  }, [date]);
 
   // --- Outfit functions ---
   // ---------------------------------------------------------
@@ -236,7 +207,6 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
     const token = await getToken({ template: jwtTemplateName });
 
     // --- Call POST function if we are adding a clothing item ---
-    console.log(outfitId);
     if (outfitId === undefined || outfitId === null || outfitId === "") {
       // Create an outfit from state variables
       const postItem = {
@@ -279,6 +249,34 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
     });
     return Array.from(clothingListIds);
   }
+
+  // --- Edit useEffect ---
+  // Load edit page with current outfit's clothing articles
+  useEffect(() => {
+    // Perform query to get the current day's outfit
+    async function processOutfit() {
+      // Get auth token
+      const token = await getToken({ template: jwtTemplateName });
+
+      // Get outfit details from query parameter
+      const outfitIds = await getOutfits(token, outfitId);
+      const outfitDetails = await getOutfitArrayFromIds(token, outfitIds);
+      setOutfit(outfitDetails);
+
+      // Set lists based on query for outfit details
+      setOnePiece(filterClothesByCategory(outfitDetails, "One Piece"));
+      setTops(filterClothesByCategory(outfitDetails, "Top"));
+      setBottoms(filterClothesByCategory(outfitDetails, "Bottom"));
+      setShoes(filterClothesByCategory(outfitDetails, "Shoes"));
+      setAccessories(filterClothesByCategory(outfitDetails, "Accessories"));
+
+      console.log(outfitDetails);
+      console.log(onePiece);
+
+      setLoading(false);
+    }
+    processOutfit();
+  }, [date]);
 
   var d = new Date();
   var yesterday = d.setDate(d.getDate() - 1);
@@ -380,7 +378,7 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
               setCategory("One Piece");
             }}
           >
-            {onePiece.length > 0 ? (
+            { onePiece.length > 0 ? (
               <>
                 Replace <AutorenewRoundedIcon />
               </>
