@@ -40,7 +40,7 @@ import ClothingList from "@/components/ClothingList";
 import WeatherCard from "@/components/WeatherCard";
 import SearchBar from "@/components/SearchBar";
 import WardrobeTabs from "./WardrobeTabs";
-import { formatDateWeekday } from "@/modules/dateFunctions";
+import { formatDateWeekday, getDays } from "@/modules/dateFunctions";
 
 // DB Clothing functions
 import { filterClothesByCategory } from "@/modules/clothesFunctions";
@@ -240,6 +240,10 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
     return Array.from(clothingListIds);
   }
 
+  var d = new Date();
+  var yesterday = d.setDate(d.getDate() - 1);
+  var nextMonth = d.setDate(d.getDate() + 30);
+  
   if (loading) {
     return <></>;
   } else {
@@ -260,6 +264,7 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
             justifyContent="center"
             alignItems="center"
           >
+          {date > yesterday && date < nextMonth ? (
             <Grid item xs={6}>
               <Box
                 sx={{
@@ -277,6 +282,7 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
                 <WeatherCard date={date} />
               </Box>
             </Grid>
+          ):null}
             <Grid item xs={6}>
               <Box
                 sx={{
