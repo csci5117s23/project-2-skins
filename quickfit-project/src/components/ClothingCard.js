@@ -7,6 +7,10 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
+// DB Image Function imports
+import {
+  downloadImage,
+} from "@/modules/imageFunctions";
 
 export default function ClothingCard(props) {
   const { clothes } = props;
@@ -73,7 +77,7 @@ export default function ClothingCard(props) {
                       maxWidth: { xs: "15vh", md: "25vh"},
                       maxHeight: { xs: "15vh", md: "25vh" },
                     }}
-                    src={clothes["imageUrl"]} 
+                    src={downloadImage(clothes["imageUrl"])} 
                     alt="Clothing Image"
                   /> 
                 }

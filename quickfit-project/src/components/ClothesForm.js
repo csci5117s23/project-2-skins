@@ -38,9 +38,7 @@ import { getTags, addTag, editTag, deleteTag } from "@/modules/tagFunctions";
 // DB Image Function imports
 import {
   useCloudUpload,
-  useCloudDownloadLatest,
-  useCloudDownloads,
-  uploadScreenshot,
+  getDownloadUrlForLatest,
 } from "@/modules/imageFunctions";
 // Custom component imports
 import AddTagComboBox from "./AddTagComboBox";
@@ -116,11 +114,6 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
     setFileUploadText("Choose an image...");
   }
 
-  async function downloadImage() {
-    const src = await useCloudDownloadLatest();
-    setImage(<Image src={src} width={500} height={500} />);
-  }
-
   // --- Clothes functions ---
   // --------------------------------------------------
   // Function to add a clothing article from front-end
@@ -133,14 +126,11 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
     let imageUrl = null;
     if (imageFile) {
       await handleImageUpload(e, token);
-      imageUrl = await useCloudDownloadLatest(token);
+      imageUrl = await getDownloadUrlForLatest(token);
     } else if (image) {
       await uploadScreenshot(token);
-      imageUrl = await useCloudDownloadLatest(token);
+      imageUrl = await getDownloadUrlForLatest(token);
     }
-
-    // console.log(JSON.stringify(await getClothes(token)));
-
     let result;
     // --- Call POST function if we are adding a clothing item ---
     if (clothingToEdit === null) { 

@@ -77,7 +77,7 @@ export async function useCloudUpload(authToken, file) {
     }
 }
 
-export async function useCloudDownloadLatest(authToken) {
+export async function getDownloadUrlForLatest(authToken) {
     // 1. Get the download url
     const downloadRes = await fetch(`${CODEHOOKS_URL}/get_download_url`, {
         method: "GET",
@@ -102,13 +102,16 @@ export async function useCloudDownloadLatest(authToken) {
 
     // 2. Build our download urls
     const downloadUrl = `${downloadData.downloadUrl}/b2api/v2/b2_download_file_by_id?fileId=${latestId}`;
+    return String(downloadUrl);
+}
 
+// Function to download image from a given download URL
+export async function downloadImage(downloadUrl) {
     // 3. Fetch request for each download url
     const response = await fetch(downloadUrl);
     const blob = await response.blob();
     const src = URL.createObjectURL(blob);
-
-    return String(src);
+    return src;
 }
 
 export async function useCloudDownloads(downloadUrls) {
