@@ -54,7 +54,7 @@ export default function UILayout({ date, setDate }) {
       setLoading(false);
     }
     processOutfit();
-  }, [date, outfit]);
+  }, [date]);
 
   const handlePreviousDayClick = () => {
     var d = new Date(date);
