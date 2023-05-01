@@ -63,11 +63,12 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
   const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
   const { getToken } = useAuth();
 
-  // properties for the post request to add outfit
+  // Properties for the post request to add outfit
   // if there is an outfit id do an update instead of post
   // --- Main form state hooks & functions --------------------------------------------------------------
   const { outfitId } = router.query;
   const [outfit, setOutfit] = useState(null);
+  const [deletingOutfit, setDeletingOutfit] = useState(false);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState("");
   const [onePiece, setOnePiece] = useState([]);
@@ -96,9 +97,9 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
     setOpenDelete(false);
   };
 
-  // take the ClothingToDelete and remove it from the list
-  // removing an item from list found on https://semicolon.dev/tutorial/javascript/remove-matching-object-from-js-array
-  const handleDelete = () => {
+  // Take the ClothingToDelete and remove it from the list
+  // Removing an item from list found on https://semicolon.dev/tutorial/javascript/remove-matching-object-from-js-array
+  const handleDelete = async () => {
     if (clothingToDelete["category"] == "One Piece") {
       setOnePiece([]);
     } else if (clothingToDelete["category"] == "Top") {
@@ -107,11 +108,17 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
       setBottoms(removeItemFromList(bottoms, clothingToDelete));
     } else if (clothingToDelete["category"] == "Shoes") {
       setShoes([]);
-    } else if (clothingToDelete["category"] == "Accessory") {
+    } else if (clothingToDelete["category"] == "Accessories") {
       setAccessories(removeItemFromList(accessories, clothingToDelete));
     }
     setOpenDelete(false);
+
+    // If it's the last item, remove the outfit completely.
+    if (outfit.length === 1) {
+      setDeletingOutfit(true);
+    }
   };
+
   // Helper function returns a list that has item removed from it
   const removeItemFromList = (list, item) => {
     const index = list.indexOf(item);
@@ -150,17 +157,50 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
     }
     setOpen(false);
   };
-
-  // ------------------------------------------------------------
-  // Function to call DELETE request to get rid of clothing item
-  // ------------------------------------------------------------
-  async function makeDeleteRequest(clothingId) {
+  
+  // --- Outfit functions ---
+  // ---------------------------------------------------------
+  // Function to add an outfit from front-end state variables
+  // ---------------------------------------------------------
+  async function onHandleSubmit(e) {
     // Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
 
-    // --- Call DELETE function ---
-    const result = deleteClothes(token, clothingId);
+    // --- Call POST function if we are adding a clothing item ---
+    if (outfitId === undefined || outfitId === null || outfitId === "") {
+      // Create an outfit from state variables
+      const postItem = {
+        topId:          getListIds(tops),               // Muliple tops allowed (zip up hoodie with t-shirt)                 
+        bottomId:       getListIds(bottoms),            // Multiple bottoms allowed (skirt with leggings)
+        shoesId:        getListIds(shoes)[0] || "",     // One pair of shoes only    
+        accessoriesId:  getListIds(accessories),        // Multiple accessories allowed (necklace and watch)
+        onePieceId:     getListIds(onePiece)[0] || "",  // Only one allowed 
+        dateWorn:       new Date(date),                 // Date of when user set to wear this outfit (current calendar date)
+      }; 
+      // Make POST request
+      const result = await addOutfit(token, postItem);
+    } 
+    else if (deletingOutfit === true) {
+      const result = await deleteOutfit(token, outfitId);
+      setDeletingOutfit(false);
+    }
+    // --- Call PUT function if we are editing a clothing item ---
+    else {
+      // Create an outfit from state variables
+      const putItem = {
+        _id:            outfitId,
+        topId:          getListIds(tops),               // Muliple tops allowed (zip up hoodie with t-shirt)                 
+        bottomId:       getListIds(bottoms),            // Multiple bottoms allowed (skirt with leggings)
+        shoesId:        getListIds(shoes)[0] || "",     // One pair of shoes only    
+        accessoriesId:  getListIds(accessories),        // Multiple accessories allowed (necklace and watch)
+        onePieceId:     getListIds(onePiece)[0] || "",  // Only one allowed 
+        dateWorn:       new Date(date),                 // Date of when user set to wear this outfit (current calendar date)
+      };
+      // Make PUT request
+      const result = await editOutfit(token, putItem);
+    }
   }
+
 
   // --- Edit useEffect ---
   // Load edit page with current outfit's clothing articles
@@ -185,7 +225,7 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
       setLoading(false);
     }
     processOutfit();
-  }, [date]); // category?
+  }, [date]);
 
   // --- Outfit functions ---
   // ---------------------------------------------------------
