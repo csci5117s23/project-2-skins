@@ -114,7 +114,7 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
     setOpenDelete(false);
 
     // If it's the last item, remove the outfit completely.
-    if (outfit.length === 1) {
+    if (outfit.length === 0) {
       setDeletingOutfit(true);
     }
   };
@@ -236,7 +236,6 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
     const token = await getToken({ template: jwtTemplateName });
 
     // --- Call POST function if we are adding a clothing item ---
-    console.log(outfitId);
     if (outfitId === undefined || outfitId === null || outfitId === "") {
       // Create an outfit from state variables
       const postItem = {
@@ -290,8 +289,6 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
           sx={{
             backgroundColor: "#ffd83d",
             width: "100vw",
-            // backgroundImage:
-            //   "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
           }}
         >
           <Grid
