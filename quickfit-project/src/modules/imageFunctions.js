@@ -24,7 +24,6 @@ const CODEHOOKS_KEY = process.env.CH_API_KEY_RW;
 export async function useCloudUpload(authToken, file) {
     // 1. Fetch upload URL
     try {
-        let codehooksImageEntry;
         const response = await fetch(CODEHOOKS_URL+"/get_upload_url", {
             method: "GET",
             headers: {
@@ -40,7 +39,6 @@ export async function useCloudUpload(authToken, file) {
         const fileSize = file.size;
 
         const reader = new FileReader();
-
         reader.addEventListener("loadend", async (e) => {
             const checksum = SHA1(WordArray.create(reader.result)).toString(Hex);
 
@@ -59,7 +57,7 @@ export async function useCloudUpload(authToken, file) {
             const uploadData = await uploadResponse.json();
 
             // 4. Image uploaded, store the image details in the database
-            codehooksImageEntry = await fetch(`${CODEHOOKS_URL}/store_file_id`, {
+            const result = await fetch(`${CODEHOOKS_URL}/store_file_id`, {
                 method: "POST",
                 headers: {
                     "Authorization": "Bearer " + authToken,
@@ -71,19 +69,20 @@ export async function useCloudUpload(authToken, file) {
                     id: uploadData.fileId,
                 }),
             });
+
         });
         reader.readAsArrayBuffer(file);
-        return await codehooksImageEntry.json();
     } catch (error) {
         console.log("Failed to cloud upload image. " + error);
     }
 }
 
-export async function useCloudDownloadLatest() {
+export async function useCloudDownloadLatest(authToken) {
     // 1. Get the download url
     const downloadRes = await fetch(`${CODEHOOKS_URL}/get_download_url`, {
         method: "GET",
         headers: {
+            "Authorization": "Bearer " + authToken,
             "x-api-key": CODEHOOKS_KEY,
         },
     });
@@ -93,24 +92,23 @@ export async function useCloudDownloadLatest() {
     const res = await fetch(`${CODEHOOKS_URL}/get_all_images`, {
         method: "GET",
         headers: {
+            "Authorization": "Bearer " + authToken,
             "x-api-key": CODEHOOKS_KEY,
         },
     });
-   
-    console.log(res);
+    const resData = await res.json();
+    
+    let latestId = resData[resData.length - 1].id;
 
-    // const resData = await res.json();
-    // let latestId = resData[resData.length - 1].id;
+    // 2. Build our download urls
+    const downloadUrl = `${downloadData.downloadUrl}/b2api/v2/b2_download_file_by_id?fileId=${latestId}`;
 
-    // // 2. Build our download urls
-    // const downloadUrl = `${downloadData.downloadUrl}/b2api/v2/b2_download_file_by_id?fileId=${latestId}`;
+    // 3. Fetch request for each download url
+    const response = await fetch(downloadUrl);
+    const blob = await response.blob();
+    const src = URL.createObjectURL(blob);
 
-    // // 3. Fetch request for each download url
-    // const response = await fetch(downloadUrl);
-    // const blob = await response.blob();
-    // const src = URL.createObjectURL(blob);
-
-    // return src;
+    return String(src);
 }
 
 export async function useCloudDownloads(downloadUrls) {
@@ -125,46 +123,3 @@ export async function useCloudDownloads(downloadUrls) {
 
     return urls;
 }
-
-
-export async function uploadScreenshot(image) {
-    if (image) {
-        //convert the base64 image to a blob: https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
-        console.log(image);
-        const byteCharacters = atob(image.split(",")[1]);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++)
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-        const byteArray = new Uint8Array(byteNumbers);
-        const blobImage = new Blob([byteArray], { type: "image/jpeg" });
-        blobImage && (await useCloudUpload(blobImage));
-    }
-}
-
-async function handleImageUpload(e, imageFile) {
-    e.preventDefault();
-    try {
-        // Resize image 
-        const resized = await new Promise((resolve) => {
-            Resizer.imageFileResizer(
-                imageFile,
-                600,
-                600,
-                "JPEG",
-                100,
-                0,
-                (uri) => {resolve(uri)},
-                "file",
-                200,
-                200
-            );
-        });
-        // Upload resized image to bucket
-        await useCloudUpload(resized);
-        setRefresh(!refresh);
-    } catch (error) {
-        console.log("Error while resizing image:", error);
-    }
-    console.log("Finishing upload");
-    // document.getElementById("imageField").value = "";
-  }

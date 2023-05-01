@@ -46,7 +46,7 @@ const clothesSchemaYup = object( {
   name:          string().required(),                 // Name of clothing (Black Nike hoodie, Red long sleeve from garage) 
   tags:          array().of(string()),                // List of user specified strings
   color:         string(),                            // User-specified color
-  imageId:       string(),                            // User-uplodad image of clothing
+  imageUrl:      string(),                            // User-uplodad image of clothing
   createdOn:     date().default(() => new Date()),    // Date of when clothing article was created (POST date)
 })
 //////////////////////////////////////////////////////////////////////

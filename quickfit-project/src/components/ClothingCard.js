@@ -1,4 +1,4 @@
-import * as React from "react";
+import {useState} from "react";
 import { redirect } from "next/navigation";
 // MUI Component imports
 import {
@@ -86,16 +86,16 @@ export default function ClothingCard(props) {
           <Grid item xs={6}>
             <Box display="flex" justifyContent="flex-end">
               {/* {image} */}
-              {/* <Box
+              <Box
                 component="img"
                 sx={{
                   backgroundColor: "#000000",
                   maxWidth: { xs: "15vh", md: "25vh"},
                   maxHeight: { xs: "100%" },
                 }}
-                src="https://dtpmhvbsmffsz.cloudfront.net/posts/2015/08/12/55cba8312035ea03bf02284f/m_55cba8312035ea03bf022850.jpg"
+                src="https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=4_z905315d66103c2ae8e7c0f1a_f1039a75974026af5_d20230501_m005334_c005_v0501002_t0038_u01682902414113"
                 alt="Clothing Image"
-              /> */}
+              />
             </Box>
           </Grid>
         </Grid>

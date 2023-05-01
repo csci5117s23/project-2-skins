@@ -70,7 +70,7 @@ export default function ClothesForm( {clothingToEdit = null} ) {
   const editColor = clothingToEdit?.color;
   const editName = clothingToEdit?.name;
   const editTags = clothingToEdit?.tags;
-  const editImageId = clothingToEdit?.imageId;
+  const editImageUrl = clothingToEdit?.imageUrl;
 
   // --- Main form state hooks & functions ------------------------------------------------------------------------------------------------
   const [category, setCategory] = useState(editCategory || "");               // Clothing entry category
@@ -99,6 +99,11 @@ export default function ClothesForm( {clothingToEdit = null} ) {
     setFileUploadText("Choose an image...");
   }
 
+  async function downloadImage() {
+    const src = await useCloudDownloadLatest();
+    setImage(<Image src={src} width={500} height={500} />);
+  }
+
   // --- Clothes functions ---
   // --------------------------------------------------
   // Function to add a clothing article from front-end
@@ -106,42 +111,44 @@ export default function ClothesForm( {clothingToEdit = null} ) {
   async function onHandleSubmit(e) {
     // Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
-
-
-    handleImageUpload(e);
     
+    // Upload image first, then get the most recent image slotted in images table
+    await uploadScreenshot(e, token);
+    let imageUrl = await useCloudDownloadLatest(token);
 
-    // // let result;
-    // // // --- Call POST function if we are adding a clothing item ---
-    // if (clothingToEdit === null) { 
-    //   // Create a clothing item from state variables
-    //   const postItem = {
-    //     category: category,
-    //     name:     name,
-    //     color:    color,
-    //     tags:     getTagNames(inputTags),
-    //     imageId:  uploadImage(),
-    //   }; // Make POST request
-    //   console.log("postItem: " + JSON.stringify(postItem));
-    //   // result = await addClothes(token, postItem);
-    // } 
-    // // --- Call PUT function if we are editing a clothing item ---
-    // else { 
-    //   // Create a clothing item from state variables
-    //   const putItem = {
-    //     _id:        editId,
-    //     createdOn:  editCreatedOn,
-    //     imageId:    editImageId,
-    //     category:   category,
-    //     name:       name,
-    //     color:      color,
-    //     tags:       getTagNames(inputTags),
-    //   }; // Make PUT request
-    //   result = await editClothes(token, putItem);
-    // }
+    // console.log(JSON.stringify(await getClothes(token)));
+
+    let result;
+    // --- Call POST function if we are adding a clothing item ---
+    if (clothingToEdit === null) { 
+      // Create a clothing item from state variables
+      const postItem = {
+        category: category,
+        name:     name,
+        color:    color,
+        tags:     getTagNames(inputTags),
+        imageUrl: await imageUrl || "",
+      }; // Make POST request
+      console.log("postItem: " + JSON.stringify(postItem));
+      result = await addClothes(token, postItem);
+    } 
+    // --- Call PUT function if we are editing a clothing item ---
+    else { 
+      // Create a clothing item from state variables
+      const putItem = {
+        _id:        editId,
+        createdOn:  editCreatedOn,
+        imageUrl:   await imageUrl || "",
+        category:   category,
+        name:       name,
+        color:      color,
+        tags:       getTagNames(inputTags),
+      }; // Make PUT request
+      result = await editClothes(token, putItem);
+    }
 
     // On submit also, refresh the form
-    // resetForm();
+    resetForm();
   }
 
   // -----------------------------------------------------
@@ -214,9 +221,10 @@ export default function ClothesForm( {clothingToEdit = null} ) {
   // To upload an image from form:
   // ------------------------------
   // Code referenced from Upper Five tech share: https://github.com/jasonwoitalla/csci5117-upper-five-tech-share/blob/main/src/pages/cloud-storage.js
-  async function handleImageUpload(e) {
+  async function handleImageUpload(e, token) {
     e.preventDefault();
     try {
+        console.log(imageFile);
         // Resize image 
         const resized = await new Promise((resolve) => {
             Resizer.imageFileResizer(
@@ -233,20 +241,19 @@ export default function ClothesForm( {clothingToEdit = null} ) {
             );
         });
         // Upload resized image to bucket
-        const result = await useCloudUpload(resized);
-        console.log(result);
-        setRefresh(!refresh);
+        await useCloudUpload(token, resized);
+        setReset(false);
     } catch (error) {
         console.log("Error while resizing image:", error);
     }
     console.log("Finishing upload");
-    // document.getElementById("imageField").value = "";
   }
 
   // -----------------------------------------------
   // Function to upload React camera image to cloud
   // -----------------------------------------------
-  async function uploadScreenshot(image) {
+  // Code referenced from Codehooks Backblaze techshare: https://github.com/jasonwoitalla/csci5117-upper-five-tech-share/blob/main/src/pages/gallery.js
+  async function uploadScreenshot(token) {
     if (image) {
         //convert the base64 image to a blob: https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
         console.log(image);
@@ -256,7 +263,7 @@ export default function ClothesForm( {clothingToEdit = null} ) {
             byteNumbers[i] = byteCharacters.charCodeAt(i);
         const byteArray = new Uint8Array(byteNumbers);
         const blobImage = new Blob([byteArray], { type: "image/jpeg" });
-        blobImage && (await useCloudUpload(blobImage));
+        blobImage && (await useCloudUpload(token, blobImage));
     }
   }
 

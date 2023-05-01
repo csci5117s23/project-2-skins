@@ -154,6 +154,7 @@ export async function addClothes(authToken, clothing) {
                 name:     clothing.name,
                 color:    clothing.color,  
                 tags:     clothing.tags,
+                imageUrl: clothing.imageUrl,
             }),
         })
         // Return newly-made clothing entry
