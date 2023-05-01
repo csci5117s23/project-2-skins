@@ -71,7 +71,7 @@ export default function ClothingCard(props) {
                     sx={{
                       backgroundColor: "#000000",
                       maxWidth: { xs: "15vh", md: "25vh"},
-                      maxHeight: { xs: "100%" },
+                      maxHeight: { xs: "15vh", md: "25vh" },
                     }}
                     src={clothes["imageUrl"]} 
                     alt="Clothing Image"
