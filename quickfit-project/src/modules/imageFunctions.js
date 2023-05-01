@@ -108,8 +108,7 @@ export async function getDownloadUrlForLatest(authToken) {
 // Function to download image from a given download URL
 export async function downloadImage(downloadUrl) {
     // 3. Fetch request for each download url
-    const response = await fetch(downloadUrl);
-    const blob = await response.blob();
+    const blob = downloadUrl.blob();
     const src = URL.createObjectURL(blob);
     return src;
 }
