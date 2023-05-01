@@ -5,7 +5,7 @@ CSCI 5117, Spring 2022, [assignment description](https://canvas.umn.edu/courses/
 ## App Info:
 
 * Team Name: SKINS
-* App Name: QuickFIT
+* App Name: QuickFITS
 * App Link: https://main--curious-treacle-7cb562.netlify.app/
 
 ### Students
@@ -20,16 +20,19 @@ CSCI 5117, Spring 2022, [assignment description](https://canvas.umn.edu/courses/
 **Describe the most challenging features you implemented
 (one sentence per bullet, maximum 4 bullets):**
 
-* ...
+* Getting the weather and calendar to interact with eachother was pretty complicated.
+* Real time editing and deleting of clothes on the wardrobe page without refreshing.
 
 Which (if any) device integration(s) does your app support?
 
-* ...
+* Camera
+* Geolocation
 
 Which (if any) progressive web app feature(s) does your app support?
 
-* ...
-
+* Responsiveness 
+* App-like interface 
+* Installation process: Does not need to install an app, just needs to visit a website
 
 
 ## Mockup images
@@ -81,11 +84,11 @@ along with a very brief caption:**
 **Document integrations with 3rd Party code or services here.
 Please do not document required libraries (e.g., Vue, Vuefire, Firebase).**
 
-* Library or service name: description of use
-* ...
+* OpenWeatherMap: Used to get weather data 
+* Material UI: Library for all our components 
+* React-Swipeable: Used to integrate swipeable feature on home & wardrobe page 
 
 **If there's anything else you would like to disclose about how your project
 relied on external code, expertise, or anything else, please disclose that
 here:**
-
-...
+* Used stack overflow in some areas, cited in code  
