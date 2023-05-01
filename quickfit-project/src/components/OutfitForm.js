@@ -280,6 +280,10 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
     return Array.from(clothingListIds);
   }
 
+  var d = new Date();
+  var yesterday = d.setDate(d.getDate() - 1);
+  var nextMonth = d.setDate(d.getDate() + 30);
+  
   if (loading) {
     return <></>;
   } else {
@@ -290,6 +294,8 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
           sx={{
             backgroundColor: "#ffd83d",
             width: "100vw",
+            // backgroundImage:
+            //   "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
           }}
         >
           <Grid
@@ -298,6 +304,7 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
             justifyContent="center"
             alignItems="center"
           >
+          {date > yesterday && date < nextMonth ? (
             <Grid item xs={6}>
               <Box
                 sx={{
@@ -315,6 +322,7 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
                 <WeatherCard date={date} />
               </Box>
             </Grid>
+          ):null}
             <Grid item xs={6}>
               <Box
                 sx={{
