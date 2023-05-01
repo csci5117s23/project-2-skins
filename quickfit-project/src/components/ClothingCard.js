@@ -81,8 +81,10 @@ export default function ClothingCard(props) {
                 </Box>
               </Box>
             </Grid>
-            <Grid item xs={6}>
-              <Box display="flex" justifyContent="flex-end">
+          </Grid>
+          <Grid item xs={6}>
+            <Box display="flex" justifyContent="flex-end">
+              { clothes["imageUrl"] && 
                 <Box
                   component="img"
                   sx={{
@@ -90,25 +92,10 @@ export default function ClothingCard(props) {
                     maxWidth: { xs: "15vh", md: "25vh"},
                     maxHeight: { xs: "100%" },
                   }}
-                  src="https://dtpmhvbsmffsz.cloudfront.net/posts/2015/08/12/55cba8312035ea03bf02284f/m_55cba8312035ea03bf022850.jpg"
+                  src={clothes["imageUrl"] || ""}
                   alt="Clothing Image"
                 />
-              </Box>
-            </Grid>
-          </Grid>
-          <Grid item xs={6}>
-            <Box display="flex" justifyContent="flex-end">
-              {/* {image} */}
-              <Box
-                component="img"
-                sx={{
-                  backgroundColor: "#000000",
-                  maxWidth: { xs: "15vh", md: "25vh"},
-                  maxHeight: { xs: "100%" },
-                }}
-                src={clothes["imageUrl"] || ""}
-                alt="Clothing Image"
-              />
+              }
             </Box>
         </Grid>
       </Card>
