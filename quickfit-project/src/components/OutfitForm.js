@@ -53,6 +53,7 @@ import {
   editOutfit,
   deleteOutfit,
 } from "@/modules/outfitFunctions";
+import OutfitAdd from "./OutfitAdd";
 
 export default function OutfitForm({ date, outfitToEdit = null }) {
   // ---  React router --------------------------------------------
@@ -570,7 +571,7 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
               mb={2}
             >
               {/* Use wardrobe tab component with different click function */}
-              <WardrobeTabs
+              <OutfitAdd
                 clickFunction={handleClickClothes}
                 category={category}
               />

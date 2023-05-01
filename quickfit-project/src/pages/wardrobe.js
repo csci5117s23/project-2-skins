@@ -34,7 +34,7 @@ import WeatherCard from "@/components/WeatherCard";
 import ClothingCard from "@/components/ClothingCard";
 import SearchBar from '@/components/SearchBar.js';
 import WardrobeTabs from '@/components/WardrobeTabs.js';
-import WardrobeDialog from "./WardrobeDialog.js";
+import WardrobeDialog from "../components/WardrobeDialog.js";
 // Load any necessary ENV variables
 const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
