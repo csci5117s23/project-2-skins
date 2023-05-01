@@ -64,7 +64,7 @@ export default function ClothingCard(props) {
             </Grid>
             <Grid item xs={6}>
               <Box display="flex" justifyContent="flex-end">
-                { (clothes.imageUrl !== "" || clothes.imageUrl !== undefined) &&
+                { (clothes["imageUrl"] !== "" || clothes["imageUrl"] !== undefined) &&
                   <Box
                     component="img"
                     sx={{
