@@ -427,7 +427,6 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
               {/* --- Tags --- */}
               <InputHeader> Tags </InputHeader>
               <AddTagComboBox
-                reset={reset}
                 userTags={userTags}
                 setInputTags={setInputTags}
                 getTags={getTags}
@@ -438,29 +437,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
 
               {/* --- Images --- */}
               <InputHeader>Image</InputHeader>
-              <Stack direction="row" alignItems="center" spacing={2}>
-                {/* Upload photo button */}
-                <Tooltip title="Upload a photo">
-                  <Button
-                    variant="outlined"
-                    component="label"
-                    sx={{ width: 150, color:"#3C3F42", borderColor:"#3C3F42" }}
-                    endIcon={<DriveFolderUploadRoundedIcon />}
-                  >
-                    Upload
-                    <input
-                      hidden
-                      id="imageFile"
-                      accept="image/*"
-                      multiple
-                      type="file"
-                      onChange={handleFileOnChange}
-                    />
-                  </Button>
-                </Tooltip>
-                {/* Image file name */}
-                <Box>{fileUploadText}</Box>
-              </Stack>
+              <PhotoUpload reset={reset} setImage={setImage} setImageFile={setImageFile} />
 
               {/* Take photo (from camera) */}
               <WebcamDialog
@@ -470,7 +447,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
               />
 
               {/* Show preview of image */}
-              {image && <img src={image} alt="captured-photo" />}
+              {image && <Box component="img" src={image} alt="captured-photo" />}
 
               {/* --- Submit --- */}
               { (clothingToEdit !== null) 
