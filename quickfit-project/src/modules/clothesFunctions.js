@@ -69,8 +69,7 @@ export function filterClothesByCategory(clothesList, category) {
         console.log("Invalid input.");
         return;
     }
-    const results = Object.values(clothesList).filter( (item) => (item !== undefined));
-    return Object.values(results).filter( (item) => (item.category === category));
+    return Object.values(clothesList).filter( (item) => (item.category === category));
 }
 
 // --------------------------------------------------------------------------
@@ -155,6 +154,7 @@ export async function addClothes(authToken, clothing) {
                 name:     clothing.name,
                 color:    clothing.color,  
                 tags:     clothing.tags,
+                imageUrl: clothing.imageUrl,
             }),
         })
         // Return newly-made clothing entry
