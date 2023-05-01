@@ -36,8 +36,11 @@ import ClothingSearchList from "@/components/ClothingSearchList";
 import ClothingData from "@/components/ClothingData";
 import ClothingCard from "@/components/ClothingCard";
 import ClothingList from "@/components/ClothingList";
+import WeatherCard from "@/components/WeatherCard";
 import SearchBar from "@/components/SearchBar";
 import WardrobeTabs from "./WardrobeTabs";
+import { formatDateWeekday } from "@/modules/dateFunctions";
+
 // DB Clothing functions
 import { filterClothesByCategory } from "@/modules/clothesFunctions";
 // DB Outfit functions
@@ -240,7 +243,31 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
   } else {
     return (
       <>
-        <CssBaseline />
+        <CssBaseline />    
+        <Card
+            sx={{
+              backgroundColor:"#ffd83d",
+              width:"100vw",
+              // backgroundImage:
+              //   "url(https://media.giphy.com/media/7Qq4PZoYc5XtDjArdM/giphy.gif)",
+            }}
+          >
+            <Stack
+            direction="row"
+                justifyContent="center"
+                alignItems="center"
+                mb={1}
+              sx={{
+           height:{xs:"7vh", md:"11vh"},
+            width:"95vw",
+            
+          }}
+            >
+              <Box sx={{width: "50vw", height:{xs:"6vh", md:"8vh", transform:"scale(.9) translate(-10%, -15%)"}}}><WeatherCard date={date} /></Box>
+                
+                <Box sx={{fontWeight: "Bold", width: "50vw", ml: {xs:"4vw", md:"2vw"}}}>{formatDateWeekday(date)}</Box>
+            </Stack>
+          </Card>
         <Stack
           spacing={2}
           justifyContent={"center"}
@@ -248,6 +275,8 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
           mt={"4vw"}
           mb={"4vw"}
         >
+      
+
           {/* One Pieces */}
           <Card
             sx={{
@@ -257,7 +286,8 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
           >
             <Stack
               alignItems={"center"}
-              sx={{ width: { xs: "90vw", md: "70vw" } }}
+              justifyContent={"center"}
+              sx={{ width: { xs: "90vw", md: "70vw" }, height:{xs:"5.5vh", md:"8vh"} }}
             >
               <CardContent>
                 <Typography variant="h5">One Piece</Typography>
@@ -299,9 +329,10 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
           >
             <Stack
               alignItems={"center"}
-              sx={{ width: { xs: "90vw", md: "70vw" } }}
+              justifyContent={"center"}
+              sx={{ width: { xs: "90vw", md: "70vw" }, height:{xs:"5.5vh", md:"8vh"}}}
             >
-              <CardContent>
+              <CardContent >
                 <Typography variant="h5">Tops</Typography>
               </CardContent>
             </Stack>
@@ -340,7 +371,8 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
           >
             <Stack
               alignItems={"center"}
-              sx={{ width: { xs: "90vw", md: "70vw" } }}
+              justifyContent={"center"}
+              sx={{ width: { xs: "90vw", md: "70vw" } ,height:{xs:"5.5vh", md:"8vh"}}}
             >
               <CardContent>
                 <Typography variant="h5">Bottoms</Typography>
@@ -381,7 +413,8 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
           >
             <Stack
               alignItems={"center"}
-              sx={{ width: { xs: "90vw", md: "70vw" } }}
+              justifyContent={"center"}
+              sx={{ width: { xs: "90vw", md: "70vw" }, height:{xs:"5.5vh", md:"8vh"}}}
             >
               <CardContent>
                 <Typography variant="h5">Shoes</Typography>
@@ -422,7 +455,8 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
           >
             <Stack
               alignItems={"center"}
-              sx={{ width: { xs: "90vw", md: "70vw" } }}
+              justifyContent={"center"}
+              sx={{ width: { xs: "90vw", md: "70vw" },height:{xs:"5.5vh", md:"8vh"} }}
             >
               <CardContent>
                 <Typography variant="h5">Accessories</Typography>
