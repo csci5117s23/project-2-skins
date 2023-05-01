@@ -69,7 +69,8 @@ export function filterClothesByCategory(clothesList, category) {
         console.log("Invalid input.");
         return;
     }
-    return Object.values(clothesList).filter( (item) => (item.category === category));
+    const results = Object.values(clothesList).filter( (item) => (item !== undefined));
+    return Object.values(results).filter( (item) => (item.category === category));
 }
 
 // --------------------------------------------------------------------------
