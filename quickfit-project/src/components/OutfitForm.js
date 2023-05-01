@@ -100,23 +100,18 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
   // Take the ClothingToDelete and remove it from the list
   // Removing an item from list found on https://semicolon.dev/tutorial/javascript/remove-matching-object-from-js-array
   const handleDelete = async () => {
-    if (clothingToDelete["category"] == "One Piece") {
+    if (clothingToDelete["category"] === "One Piece") {
       setOnePiece([]);
-    } else if (clothingToDelete["category"] == "Top") {
+    } else if (clothingToDelete["category"] === "Top") {
       setTops(removeItemFromList(tops, clothingToDelete));
-    } else if (clothingToDelete["category"] == "Bottom") {
+    } else if (clothingToDelete["category"] === "Bottom") {
       setBottoms(removeItemFromList(bottoms, clothingToDelete));
-    } else if (clothingToDelete["category"] == "Shoes") {
+    } else if (clothingToDelete["category"] === "Shoes") {
       setShoes([]);
-    } else if (clothingToDelete["category"] == "Accessories") {
+    } else if (clothingToDelete["category"] === "Accessories") {
       setAccessories(removeItemFromList(accessories, clothingToDelete));
     }
     setOpenDelete(false);
-
-    // If it's the last item, remove the outfit completely.
-    if (outfit.length === 1) {
-      setDeletingOutfit(true);
-    }
   };
 
   // Helper function returns a list that has item removed from it
