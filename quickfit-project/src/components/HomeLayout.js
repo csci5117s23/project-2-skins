@@ -45,8 +45,9 @@ export default function UILayout({ date, setDate }) {
       const token = await getToken({ template: jwtTemplateName });
       const outfitIds = await getOutfitByDateWorn(token, date);
       const outfitDetails = await getOutfitArrayFromIds(token, outfitIds[0]);
-      setOutfit(outfitDetails);
-      setOutfitCoho(outfitIds[0]);
+      console.log(outfitDetails);
+      setOutfit(await outfitDetails);
+      setOutfitCoho(await outfitIds[0]);
       setLoading(false);
     }
     processOutfit();
@@ -139,15 +140,16 @@ export default function UILayout({ date, setDate }) {
                 >
                   {outfit ? (
                     outfit.map((clothes) => {
-                      return (
-                        <Box
-                          key={clothes._id}
-                          sx={{ m: 1, width: { xs: "100vw", md: "34vw" } }}
-                        >
-                          <ClothingCard clothes={clothes} />
-                        </Box>
-                      );
-                    })
+                      if (clothes !== undefined) {
+                        return (
+                          <Box
+                            key={clothes._id}
+                            sx={{ m: 1, width: { xs: "100vw", md: "34vw" } }}
+                          >
+                            <ClothingCard clothes={clothes} />
+                          </Box>
+                        );
+                    }})
                   ) : (
                     <NoFitChosenLayout />
                   )}
