@@ -107,7 +107,7 @@ export default function ClothesForm( {clothingToEdit = null} ) {
     // Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
 
-    
+
     handleImageUpload(e);
     
 
@@ -233,7 +233,8 @@ export default function ClothesForm( {clothingToEdit = null} ) {
             );
         });
         // Upload resized image to bucket
-        await useCloudUpload(resized);
+        const result = await useCloudUpload(resized);
+        console.log(result);
         setRefresh(!refresh);
     } catch (error) {
         console.log("Error while resizing image:", error);
