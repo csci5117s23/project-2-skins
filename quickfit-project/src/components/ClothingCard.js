@@ -77,7 +77,7 @@ export default function ClothingCard(props) {
                       maxWidth: { xs: "15vh", md: "25vh"},
                       maxHeight: { xs: "15vh", md: "25vh" },
                     }}
-                    src={downloadImage(clothes["imageUrl"])} 
+                    src={(clothes["imageUrl"])} 
                     alt="Clothing Image"
                   /> 
                 }
