@@ -39,15 +39,16 @@ export default function ClothingList(props) {
     sx={{ display: "flex", flexWrap: "wrap", width:"100vw" }}
     >
       {clothes.map((clothing) => {
-        return (
-          <Box
-            key={clothing._id}
-            onClick={() => {clickFunction?clickFunction(clothing):null;}}
-            sx={{cursor: "pointer", m: 1, width: { xs: "100vw", md: "34vw" } }}
-          >
-            <ClothingCard clothes={clothing} />
-          </Box>
-        );
+        if (clothing !== undefined) {
+          return (
+            <Box
+              key={clothing._id}
+              onClick={() => {clickFunction?clickFunction(clothing):null;}}
+              sx={{cursor: "pointer", m: 1, width: { xs: "100vw", md: "34vw" } }}
+            >
+              <ClothingCard clothes={clothing} />
+            </Box>
+          )};
       })}
     </Box>
   );
