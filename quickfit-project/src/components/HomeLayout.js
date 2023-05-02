@@ -46,7 +46,7 @@ export default function UILayout({ date, setDate }) {
       const token = await getToken({ template: jwtTemplateName });
       const outfitIds = await getOutfitByDateWorn(token, date);
       let outfitDetails = await getOutfitArrayFromIds(token, outfitIds[0]); 
-      // Delete the outfit if its basically empty & handle any user deletion from wardrobe
+      // Delete the outfit if its basically empty
       if ((outfitDetails !== undefined && 
         ((outfitDetails.every( (item) => (item === undefined) )) 
       || (outfitDetails.every( (item) => (item.details !== undefined && item.details.includes("NotFoundError:"))))))) {
