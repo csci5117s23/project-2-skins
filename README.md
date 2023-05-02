@@ -32,8 +32,6 @@ Which (if any) progressive web app feature(s) does your app support?
 
 * Responsiveness 
 * App-like interface 
-* Installation process: Does not need to install an app, just needs to visit a website
-
 
 ## Mockup images
 
