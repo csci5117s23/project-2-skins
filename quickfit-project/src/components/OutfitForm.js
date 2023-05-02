@@ -24,6 +24,7 @@ import {
   CssBaseline,
   Paper,
   Grid,
+  CircularProgress,
 } from "@mui/material";
 // MUI Icon imports
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
@@ -55,7 +56,7 @@ import {
 } from "@/modules/outfitFunctions";
 import OutfitAdd from "./OutfitAdd";
 
-export default function OutfitForm({ date, outfitToEdit = null }) {
+export default function OutfitForm({ date }) {
   // ---  React router --------------------------------------------
   const router = useRouter();
 
@@ -201,32 +202,6 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
     }
   }
 
-
-  // --- Edit useEffect ---
-  // Load edit page with current outfit's clothing articles
-  useEffect(() => {
-    // Perform query to get the current day's outfit
-    async function processOutfit() {
-      // Get auth token
-      const token = await getToken({ template: jwtTemplateName });
-
-      // Get outfit details from query parameter
-      const outfitIds = await getOutfits(token, outfitId);
-      const outfitDetails = await getOutfitArrayFromIds(token, outfitIds);
-      setOutfit(outfitDetails);
-
-      // Set lists based on query for outfit details
-      setOnePiece(filterClothesByCategory(outfitDetails, "One Piece"));
-      setTops(filterClothesByCategory(outfitDetails, "Top"));
-      setBottoms(filterClothesByCategory(outfitDetails, "Bottom"));
-      setShoes(filterClothesByCategory(outfitDetails, "Shoes"));
-      setAccessories(filterClothesByCategory(outfitDetails, "Accessories"));
-
-      setLoading(false);
-    }
-    processOutfit();
-  }, [date]);
-
   // --- Outfit functions ---
   // ---------------------------------------------------------
   // Function to add an outfit from front-end state variables
@@ -280,12 +255,42 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
     return Array.from(clothingListIds);
   }
 
+  // Load edit page with current outfit's clothing articles
+  useEffect(() => {
+    // Perform query to get the current day's outfit
+    async function processOutfit() {
+      // Get outfit details from query parameter
+      if (outfitId) {
+        // Get auth token
+        const token = await getToken({ template: jwtTemplateName });
+        
+        const outfitIds = await getOutfits(token, outfitId);
+        const outfitDetails = await getOutfitArrayFromIds(token, outfitIds);
+        setOutfit(outfitDetails);
+
+        // Set lists based on query for outfit details
+        setOnePiece(filterClothesByCategory(outfitDetails, "One Piece"));
+        setTops(filterClothesByCategory(outfitDetails, "Top"));
+        setBottoms(filterClothesByCategory(outfitDetails, "Bottom"));
+        setShoes(filterClothesByCategory(outfitDetails, "Shoes"));
+        setAccessories(filterClothesByCategory(outfitDetails, "Accessories"));
+
+        console.log("One piece: ");
+        console.log(onePiece);
+
+        setLoading(false);
+      }
+    }
+    processOutfit();
+  }, [date, outfitId]);
+  
+
   var d = new Date();
   var yesterday = d.setDate(d.getDate() - 1);
   var nextMonth = d.setDate(d.getDate() + 30);
   
   if (loading) {
-    return <></>;
+    return <><CircularProgress/></>;
   } else {
     return (
       <>
