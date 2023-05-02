@@ -157,7 +157,7 @@ export async function editOutfit(authToken, outfit) {
 }
 
 // -----------------------------------------------------------------
-// DELETE: Function to remove am user outfit
+// DELETE: Function to remove a user outfit
 // -----------------------------------------------------------------
 export async function deleteOutfit(authToken, outfitId) {
     // Send DELETE request

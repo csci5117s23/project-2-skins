@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useAuth } from "@clerk/nextjs";
+import Resizer from "react-image-file-resizer";
+import Webcam from "react-webcam";
 // MUI Component imports
 import {
   Box,
@@ -31,19 +33,18 @@ import {
   editClothes,
   deleteClothes,
 } from "@/modules/clothesFunctions";
-
 // DB Tag Function imports
 import { getTags, addTag, editTag, deleteTag } from "@/modules/tagFunctions";
-
 // DB Image Function imports
 import {
   useCloudUpload,
-  useCloudDownloadLatest,
+  getDownloadUrlForLatest,
 } from "@/modules/imageFunctions";
-
 // Custom component imports
 import AddTagComboBox from "./AddTagComboBox";
 import WebcamDialog from "./WebcamDialog";
+import PhotoUpload from "./PhotoUpload";
+import { UploadFile } from "@mui/icons-material";
 
 // Header text styling for each form input
 function InputHeader(props) {
@@ -63,7 +64,7 @@ function InputHeader(props) {
 export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
   // --- Authorization ---------------------------------------------------
   const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
-  const { isLoaded, userId, sessionId, getToken } = useAuth();
+  const { isLoaded, userId, getToken } = useAuth();
   const [loading, setLoading] = useState(true);
 
   // --- Shows success message when submit is clicked --------------------
@@ -84,7 +85,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
   const editColor = clothingToEdit?.color;
   const editName = clothingToEdit?.name;
   const editTags = clothingToEdit?.tags;
-  const editImageId = clothingToEdit?.imageId;
+  const editImageUrl = clothingToEdit?.imageUrl;
 
   // --- Main form state hooks & functions ------------------------------------------------------------------------------------------------
   const [category, setCategory] = useState(editCategory || "");               // Clothing entry category
@@ -95,7 +96,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
   const [image, setImage] = useState(null);                                   // Image URL to take/preview on front end
   const [imageFile, setImageFile] = useState(null);                           // Image file to upload to cloud storage
   const [fileUploadText, setFileUploadText] = useState("Choose an image..."); // Image file name/text
-  const [uploaded, setUploaded] = useState(false);                            // Status of whether or not an image was uploaded to cloud
+  const [reset, setReset] = useState(false);
 
   // -----------------------------------------------------------------
   // Function to reset clothes form inputs after form submission
@@ -117,7 +118,16 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
   async function onHandleSubmit(e) {
     // Get authorization token from JWT codehooks template
     const token = await getToken({ template: jwtTemplateName });
-
+    
+    // Upload image first, then get the most recent image slotted in images table
+    let imageUrl = null;
+    if (imageFile) {
+      await handleImageUpload(e, token);
+      imageUrl = await getDownloadUrlForLatest(token);
+    } else if (image) {
+      await uploadScreenshot(token);
+      imageUrl = await getDownloadUrlForLatest(token);
+    }
     let result;
     // --- Call POST function if we are adding a clothing item ---
     if (clothingToEdit === null) { 
@@ -127,7 +137,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
         name:     name,
         color:    color,
         tags:     getTagNames(inputTags),
-        // imageId: uploadImage(e),
+        imageUrl: await imageUrl || "",
       }; // Make POST request
       console.log("postItem: " + JSON.stringify(postItem));
       result = await addClothes(token, postItem);
@@ -136,17 +146,15 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
     else { 
       // Create a clothing item from state variables
       const putItem = {
-        _id:        editId,
-        createdOn:  editCreatedOn,
-        imageId:    editImageId,
-        category:   category,
-        name:       name,
-        color:      color,
-        tags:       getTagNames(inputTags),
+        ...clothingToEdit,
+        category:   category || editCategory,
+        name:       name || editName,
+        color:      color || editColor || "",
+        tags:       getTagNames(inputTags) || editTags || [],
+        imageUrl:   await imageUrl || editImageUrl || "",
       }; // Make PUT request
-      editClothes(token, putItem).then(()=>{setUpdated?setUpdated(true):null;});
+      editClothes(token, putItem, editId).then(()=>{setUpdated?setUpdated(true):null;});
     }
-
     // On submit also, refresh the form
     resetForm();
     
@@ -218,49 +226,57 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
   }
 
   // --- Image functions ---
-  // --------------------------------------------------------------------
+  // ------------------------------
   // To upload an image from form:
-  // --------------------------------------------------------------------
+  // ------------------------------
   // Code referenced from Upper Five tech share: https://github.com/jasonwoitalla/csci5117-upper-five-tech-share/blob/main/src/pages/cloud-storage.js
-  async function uploadImage(e) {
+  async function handleImageUpload(e, token) {
     e.preventDefault();
-
-    // Don't do anything if image file not provided.
-    if (imageFile === null || imageFile === undefined) {
-      console.log("No image provided.");
-      return;
+    try {
+        console.log(imageFile);
+        // Resize image 
+        const resized = await new Promise((resolve) => {
+            Resizer.imageFileResizer(
+                imageFile,
+                600,
+                600,
+                "JPEG",
+                100,
+                0,
+                (uri) => {resolve(uri)},
+                "file",
+                200,
+                200
+            );
+        });
+        // Upload resized image to bucket
+        await useCloudUpload(token, resized);
+        setReset(!reset);
+    } catch (error) {
+        console.log("Error while resizing image:", error);
     }
-
-    // Get authorization token from JWT codehooks template
-    const token = await getToken({ template: jwtTemplateName });
-    const thing = document.getElementById("imageFile").files[0];
-    const uploadResult = await useCloudUpload(token, thing);
-    setUploaded(!uploaded);
-    return uploadResult._id;
+    console.log("Finishing upload");
   }
 
-  // --------------------------------------------------------------------
-  // To handle change in uploaded image file
-  // --------------------------------------------------------------------
-  function handleFileOnChange(e) {
-    console.log(e.target.files);
-    // Check for if a file was provided or not
-    if (!e.target.files || e.target.files.length === 0) {
-      setFileUploadText(null);
-      return;
+  // -----------------------------------------------
+  // Function to upload React camera image to cloud
+  // -----------------------------------------------
+  // Code referenced from Codehooks Backblaze techshare: https://github.com/jasonwoitalla/csci5117-upper-five-tech-share/blob/main/src/pages/gallery.js
+  async function uploadScreenshot(token) {
+    if (image) {
+        //convert the base64 image to a blob: https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+        const byteCharacters = atob(String(image).split(",")[1]);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++)
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        const byteArray = new Uint8Array(byteNumbers);
+        const blobImage = new Blob([byteArray], { type: "image/jpeg" });
+        blobImage && (await useCloudUpload(token, blobImage));
     }
-    // Set image file
-    setImageFile(e.target.files[0]);
-
-    // Set image URL
-    const objectUrl = URL.createObjectURL(e.target.files[0]);
-    setImage(objectUrl);
-
-    // Set image text/name
-    const objectName = e.target.files[0].name;
-    setFileUploadText(objectName);
   }
 
+
+  // --- Use effects ---
   // --------------------------------------------------------------------
   // Run on every render (loaded, if tags change)
   // --------------------------------------------------------------------
@@ -277,8 +293,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
       }
     }
     processTags();
-    console.log(userTags);
-  }, [isLoaded, inputTags]);
+  }, [isLoaded, inputTags, reset]);
 
   // Load GET requests before showing any content
   if (loading) {
@@ -407,29 +422,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
 
               {/* --- Images --- */}
               <InputHeader>Image</InputHeader>
-              <Stack direction="row" alignItems="center" spacing={2}>
-                {/* Upload photo button */}
-                <Tooltip title="Upload a photo">
-                  <Button
-                    variant="outlined"
-                    component="label"
-                    sx={{ width: 150, color:"#3C3F42", borderColor:"#3C3F42" }}
-                    endIcon={<DriveFolderUploadRoundedIcon />}
-                  >
-                    Upload
-                    <input
-                      hidden
-                      id="imageFile"
-                      accept="image/*"
-                      multiple
-                      type="file"
-                      onChange={handleFileOnChange}
-                    />
-                  </Button>
-                </Tooltip>
-                {/* Image file name */}
-                <Box>{fileUploadText}</Box>
-              </Stack>
+              <PhotoUpload reset={reset} setImage={setImage} setImageFile={setImageFile} />
 
               {/* Take photo (from camera) */}
               <WebcamDialog
@@ -439,7 +432,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
               />
 
               {/* Show preview of image */}
-              {image && <img src={image} alt="captured-photo" />}
+              {image && <Box component="img" src={image} alt="captured-photo" />}
 
               {/* --- Submit --- */}
               { (clothingToEdit !== null) 

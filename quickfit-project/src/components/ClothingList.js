@@ -1,31 +1,9 @@
 import React, { useState, useEffect } from "react";
-// import styles from '@/styles/Home.module.css'
-import Head from "next/head"; // Next-js imports
-import Image from "next/image";
-import { Inter } from "next/font/google";
+// MUI Component imports
 import {
-  ClerkProvider,
-  SignUp,
-  SignIn,
-  SignedIn,
-  SignedOut,
-} from "@clerk/clerk-react"; // Clerk authorization imports
-
-import {
-  AppBar,
   Box,
-  Button,
-  Card,
-  CardActions,
-  CardActionArea,
-  CardMedia,
-  CardContent,
-  Typography,
-  Stack,
-  Grid,
-  TextField,
-  styled,
 } from "@mui/material";
+// Custom Component imports
 import ClothingCard from "@/components/ClothingCard";
 
 export default function ClothingList(props) {
@@ -38,16 +16,17 @@ export default function ClothingList(props) {
     justifyContent="center"
     sx={{ display: "flex", flexWrap: "wrap", width:"100vw" }}
     >
-      {clothes.map((clothing) => {
-        return (
-          <Box
-            key={clothing._id}
-            onClick={() => {clickFunction?clickFunction(clothing):null;}}
-            sx={{cursor: "pointer", m: 1, width: { xs: "100vw", md: "34vw" } }}
-          >
-            <ClothingCard clothes={clothing} />
-          </Box>
-        );
+      {clothes !== undefined && clothes.map((clothing) => {
+        if (clothing !== undefined) {
+          return (
+            <Box
+              key={clothing._id}
+              onClick={() => {clickFunction?clickFunction(clothing):null;}}
+              sx={{cursor: "pointer", m: 1, width: { xs: "100vw", md: "34vw" } }}
+            >
+              <ClothingCard clothes={clothing} />
+            </Box>
+          )};
       })}
     </Box>
   );

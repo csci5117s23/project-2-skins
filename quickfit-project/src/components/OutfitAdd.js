@@ -30,7 +30,7 @@ import {
   deleteClothes,
 } from "@/modules/clothesFunctions";
 
-export default function WardrobeTabs({ clickFunction, category }) {
+export default function OutfitAdd({ clickFunction, category }) {
   // Get initial tab based on which add button clicked in add/edit outfit form
   let initialTab;
   if (category === "One Piece") {
@@ -259,14 +259,8 @@ function TabPanel(props) {
       <>
         <ClothingList
           clothes={shownClothes || []}
-          clickFunction={handleClickOpen}
+          clickFunction={clickFunction}
         />
-        <Dialog open={open} onClose={handleCloseDialog}>
-          <ClothesForm
-            clothingToEdit={selectedClothing}
-            setUpdated={handleUpdate}
-          />
-        </Dialog>
       </>
     );
   }

@@ -14,6 +14,8 @@ const backendBase = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 const clothesUrl = backendBase + "/clothes";
 const apiKey = process.env.CH_API_KEY_RW;
 
+import { getOutfits } from "@/modules/outfitFunctions";
+
 // ---------------------------------------------------------
 // GET: Function get all of a user's clothes
 // ---------------------------------------------------------
@@ -69,7 +71,7 @@ export function filterClothesByCategory(clothesList, category) {
         console.log("Invalid input.");
         return;
     }
-    return Object.values(clothesList).filter( (item) => (item.category === category));
+    return Object.values(clothesList).filter( (item) => (item !== undefined && item.category === category));
 }
 
 // --------------------------------------------------------------------------
@@ -154,6 +156,7 @@ export async function addClothes(authToken, clothing) {
                 name:     clothing.name,
                 color:    clothing.color,  
                 tags:     clothing.tags,
+                imageUrl: clothing.imageUrl,
             }),
         })
         // Return newly-made clothing entry
@@ -169,6 +172,7 @@ export async function addClothes(authToken, clothing) {
 export async function editClothes(authToken, clothing) {
     // Send PUT request
     try {
+        console.log(JSON.stringify(clothing));
         const result = await fetch(clothesUrl + "/" + clothing._id, {
             'method': 'PUT',
             'headers': {
@@ -179,7 +183,9 @@ export async function editClothes(authToken, clothing) {
             'body': JSON.stringify(clothing)
         });
         // Return newly-made clothing entry
-        return await result.json();
+        let test = await result.json();
+        console.log(test);
+        return test;
     } catch (error) {
         console.log("Failed to edit clothes. " + error);
     }

@@ -21,6 +21,7 @@ import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutl
 import {
   getOutfitByDateWorn,
   getOutfitArrayFromIds,
+  deleteOutfit,
 } from "@/modules/outfitFunctions";
 // Custom component imports
 import DateWeatherWidget from "@/components/DateWeatherWidget";
@@ -32,7 +33,7 @@ import NoFitChosenLayout from "@/components/NoFitChosenLayout";
 export default function UILayout({ date, setDate }) {
   // --- Authorization ---------------------------------------------------
   const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
-  const { getToken } = useAuth();
+  const { isLoaded, getToken } = useAuth();
 
   const router = useRouter();
   const [outfit, setOutfit] = useState(null); // List of all clothing entries w/ their details
@@ -44,13 +45,20 @@ export default function UILayout({ date, setDate }) {
     async function processOutfit() {
       const token = await getToken({ template: jwtTemplateName });
       const outfitIds = await getOutfitByDateWorn(token, date);
-      const outfitDetails = await getOutfitArrayFromIds(token, outfitIds[0]);
+      let outfitDetails = await getOutfitArrayFromIds(token, outfitIds[0]); 
+      // Delete the outfit if its basically empty & handle any user deletion from wardrobe
+      if ((outfitDetails !== undefined && 
+        ((outfitDetails.every( (item) => (item === undefined) )) 
+      || (outfitDetails.every( (item) => (item.details !== undefined && item.details.includes("NotFoundError:"))))))) {
+        outfitDetails = undefined;
+        await deleteOutfit(token, outfitIds[0]._id);
+      } 
       setOutfit(outfitDetails);
       setOutfitCoho(outfitIds[0]);
       setLoading(false);
     }
     processOutfit();
-  }, [date]);
+  }, [date, isLoaded]);
 
   const handlePreviousDayClick = () => {
     var d = new Date(date);
@@ -139,15 +147,16 @@ export default function UILayout({ date, setDate }) {
                 >
                   {outfit ? (
                     outfit.map((clothes) => {
-                      return (
-                        <Box
-                          key={clothes._id}
-                          sx={{ m: 1, width: { xs: "100vw", md: "34vw" } }}
-                        >
-                          <ClothingCard clothes={clothes} />
-                        </Box>
-                      );
-                    })
+                      if (clothes._id || (clothes.details && !clothes.details.includes("NotFoundError:"))) {
+                        return (
+                          <Box
+                            key={clothes._id}
+                            sx={{ m: 1, width: { xs: "100vw", md: "34vw" } }}
+                          >
+                            <ClothingCard clothes={clothes} />
+                          </Box>
+                        );
+                    }})
                   ) : (
                     <NoFitChosenLayout />
                   )}

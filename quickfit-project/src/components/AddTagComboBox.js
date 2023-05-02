@@ -1,4 +1,4 @@
-import * as React from "react";
+import {useState}  from "react";
 import { useAuth } from "@clerk/nextjs";
 // MUI Imports
 import {
@@ -27,7 +27,7 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export default function AddTagComboBox( {userTags, setInputTags, getTags, addTag, editTag, deleteTag} ) {
+export default function AddTagComboBox( { reset, userTags, setInputTags, getTags, addTag, editTag, deleteTag} ) {
   // --- Authorization ---------------------------------------------------
   const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
   const { getToken } = useAuth();
@@ -48,6 +48,7 @@ export default function AddTagComboBox( {userTags, setInputTags, getTags, addTag
   return (
     
     <Autocomplete
+      key={reset}
       multiple
       freeSolo
       id="checkboxes-tags"

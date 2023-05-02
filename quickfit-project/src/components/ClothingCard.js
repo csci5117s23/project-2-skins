@@ -7,6 +7,10 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
+// DB Image Function imports
+import {
+  downloadImage,
+} from "@/modules/imageFunctions";
 
 export default function ClothingCard(props) {
   const { clothes } = props;
@@ -64,17 +68,20 @@ export default function ClothingCard(props) {
             </Grid>
             <Grid item xs={6}>
               <Box display="flex" justifyContent="flex-end">
-                <Box
-                  component="img"
-                  sx={{
-                    backgroundColor: "#000000",
-                    maxWidth: { xs: "15vh", md: "25vh"},
-                    maxHeight: { xs: "100%" },
-                  }}
-                  src="https://dtpmhvbsmffsz.cloudfront.net/posts/2015/08/12/55cba8312035ea03bf02284f/m_55cba8312035ea03bf022850.jpg"
-                  alt="Clothing Image"
-                />
-              </Box>
+                {/* {console.log(clothes)} */}
+                { (clothes["imageUrl"] !== "" && clothes["imageUrl"] !== undefined) &&
+                  <Box
+                    component="img"
+                    sx={{
+                      backgroundColor: "#000000",
+                      maxWidth: { xs: "15vh", md: "25vh"},
+                      maxHeight: { xs: "15vh", md: "25vh" },
+                    }}
+                    src={(clothes["imageUrl"])} 
+                    alt="Clothing Image"
+                  /> 
+                }
+                </Box>
             </Grid>
           </Grid>
         </Card>

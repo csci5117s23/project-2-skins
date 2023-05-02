@@ -24,6 +24,7 @@ import {
   CssBaseline,
   Paper,
   Grid,
+  CircularProgress,
 } from "@mui/material";
 // MUI Icon imports
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
@@ -40,7 +41,7 @@ import ClothingList from "@/components/ClothingList";
 import WeatherCard from "@/components/WeatherCard";
 import SearchBar from "@/components/SearchBar";
 import WardrobeTabs from "./WardrobeTabs";
-import { formatDateWeekday, getDays } from "@/modules/dateFunctions";
+import { formatDateWeekday } from "@/modules/dateFunctions";
 
 // DB Clothing functions
 import { filterClothesByCategory } from "@/modules/clothesFunctions";
@@ -53,21 +54,23 @@ import {
   editOutfit,
   deleteOutfit,
 } from "@/modules/outfitFunctions";
+import OutfitAdd from "./OutfitAdd";
 
-export default function OutfitForm({ date, outfitToEdit = null }) {
+export default function OutfitForm({ date }) {
   // ---  React router --------------------------------------------
   const router = useRouter();
 
   // --- Authorization ---------------------------------------------------
   const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
-  const { getToken } = useAuth();
+  const { isLoaded, userId, getToken } = useAuth();
 
-  // properties for the post request to add outfit
+  // Properties for the post request to add outfit
   // if there is an outfit id do an update instead of post
   // --- Main form state hooks & functions --------------------------------------------------------------
   const { outfitId } = router.query;
-  const [outfit, setOutfit] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [outfit, setOutfit] = useState(null); // List of all clothing entries w/ their details
+  const [outfitCoho, setOutfitCoho] = useState(null); // just need a way to store the outfit ID since not stored in 'outfit'
+  const [loading, setLoading] = useState(true); // Load GET requests before rendering content
   const [category, setCategory] = useState("");
   const [onePiece, setOnePiece] = useState([]);
   const [tops, setTops] = useState([]);
@@ -95,9 +98,9 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
     setOpenDelete(false);
   };
 
-  // take the ClothingToDelete and remove it from the list
-  // removing an item from list found on https://semicolon.dev/tutorial/javascript/remove-matching-object-from-js-array
-  const handleDelete = () => {
+  // Take the ClothingToDelete and remove it from the list
+  // Removing an item from list found on https://semicolon.dev/tutorial/javascript/remove-matching-object-from-js-array
+  const handleDelete = async () => {
     if (clothingToDelete["category"] == "One Piece") {
       setOnePiece([]);
     } else if (clothingToDelete["category"] == "Top") {
@@ -106,11 +109,12 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
       setBottoms(removeItemFromList(bottoms, clothingToDelete));
     } else if (clothingToDelete["category"] == "Shoes") {
       setShoes([]);
-    } else if (clothingToDelete["category"] == "Accessory") {
+    } else if (clothingToDelete["category"] == "Accessories") {
       setAccessories(removeItemFromList(accessories, clothingToDelete));
     }
     setOpenDelete(false);
   };
+
   // Helper function returns a list that has item removed from it
   const removeItemFromList = (list, item) => {
     const index = list.indexOf(item);
@@ -149,43 +153,7 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
     }
     setOpen(false);
   };
-
-  // ------------------------------------------------------------
-  // Function to call DELETE request to get rid of clothing item
-  // ------------------------------------------------------------
-  async function makeDeleteRequest(clothingId) {
-    // Get authorization token from JWT codehooks template
-    const token = await getToken({ template: jwtTemplateName });
-
-    // --- Call DELETE function ---
-    const result = deleteClothes(token, clothingId);
-  }
-
-  // --- Edit useEffect ---
-  // Load edit page with current outfit's clothing articles
-  useEffect(() => {
-    // Perform query to get the current day's outfit
-    async function processOutfit() {
-      // Get auth token
-      const token = await getToken({ template: jwtTemplateName });
-
-      // Get outfit details from query parameter
-      const outfitIds = await getOutfits(token, outfitId);
-      const outfitDetails = await getOutfitArrayFromIds(token, outfitIds);
-      setOutfit(outfitDetails);
-
-      // Set lists based on query for outfit details
-      setOnePiece(filterClothesByCategory(outfitDetails, "One Piece"));
-      setTops(filterClothesByCategory(outfitDetails, "Top"));
-      setBottoms(filterClothesByCategory(outfitDetails, "Bottom"));
-      setShoes(filterClothesByCategory(outfitDetails, "Shoes"));
-      setAccessories(filterClothesByCategory(outfitDetails, "Accessories"));
-
-      setLoading(false);
-    }
-    processOutfit();
-  }, [date]); // category?
-
+  
   // --- Outfit functions ---
   // ---------------------------------------------------------
   // Function to add an outfit from front-end state variables
@@ -195,37 +163,36 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
     const token = await getToken({ template: jwtTemplateName });
 
     // --- Call POST function if we are adding a clothing item ---
-    console.log(outfitId);
     if (outfitId === undefined || outfitId === null || outfitId === "") {
       // Create an outfit from state variables
       const postItem = {
-        topId: getListIds(tops), // Muliple tops allowed (zip up hoodie with t-shirt)
-        bottomId: getListIds(bottoms), // Multiple bottoms allowed (skirt with leggings)
-        shoesId: getListIds(shoes)[0] || "", // One pair of shoes only
-        accessoriesId: getListIds(accessories), // Multiple accessories allowed (necklace and watch)
-        onePieceId: getListIds(onePiece)[0] || "", // Only one allowed
-        dateWorn: new Date(date), // Date of when user set to wear this outfit (current calendar date)
-      };
+        topId:          getListIds(tops),               // Muliple tops allowed (zip up hoodie with t-shirt)                 
+        bottomId:       getListIds(bottoms),            // Multiple bottoms allowed (skirt with leggings)
+        shoesId:        getListIds(shoes)[0] || "",     // One pair of shoes only    
+        accessoriesId:  getListIds(accessories),        // Multiple accessories allowed (necklace and watch)
+        onePieceId:     getListIds(onePiece)[0] || "",  // Only one allowed 
+        dateWorn:       new Date(date),                 // Date of when user set to wear this outfit (current calendar date)
+      }; 
       // Make POST request
       const result = await addOutfit(token, postItem);
-    }
+    } 
     // --- Call PUT function if we are editing a clothing item ---
     else {
       // Create an outfit from state variables
       const putItem = {
-        _id: outfitId,
-        topId: getListIds(tops), // Muliple tops allowed (zip up hoodie with t-shirt)
-        bottomId: getListIds(bottoms), // Multiple bottoms allowed (skirt with leggings)
-        shoesId: getListIds(shoes)[0] || "", // One pair of shoes only
-        accessoriesId: getListIds(accessories), // Multiple accessories allowed (necklace and watch)
-        onePieceId: getListIds(onePiece)[0] || "", // Only one allowed
-        dateWorn: new Date(date), // Date of when user set to wear this outfit (current calendar date)
+        ...outfitCoho,
+        topId:          getListIds(tops),               // Muliple tops allowed (zip up hoodie with t-shirt)                 
+        bottomId:       getListIds(bottoms),            // Multiple bottoms allowed (skirt with leggings)
+        shoesId:        getListIds(shoes)[0] || "",     // One pair of shoes only    
+        accessoriesId:  getListIds(accessories),        // Multiple accessories allowed (necklace and watch)
+        onePieceId:     getListIds(onePiece)[0] || "",  // Only one allowed 
+        dateWorn:       new Date(date),                 // Date of when user set to wear this outfit (current calendar date)
       };
       // Make PUT request
       const result = await editOutfit(token, putItem);
-      console.log(result);
     }
   }
+
 
   // ---------------------------------------------------------------------------
   // Function to convert a list of clothing objects to just a list of their IDs
@@ -239,12 +206,39 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
     return Array.from(clothingListIds);
   }
 
+  // Load edit page with current outfit's clothing articles
+  useEffect(() => {
+    // Perform query to get the current day's outfit
+    async function processOutfit() {
+      // Get outfit details from query parameter
+      if (outfitId) {
+        // Get auth token
+        const token = await getToken({ template: jwtTemplateName });
+        
+        const outfitIds = await getOutfits(token, outfitId);
+        const outfitDetails = await getOutfitArrayFromIds(token, outfitIds);
+        setOutfit(outfitDetails);
+        setOutfitCoho(outfitIds);
+
+        // Set lists based on query for outfit details
+        setOnePiece(filterClothesByCategory(outfitDetails, "One Piece"));
+        setTops(filterClothesByCategory(outfitDetails, "Top"));
+        setBottoms(filterClothesByCategory(outfitDetails, "Bottom"));
+        setShoes(filterClothesByCategory(outfitDetails, "Shoes"));
+        setAccessories(filterClothesByCategory(outfitDetails, "Accessories"));
+      }
+    }
+    processOutfit();
+    setLoading(false);
+  }, [date, isLoaded]);
+  
+
   var d = new Date();
   var yesterday = d.setDate(d.getDate() - 1);
   var nextMonth = d.setDate(d.getDate() + 30);
   
   if (loading) {
-    return <></>;
+    return <><CircularProgress/></>;
   } else {
     return (
       <>
@@ -339,7 +333,7 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
               setCategory("One Piece");
             }}
           >
-            {onePiece.length > 0 ? (
+            {onePiece !== undefined && onePiece.length > 0 ? (
               <>
                 Replace <AutorenewRoundedIcon />
               </>
@@ -384,7 +378,7 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
               bgcolor: "#333333",
             }}
           >
-            {tops.length > 0 ? (
+            {tops !== undefined && tops.length > 0 ? (
               <>
                 Add Another Top
                 <AddIcon />
@@ -429,7 +423,7 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
               setCategory("Bottom");
             }}
           >
-            {bottoms.length > 0 ? (
+            {bottoms !== undefined && bottoms.length > 0 ? (
               <>
                 Add Another bottom
                 <AddIcon />
@@ -474,7 +468,7 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
               setCategory("Shoes");
             }}
           >
-            {shoes.length > 0 ? (
+            {shoes !== undefined && shoes.length > 0 ? (
               <>
                 Replace <AutorenewRoundedIcon />
               </>
@@ -522,7 +516,7 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
               setCategory("Accessories");
             }}
           >
-            {accessories.length > 0 ? (
+            {accessories !== undefined && accessories.length > 0 ? (
               <>
                 Add Another Accessory
                 <AddIcon />
@@ -576,7 +570,7 @@ export default function OutfitForm({ date, outfitToEdit = null }) {
               mb={2}
             >
               {/* Use wardrobe tab component with different click function */}
-              <WardrobeTabs
+              <OutfitAdd
                 clickFunction={handleClickClothes}
                 category={category}
               />
