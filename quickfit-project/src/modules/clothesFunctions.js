@@ -170,6 +170,7 @@ export async function addClothes(authToken, clothing) {
 export async function editClothes(authToken, clothing) {
     // Send PUT request
     try {
+        console.log(JSON.stringify(clothing));
         const result = await fetch(clothesUrl + "/" + clothing._id, {
             'method': 'PUT',
             'headers': {
@@ -180,7 +181,9 @@ export async function editClothes(authToken, clothing) {
             'body': JSON.stringify(clothing)
         });
         // Return newly-made clothing entry
-        return await result.json();
+        let test = await result.json();
+        console.log(test);
+        return test;
     } catch (error) {
         console.log("Failed to edit clothes. " + error);
     }

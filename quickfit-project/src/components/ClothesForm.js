@@ -64,7 +64,7 @@ function InputHeader(props) {
 export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
   // --- Authorization ---------------------------------------------------
   const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
-  const { isLoaded, userId, sessionId, getToken } = useAuth();
+  const { isLoaded, userId, getToken } = useAuth();
   const [loading, setLoading] = useState(true);
 
   // --- Shows success message when submit is clicked --------------------
@@ -96,10 +96,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
   const [image, setImage] = useState(null);                                   // Image URL to take/preview on front end
   const [imageFile, setImageFile] = useState(null);                           // Image file to upload to cloud storage
   const [fileUploadText, setFileUploadText] = useState("Choose an image..."); // Image file name/text
-  const [uploaded, setUploaded] = useState(false);                            // Status of whether or not an image was uploaded to cloud
   const [reset, setReset] = useState(false);
-  const [isWebcam, setIsWebcam] = useState(false);
-  const [isUpload, setIsUpload] = useState(false);
 
   // -----------------------------------------------------------------
   // Function to reset clothes form inputs after form submission
@@ -150,17 +147,15 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
     else { 
       // Create a clothing item from state variables
       const putItem = {
-        _id:        editId,
-        createdOn:  editCreatedOn,
+        ...clothingToEdit,
+        category:   category || editCategory,
+        name:       name || editName,
+        color:      color || editColor || "",
+        tags:       getTagNames(inputTags) || editTags || [],
         imageUrl:   await imageUrl || editImageUrl || "",
-        category:   category,
-        name:       name,
-        color:      color,
-        tags:       getTagNames(inputTags),
       }; // Make PUT request
-      editClothes(token, putItem).then(()=>{setUpdated?setUpdated(true):null;});
+      editClothes(token, putItem, editId).then(()=>{setUpdated?setUpdated(true):null;});
     }
-
     // On submit also, refresh the form
     resetForm();
   }
