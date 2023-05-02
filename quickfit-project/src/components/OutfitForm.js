@@ -68,9 +68,9 @@ export default function OutfitForm({ date }) {
   // if there is an outfit id do an update instead of post
   // --- Main form state hooks & functions --------------------------------------------------------------
   const { outfitId } = router.query;
-  const [outfit, setOutfit] = useState(null);
-  const [deletingOutfit, setDeletingOutfit] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [outfit, setOutfit] = useState(null); // List of all clothing entries w/ their details
+  const [outfitCoho, setOutfitCoho] = useState(null); // just need a way to store the outfit ID since not stored in 'outfit'
+  const [loading, setLoading] = useState(true); // Load GET requests before rendering content
   const [category, setCategory] = useState("");
   const [onePiece, setOnePiece] = useState([]);
   const [tops, setTops] = useState([]);
@@ -113,11 +113,6 @@ export default function OutfitForm({ date }) {
       setAccessories(removeItemFromList(accessories, clothingToDelete));
     }
     setOpenDelete(false);
-
-    // If it's the last item, remove the outfit completely.
-    if (outfit.length === 1) {
-      setDeletingOutfit(true);
-    }
   };
 
   // Helper function returns a list that has item removed from it
@@ -181,15 +176,11 @@ export default function OutfitForm({ date }) {
       // Make POST request
       const result = await addOutfit(token, postItem);
     } 
-    else if (deletingOutfit === true) {
-      const result = await deleteOutfit(token, outfitId);
-      setDeletingOutfit(false);
-    }
     // --- Call PUT function if we are editing a clothing item ---
     else {
       // Create an outfit from state variables
       const putItem = {
-        ...outfit,
+        ...outfitCoho,
         topId:          getListIds(tops),               // Muliple tops allowed (zip up hoodie with t-shirt)                 
         bottomId:       getListIds(bottoms),            // Multiple bottoms allowed (skirt with leggings)
         shoesId:        getListIds(shoes)[0] || "",     // One pair of shoes only    
@@ -202,46 +193,6 @@ export default function OutfitForm({ date }) {
     }
   }
 
-  // --- Outfit functions ---
-  // ---------------------------------------------------------
-  // Function to add an outfit from front-end state variables
-  // ---------------------------------------------------------
-  async function onHandleSubmit(e) {
-    // Get authorization token from JWT codehooks template
-    const token = await getToken({ template: jwtTemplateName });
-
-    // --- Call POST function if we are adding a clothing item ---
-    console.log(outfitId);
-    if (outfitId === undefined || outfitId === null || outfitId === "") {
-      // Create an outfit from state variables
-      const postItem = {
-        topId: getListIds(tops), // Muliple tops allowed (zip up hoodie with t-shirt)
-        bottomId: getListIds(bottoms), // Multiple bottoms allowed (skirt with leggings)
-        shoesId: getListIds(shoes)[0] || "", // One pair of shoes only
-        accessoriesId: getListIds(accessories), // Multiple accessories allowed (necklace and watch)
-        onePieceId: getListIds(onePiece)[0] || "", // Only one allowed
-        dateWorn: new Date(date), // Date of when user set to wear this outfit (current calendar date)
-      };
-      // Make POST request
-      const result = await addOutfit(token, postItem);
-    }
-    // --- Call PUT function if we are editing a clothing item ---
-    else {
-      // Create an outfit from state variables
-      const putItem = {
-        _id: outfitId,
-        topId: getListIds(tops), // Muliple tops allowed (zip up hoodie with t-shirt)
-        bottomId: getListIds(bottoms), // Multiple bottoms allowed (skirt with leggings)
-        shoesId: getListIds(shoes)[0] || "", // One pair of shoes only
-        accessoriesId: getListIds(accessories), // Multiple accessories allowed (necklace and watch)
-        onePieceId: getListIds(onePiece)[0] || "", // Only one allowed
-        dateWorn: new Date(date), // Date of when user set to wear this outfit (current calendar date)
-      };
-      // Make PUT request
-      const result = await editOutfit(token, putItem);
-      console.log(result);
-    }
-  }
 
   // ---------------------------------------------------------------------------
   // Function to convert a list of clothing objects to just a list of their IDs
@@ -267,6 +218,7 @@ export default function OutfitForm({ date }) {
         const outfitIds = await getOutfits(token, outfitId);
         const outfitDetails = await getOutfitArrayFromIds(token, outfitIds);
         setOutfit(outfitDetails);
+        setOutfitCoho(outfitIds);
 
         // Set lists based on query for outfit details
         setOnePiece(filterClothesByCategory(outfitDetails, "One Piece"));

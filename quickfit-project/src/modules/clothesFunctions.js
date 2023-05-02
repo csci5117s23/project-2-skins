@@ -14,6 +14,8 @@ const backendBase = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 const clothesUrl = backendBase + "/clothes";
 const apiKey = process.env.CH_API_KEY_RW;
 
+import { getOutfits } from "@/modules/outfitFunctions";
+
 // ---------------------------------------------------------
 // GET: Function get all of a user's clothes
 // ---------------------------------------------------------

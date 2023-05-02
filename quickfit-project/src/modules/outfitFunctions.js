@@ -53,6 +53,11 @@ export async function getOutfitByDateWorn(authToken, date, id="") {
             (outfit) => 
                 (new Date(outfit.dateWorn).toLocaleDateString("en-US") === new Date(date).toLocaleDateString("en-US")) 
         );
+
+        let jsonResult = result
+        console.log(JSON.stringify(jsonResult));
+        
+        // Delete the outfit if its basically empty
         return result;
     } catch (error) {
         console.log("Failed to get outfit by date. " + error);

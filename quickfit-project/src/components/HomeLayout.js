@@ -45,15 +45,16 @@ export default function UILayout({ date, setDate }) {
     async function processOutfit() {
       const token = await getToken({ template: jwtTemplateName });
       const outfitIds = await getOutfitByDateWorn(token, date);
-      let outfitDetails = await getOutfitArrayFromIds(token, outfitIds[0]);
+      let outfitDetails = await getOutfitArrayFromIds(token, outfitIds[0]); 
       // Delete the outfit if its basically empty
-      if (outfitDetails !== undefined && outfitDetails.every( (item) => (item === undefined) )) {
+      if ((outfitDetails !== undefined && 
+        ((outfitDetails.every( (item) => (item === undefined) )) 
+      || (outfitDetails.every( (item) => (item.details !== undefined && item.details.includes("NotFoundError:"))))))) {
         outfitDetails = undefined;
-        await deleteOutfit(token, outfitIds._id);
+        await deleteOutfit(token, outfitIds[0]._id);
       } 
-      console.log(outfitDetails);
       setOutfit(outfitDetails);
-      setOutfitCoho(await outfitIds[0]);
+      setOutfitCoho(outfitIds[0]);
       setLoading(false);
     }
     processOutfit();
@@ -146,7 +147,7 @@ export default function UILayout({ date, setDate }) {
                 >
                   {outfit ? (
                     outfit.map((clothes) => {
-                      if (clothes !== undefined) {
+                      if (clothes._id || (clothes.details && !clothes.details.includes("NotFoundError:"))) {
                         return (
                           <Box
                             key={clothes._id}
