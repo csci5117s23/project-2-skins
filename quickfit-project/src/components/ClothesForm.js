@@ -109,7 +109,6 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
     setImage(null);
     setImageFile(null);
     setFileUploadText("Choose an image...");
-    setReset(true);
   }
 
   // --- Clothes functions ---
@@ -158,6 +157,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
     }
     // On submit also, refresh the form
     resetForm();
+    
   }
 
   // -----------------------------------------------------
@@ -251,6 +251,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
         });
         // Upload resized image to bucket
         await useCloudUpload(token, resized);
+        setReset(!reset);
     } catch (error) {
         console.log("Error while resizing image:", error);
     }
@@ -292,7 +293,7 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
       }
     }
     processTags();
-  }, [isLoaded, inputTags]);
+  }, [isLoaded, inputTags, reset]);
 
   // Load GET requests before showing any content
   if (loading) {
@@ -411,7 +412,6 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
               {/* --- Tags --- */}
               <InputHeader> Tags </InputHeader>
               <AddTagComboBox
-                reset={reset}
                 userTags={userTags}
                 setInputTags={setInputTags}
                 getTags={getTags}

@@ -352,4 +352,6 @@ app.use('/image/:id', async (req, res, next) => {
   // if we don't crash out -- call next and let crudlify deal with the details...
   next();
 })
+
+
 export default app.init();
