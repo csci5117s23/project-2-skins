@@ -76,7 +76,6 @@ const imageSchemaYup = object({
   content:    string().required(),              // Image base64-encoding
   createdOn:  date().default(() => new Date()), // Date of when clothing article was created (POST date)
 });
-crudlify(app, { clothes: clothesSchemaYup, outfit: outfitSchemaYup, tag: tagSchemaYup, image: imageSchemaYup }, options);
 
 // Backblaze functions for images
 // Code referenced from Upper Five tech share:
@@ -353,5 +352,6 @@ app.use('/image/:id', async (req, res, next) => {
   next();
 })
 
+crudlify(app, { clothes: clothesSchemaYup, outfit: outfitSchemaYup, tag: tagSchemaYup, image: imageSchemaYup }, options);
 
 export default app.init();
