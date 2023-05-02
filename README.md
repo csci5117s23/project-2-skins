@@ -85,7 +85,7 @@ Which (if any) progressive web app feature(s) does your app support?
 ### Home page after the user HAS selected an outfit. 
 ![Choosing Fit ](images/siteScreenshots/withfit.png?raw=true)
 
-### To delete something from your outfit just click on the clothing card and it will show a message. 
+### Before submitting your outfit, if you wanted to delete something from your outfit just click on the clothing card and it will give you a delete option. 
 ![Choosing Fit ](images/siteScreenshots/deleteclothefromfit.png?raw=true)
 
 ### Page to add clothes to your wardrobe 
