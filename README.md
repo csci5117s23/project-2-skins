@@ -81,12 +81,12 @@ Which (if any) progressive web app feature(s) does your app support?
 ### After pressing the add top button, it will bring you to this page. 
 ![Choosing Fit ](images/siteScreenshots/clotheslist.png?raw=true)
 
+### Before submitting your outfit, if you wanted to delete something from your outfit just click on the clothing card and it will give you a delete option. 
+![Choosing Fit ](images/siteScreenshots/deleteclothefromfit.png?raw=true)
 
 ### Home page after the user HAS selected an outfit. 
 ![Choosing Fit ](images/siteScreenshots/withfit.png?raw=true)
 
-### Before submitting your outfit, if you wanted to delete something from your outfit just click on the clothing card and it will give you a delete option. 
-![Choosing Fit ](images/siteScreenshots/deleteclothefromfit.png?raw=true)
 
 ### Page to add clothes to your wardrobe 
 ![Choosing Fit ](images/siteScreenshots/addclothes.png?raw=true)
