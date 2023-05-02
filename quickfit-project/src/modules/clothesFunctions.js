@@ -178,7 +178,15 @@ export async function editClothes(authToken, clothing) {
                 'Content-Type': 'application/json',
                 'x-api-key': apiKey,
             },
-            'body': JSON.stringify(clothing)
+            'body': JSON.stringify({
+                _id:       clothing._id,
+                createdOn: clothing.createdOn,
+                category:  clothing.category,
+                name:      clothing.name,
+                color:     clothing.color,  
+                tags:      clothing.tags,
+                imageUrl:  clothing.imageUrl,
+            }),
         });
         // Return newly-made clothing entry
         return await result.json();

@@ -150,13 +150,15 @@ export default function ClothesForm( {clothingToEdit = null, setUpdated} ) {
       // Create a clothing item from state variables
       const putItem = {
         _id:        editId,
-        createdOn:  editCreatedOn,
+        createdOn:  editCreatedOn || new Date(),
         imageUrl:   await imageUrl || editImageUrl || "",
-        category:   category,
-        name:       name,
-        color:      color,
-        tags:       getTagNames(inputTags),
+        category:   category || "",
+        name:       name || "",
+        color:      color || "",
+        tags:       getTagNames(inputTags) || [],
       }; // Make PUT request
+      // console.log("Put item: ");
+      // console.log(JSON.stringify(putItem));
       editClothes(token, putItem).then(()=>{setUpdated?setUpdated(true):null;});
     }
 
