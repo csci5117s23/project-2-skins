@@ -72,7 +72,7 @@ Which (if any) progressive web app feature(s) does your app support?
 
 ## Screenshots of Site (complete)
 
-### Home page when user HAS NOT selected an outfit yet. Can use the calendar to change days, arrows, or swipe.  
+### Home page when user HAS NOT selected an outfit yet. Can use the calendar, arrows, or swipe feature to change the day.  
 ![Choosing Fit ](images/siteScreenshots/nofit.png?raw=true)
 
 ### Pressing the choose an outfit button will take you to this page and allow you to build an outfit.   
