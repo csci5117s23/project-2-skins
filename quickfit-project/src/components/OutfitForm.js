@@ -62,7 +62,7 @@ export default function OutfitForm({ date }) {
 
   // --- Authorization ---------------------------------------------------
   const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
-  const { getToken } = useAuth();
+  const { isLoaded, userId, getToken } = useAuth();
 
   // Properties for the post request to add outfit
   // if there is an outfit id do an update instead of post
@@ -189,7 +189,7 @@ export default function OutfitForm({ date }) {
     else {
       // Create an outfit from state variables
       const putItem = {
-        _id:            outfitId,
+        ...outfit,
         topId:          getListIds(tops),               // Muliple tops allowed (zip up hoodie with t-shirt)                 
         bottomId:       getListIds(bottoms),            // Multiple bottoms allowed (skirt with leggings)
         shoesId:        getListIds(shoes)[0] || "",     // One pair of shoes only    
@@ -274,15 +274,11 @@ export default function OutfitForm({ date }) {
         setBottoms(filterClothesByCategory(outfitDetails, "Bottom"));
         setShoes(filterClothesByCategory(outfitDetails, "Shoes"));
         setAccessories(filterClothesByCategory(outfitDetails, "Accessories"));
-
-        console.log("One piece: ");
-        console.log(onePiece);
-
-        setLoading(false);
       }
     }
     processOutfit();
-  }, [date, outfitId]);
+    setLoading(false);
+  }, [date, isLoaded]);
   
 
   var d = new Date();
@@ -385,7 +381,7 @@ export default function OutfitForm({ date }) {
               setCategory("One Piece");
             }}
           >
-            {onePiece.length > 0 ? (
+            {onePiece !== undefined && onePiece.length > 0 ? (
               <>
                 Replace <AutorenewRoundedIcon />
               </>
@@ -430,7 +426,7 @@ export default function OutfitForm({ date }) {
               bgcolor: "#333333",
             }}
           >
-            {tops.length > 0 ? (
+            {tops !== undefined && tops.length > 0 ? (
               <>
                 Add Another Top
                 <AddIcon />
@@ -475,7 +471,7 @@ export default function OutfitForm({ date }) {
               setCategory("Bottom");
             }}
           >
-            {bottoms.length > 0 ? (
+            {bottoms !== undefined && bottoms.length > 0 ? (
               <>
                 Add Another bottom
                 <AddIcon />
@@ -520,7 +516,7 @@ export default function OutfitForm({ date }) {
               setCategory("Shoes");
             }}
           >
-            {shoes.length > 0 ? (
+            {shoes !== undefined && shoes.length > 0 ? (
               <>
                 Replace <AutorenewRoundedIcon />
               </>
@@ -568,7 +564,7 @@ export default function OutfitForm({ date }) {
               setCategory("Accessories");
             }}
           >
-            {accessories.length > 0 ? (
+            {accessories !== undefined && accessories.length > 0 ? (
               <>
                 Add Another Accessory
                 <AddIcon />

@@ -16,7 +16,7 @@ export default function ClothingList(props) {
     justifyContent="center"
     sx={{ display: "flex", flexWrap: "wrap", width:"100vw" }}
     >
-      {clothes.map((clothing) => {
+      {clothes !== undefined && clothes.map((clothing) => {
         if (clothing !== undefined) {
           return (
             <Box

@@ -21,6 +21,7 @@ import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutl
 import {
   getOutfitByDateWorn,
   getOutfitArrayFromIds,
+  deleteOutfit,
 } from "@/modules/outfitFunctions";
 // Custom component imports
 import DateWeatherWidget from "@/components/DateWeatherWidget";
@@ -32,7 +33,7 @@ import NoFitChosenLayout from "@/components/NoFitChosenLayout";
 export default function UILayout({ date, setDate }) {
   // --- Authorization ---------------------------------------------------
   const jwtTemplateName = process.env.CLERK_JWT_TEMPLATE_NAME;
-  const { getToken } = useAuth();
+  const { isLoaded, getToken } = useAuth();
 
   const router = useRouter();
   const [outfit, setOutfit] = useState(null); // List of all clothing entries w/ their details
@@ -44,14 +45,19 @@ export default function UILayout({ date, setDate }) {
     async function processOutfit() {
       const token = await getToken({ template: jwtTemplateName });
       const outfitIds = await getOutfitByDateWorn(token, date);
-      const outfitDetails = await getOutfitArrayFromIds(token, outfitIds[0]);
+      let outfitDetails = await getOutfitArrayFromIds(token, outfitIds[0]);
+      // Delete the outfit if its basically empty
+      if (outfitDetails !== undefined && outfitDetails.every( (item) => (item === undefined) )) {
+        outfitDetails = undefined;
+        await deleteOutfit(token, outfitIds._id);
+      } 
       console.log(outfitDetails);
-      setOutfit(await outfitDetails);
+      setOutfit(outfitDetails);
       setOutfitCoho(await outfitIds[0]);
       setLoading(false);
     }
     processOutfit();
-  }, [date]);
+  }, [date, isLoaded]);
 
   const handlePreviousDayClick = () => {
     var d = new Date(date);
