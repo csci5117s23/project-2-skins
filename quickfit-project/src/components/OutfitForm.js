@@ -191,6 +191,7 @@ export default function OutfitForm({ date }) {
       // Make PUT request
       const result = await editOutfit(token, putItem);
     }
+    router.push("/");
   }
 
 
@@ -536,7 +537,7 @@ export default function OutfitForm({ date }) {
             }}
             onClick={(event, value) => {
               onHandleSubmit(event);
-              router.push("/");
+              // router.push("/");
             }}
           >
             <Typography variant="h6">Submit outfit </Typography>
