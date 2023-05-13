@@ -32,8 +32,6 @@ Which (if any) progressive web app feature(s) does your app support?
 
 * Responsiveness 
 * App-like interface 
-* Installation process: Does not need to install an app, just needs to visit a website
-
 
 ## Mockup images
 
@@ -72,12 +70,30 @@ Which (if any) progressive web app feature(s) does your app support?
 
 ## Screenshots of Site (complete)
 
-**[Add a screenshot of each key page](https://stackoverflow.com/questions/10189356/how-to-add-screenshot-to-readmes-in-github-repository)
-along with a very brief caption:**
+### Home page when user HAS NOT selected an outfit yet. Can use the calendar, arrows, or swipe feature to change the day.  
+![Choosing Fit ](images/siteScreenshots/nofit.png?raw=true)
 
-![](https://media.giphy.com/media/o0vwzuFwCGAFO/giphy.gif)
+### Pressing the choose an outfit button will take you to this page and allow you to build an outfit.   
+![Choosing Fit ](images/siteScreenshots/chooseanoutfit.png?raw=true)
+
+### After pressing the add top button, it will bring you to this page. 
+![Choosing Fit ](images/siteScreenshots/clotheslist.png?raw=true)
+
+### Before submitting your outfit, if you wanted to delete something from your outfit just click on the clothing card and it will give you a delete option. 
+![Choosing Fit ](images/siteScreenshots/deleteclothefromfit.png?raw=true)
+
+### Home page after the user HAS selected an outfit. 
+![Choosing Fit ](images/siteScreenshots/withfit.png?raw=true)
 
 
+### Page to add clothes to your wardrobe 
+![Choosing Fit ](images/siteScreenshots/addclothes.png?raw=true)
+
+### Wardrobe page is where all your clothes are. You can use the tabs to go to another category or swipe. 
+![Choosing Fit ](images/siteScreenshots/wardrobe.png?raw=true)
+
+### If you made a mistake or want to add more to you clothing info you can just click on the clothing card on the wardrobe page and edit. To cancel/get out of an edit, you can click anywhere outside the form. 
+![Choosing Fit ](images/siteScreenshots/inwardrobeeditingclothesinfo.png?raw=true)
 
 ## External Dependencies
 
